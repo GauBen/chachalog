@@ -32,3 +32,7 @@ jobs:
       - run: npx chachalog publish-release
         env:
           GITHUB_TOKEN: '${{ secrets.GITHUB_TOKEN }}'
+      - run: |
+          # Publish all packages to npm
+          yarn config set npmAuthToken '${{ secrets.NPM_TOKEN }}'
+          yarn workspaces foreach --all npm publish --tolerate-republish
