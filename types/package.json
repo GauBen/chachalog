@@ -1,0 +1,11 @@
+{
+	"name": "@chachalog/types",
+	"version": "0.0.0",
+	"license": "AGPL-3.0-only",
+	"type": "module",
+	"types": "./index.d.ts",
+	"files": [
+		"./index.d.ts"
+	],
+	"packageManager": "yarn@4.7.0"
+}

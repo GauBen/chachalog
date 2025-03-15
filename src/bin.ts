@@ -1,0 +1,124 @@
+import fs from "node:fs/promises";
+import path from "node:path";
+import pkg from "chachalog/package.json" with { type: "json" };
+import { Builtins, Cli, Command, Option } from "clipanion";
+import { type Package, type UserConfig, stringifyPackage } from "./index.ts";
+
+/** Finds a config file in `dir`, returns its absolute path or throws. */
+async function findConfigFile(dir: string) {
+	const extensions = ["js", "mjs", "ts", "mts"];
+	for (const file of extensions) {
+		try {
+			const config = path.resolve(dir, `config.${file}`);
+			await fs.access(config);
+			return config;
+		} catch {}
+	}
+	throw new Error(`No config file found in ${dir}/config.{${extensions.join(",")}}`);
+}
+
+/** Transforms a raw config into a usable one. */
+async function resolveConfig(config: UserConfig) {
+	const managers = Array.isArray(config.managers)
+		? await Promise.all(config.managers)
+		: [await config.managers];
+
+	const setVersion = async (pkg: Package, version: string) => {
+		let updated: unknown;
+		for (const manager of managers) {
+			// Written as updated = ... || updated to avoid short-circuiting
+			if (manager.setVersion) updated = (await manager.setVersion(pkg, version)) || updated;
+		}
+		if (!updated) console.error("[chachalog] setVersion failed for", stringifyPackage(pkg));
+	};
+
+	return {
+		packages: managers.flatMap((manager) => manager.packages ?? []),
+		setVersion,
+		platform: await config.platform,
+	};
+}
+
+/**
+ * Loads and resolves a config file in `dir`.
+ *
+ * We copy `dist` and `package.json` into a temporary `node_modules` folder. This allows users to
+ * import `chachalog` in their config without having to install it.
+ */
+async function loadConfig(dir: string) {
+	const configFile = await findConfigFile(dir);
+	try {
+		await fs.cp(
+			new URL(".", import.meta.resolve("chachalog")),
+			path.join(dir, "node_modules", "chachalog", "dist"),
+			{ recursive: true },
+		);
+		await fs.copyFile(
+			new URL(import.meta.resolve("chachalog/package.json")),
+			path.join(dir, "node_modules", "chachalog", "package.json"),
+		);
+		const { default: raw } = (await import(configFile)) as { default: UserConfig };
+		return await resolveConfig(raw);
+	} finally {
+		await fs.rm(path.join(dir, "node_modules"), { recursive: true, force: true });
+	}
+}
+
+/** Runs a command with a resolved config. */
+export abstract class CommandWithConfig extends Command {
+	dir = Option.String("-d,--dir", ".chachalog", { description: "Chachalog directory" });
+	skipCommit = Option.Boolean("--skip-commit", false, { description: "Skip commiting changes" });
+	config!: Awaited<ReturnType<typeof loadConfig>>;
+
+	async execute() {
+		this.config = await loadConfig(this.dir);
+		return this.executeWithConfig();
+	}
+
+	abstract executeWithConfig(): Promise<number | void>;
+}
+
+await Cli.from(
+	[
+		Builtins.VersionCommand,
+		Builtins.HelpCommand,
+		class extends CommandWithConfig {
+			static paths = [["comment-pr"]];
+			static usage = Command.Usage({
+				category: "Commands",
+				description: "Create/update the changelog comment on the active PR",
+			});
+			override async executeWithConfig() {
+				const { default: commentPr } = await import("./commands/comment-pr.ts");
+				return commentPr(this);
+			}
+		},
+		class extends CommandWithConfig {
+			static paths = [["prepare-next-release"]];
+			static usage = Command.Usage({
+				category: "Commands",
+				description: "Create/update the next release PR",
+			});
+			async executeWithConfig() {
+				const { default: prepareNextRelease } = await import("./commands/prepare-next-release.ts");
+				return prepareNextRelease(this);
+			}
+		},
+		class extends CommandWithConfig {
+			static paths = [["publish-release"]];
+			static usage = Command.Usage({
+				category: "Commands",
+				description: "Create a new release using the changelog",
+			});
+			async executeWithConfig() {
+				const { default: publishRelease } = await import("./commands/publish-release.ts");
+				return publishRelease(this);
+			}
+		},
+	],
+	{
+		binaryLabel: "🦜 Chachalog",
+		binaryName: "chachalog",
+		binaryVersion: pkg.version,
+	},
+).runExit(process.argv.slice(2), Cli.defaultContext);
