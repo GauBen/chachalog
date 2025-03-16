@@ -16,6 +16,10 @@
 			"types": "./dist/github.d.ts",
 			"import": "./dist/github.js"
 		},
+		"./pnpm": {
+			"types": "./dist/pnpm.d.ts",
+			"import": "./dist/pnpm.js"
+		},
 		"./package.json": "./package.json"
 	},
 	"bin": "dist/bin.js",
@@ -31,6 +35,9 @@
 	"devDependencies": {
 		"@actions/github": "^6.0.0",
 		"@biomejs/biome": "^1.9.4",
+		"@pnpm/logger": "^1000.0.0",
+		"@pnpm/workspace.find-packages": "^1000.0.16",
+		"@pnpm/workspace.read-manifest": "^1000.1.1",
 		"@types/mdast": "^4.0.4",
 		"@types/node": "^20.17.24",
 		"@types/semver": "^7.5.8",
