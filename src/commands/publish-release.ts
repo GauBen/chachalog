@@ -27,11 +27,14 @@ export default async function publishRelease({ config }: CommandWithConfig) {
 		const version = heading.children[0].value;
 
 		const length = changelog.children
-			.slice(release)
+			.slice(release + 1)
 			.findIndex((node) => node.type === "heading" && node.depth === 2);
 		const body = remark().stringify({
 			type: "root",
-			children: changelog.children.slice(release + 1, length > 0 ? release + length : undefined),
+			children: changelog.children.slice(
+				release + 1,
+				length >= 0 ? release + length + 1 : undefined,
+			),
 		});
 
 		const title = `${pkg.name} @ v${version}`;
