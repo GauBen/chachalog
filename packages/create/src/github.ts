@@ -10,7 +10,10 @@ export const commentPr = {
 			"runs-on": "ubuntu-latest",
 			steps: [
 				{ uses: "actions/checkout@v4" },
-				{ run: "npx chachalog comment-pr", env: { GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}" } },
+				{
+					run: "npx chachalog@0.2 comment-pr",
+					env: { GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}" },
+				},
 			],
 		},
 	},
@@ -30,7 +33,7 @@ export const release = (prepare: boolean, publish: "yarn" | "pnpm" | "nothing" |
 				steps: [
 					{ uses: "actions/checkout@v4" },
 					{
-						run: "npx chachalog prepare-next-release",
+						run: "npx chachalog@0.2 prepare-next-release",
 						env: { GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}" },
 					},
 				],
@@ -59,7 +62,7 @@ export const release = (prepare: boolean, publish: "yarn" | "pnpm" | "nothing" |
 								]
 							: []),
 					{
-						run: "npx chachalog publish-release",
+						run: "npx chachalog@0.2 publish-release",
 						env: { GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}" },
 					},
 				],
