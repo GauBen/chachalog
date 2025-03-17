@@ -49,7 +49,7 @@ export const release = (prepare: boolean, publish: "yarn" | "pnpm" | "nothing" |
 								{ uses: "actions/setup-node@v4" },
 								{
 									name: "Build and publish",
-									run: "corepack enable && yarn\nyarn workspaces foreach -A --topological-dev run build\nyarn config set npmAuthToken '${{ secrets.NPM_TOKEN }}'\nyarn workspaces foreach --all --no-private npm publish --access public --tolerate-republish\n",
+									run: "corepack enable && yarn\nyarn workspaces foreach -Avv --topological-dev run build\nyarn config set npmAuthToken '${{ secrets.NPM_TOKEN }}'\nyarn workspaces foreach -Avv --no-private npm publish --access public --tolerate-republish\n",
 								},
 							]
 						: publish === "pnpm"

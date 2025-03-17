@@ -31,9 +31,9 @@ jobs:
       - name: Build and publish
         run: |
           corepack enable && yarn
-          yarn workspaces foreach -A --topological-dev run build
+          yarn workspaces foreach -Avv --topological-dev run build
           yarn config set npmAuthToken '${{ secrets.NPM_TOKEN }}'
-          yarn workspaces foreach --all npm publish --tolerate-republish
+          yarn workspaces foreach -Avv --no-private npm publish --access public --tolerate-republish
       - run: npx chachalog publish-release
         env:
           GITHUB_TOKEN: '${{ secrets.GITHUB_TOKEN }}'
