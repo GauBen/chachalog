@@ -1,7 +1,9 @@
 import fs from "node:fs/promises";
 import path from "node:path";
+import process from "node:process";
+import { styleText } from "node:util";
 import pkg from "chachalog/package.json" with { type: "json" };
-import { Builtins, Cli, Command, Option } from "clipanion";
+import { Builtins, Cli, Command, Option, UsageError } from "clipanion";
 import { type Package, type UserConfig, stringifyPackage } from "./index.ts";
 
 /** Finds a config file in `dir`, returns its absolute path or throws. */
@@ -14,7 +16,7 @@ async function findConfigFile(dir: string) {
 			return config;
 		} catch {}
 	}
-	throw new Error(`No config file found in ${dir}/config.{${extensions.join(",")}}`);
+	throw new UsageError(`No config file found in ${dir}/config.{${extensions.join(",")}}`);
 }
 
 /** Transforms a raw config into a usable one. */
@@ -40,7 +42,7 @@ async function resolveConfig(config: UserConfig) {
 }
 
 /**
- * Loads and resolves a config file in `dir`.
+ * Loads a config file in `dir`.
  *
  * We copy `dist` and `package.json` into a temporary `node_modules` folder. This allows users to
  * import `chachalog` in their config without having to install it.
@@ -57,8 +59,8 @@ async function loadConfig(dir: string) {
 			new URL(import.meta.resolve("chachalog/package.json")),
 			path.join(dir, "node_modules", "chachalog", "package.json"),
 		);
-		const { default: raw } = (await import(configFile)) as { default: UserConfig };
-		return await resolveConfig(raw);
+		const { default: raw } = await import(configFile);
+		return raw as () => UserConfig | Promise<UserConfig>;
 	} finally {
 		await fs.rm(path.join(dir, "node_modules"), { recursive: true, force: true });
 	}
@@ -68,10 +70,12 @@ async function loadConfig(dir: string) {
 export abstract class CommandWithConfig extends Command {
 	dir = Option.String("-d,--dir", ".chachalog", { description: "Chachalog directory" });
 	skipCommit = Option.Boolean("--skip-commit", false, { description: "Skip commiting changes" });
-	config!: Awaited<ReturnType<typeof loadConfig>>;
+	config!: Awaited<ReturnType<typeof resolveConfig>>;
 
 	async execute() {
-		this.config = await loadConfig(this.dir);
+		this.config = await loadConfig(this.dir)
+			.then((fn) => fn())
+			.then(resolveConfig);
 		return this.executeWithConfig();
 	}
 
@@ -113,6 +117,26 @@ await Cli.from(
 			async executeWithConfig() {
 				const { default: publishRelease } = await import("./commands/publish-release.ts");
 				return publishRelease(this);
+			}
+		},
+		class extends Command {
+			dir = Option.String("-d,--dir", ".chachalog", { description: "Chachalog directory" });
+			static paths = [["doctor"]];
+			static usage = Command.Usage({
+				category: "Helpers",
+				description: "Ensures the configuration is correct",
+			});
+			async execute() {
+				const { default: doctor } = await import("./commands/doctor.ts");
+				try {
+					const rawConfig = await loadConfig(this.dir);
+					if (typeof rawConfig !== "function")
+						console.log(styleText("red", "Config should be a function"));
+					const config = typeof rawConfig === "function" ? await rawConfig() : rawConfig;
+					await doctor(config);
+				} catch (error) {
+					console.error(styleText("redBright", "Something went wrong during diagnostic"), error);
+				}
 			}
 		},
 	],

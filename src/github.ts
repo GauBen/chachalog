@@ -4,18 +4,16 @@ import type { RestEndpointMethodTypes } from "@octokit/plugin-rest-endpoint-meth
 import { RequestError } from "@octokit/request-error";
 import type { Platform } from "./index.ts";
 
-export default function github({
+export default async function github({
 	username = "github-actions[bot]",
 	email = "41898282+github-actions[bot]@users.noreply.github.com",
-}: { username?: string; email?: string } = {}): Platform {
+}: { username?: string; email?: string } = {}): Promise<Platform> {
 	const token = process.env.GITHUB_TOKEN;
 
 	if (!token) {
-		console.error("GITHUB_TOKEN is not set");
-		console.error(
-			"Did you forget to add `env: { GITHUB_TOKEN: '${{ secrets.GITHUB_TOKEN }}' }` to your workflow?",
+		throw new Error(
+			"GITHUB_TOKEN is not set.\nDid you forget to add `env: { GITHUB_TOKEN: '${{ secrets.GITHUB_TOKEN }}' }` to your workflow?",
 		);
-		throw new Error("GITHUB_TOKEN is not set");
 	}
 
 	const octokit = getOctokit(token);
