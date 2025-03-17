@@ -1,6 +1,6 @@
 {
 	"name": "@chachalog/types",
-	"version": "0.1.2",
+	"version": "0.2.0",
 	"license": "AGPL-3.0-only",
 	"type": "module",
 	"types": "./index.d.ts",
