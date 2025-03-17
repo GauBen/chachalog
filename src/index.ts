@@ -45,7 +45,7 @@ export interface UserConfig {
 	platform: MaybePromise<Platform>;
 }
 
-export function defineConfig(config: UserConfig) {
+export function defineConfig(config: () => MaybePromise<UserConfig>) {
 	return config;
 }
 
