@@ -145,11 +145,45 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@chachalog/types@workspace:types":
+"@chachalog/create@workspace:packages/create":
   version: 0.0.0-use.local
-  resolution: "@chachalog/types@workspace:types"
+  resolution: "@chachalog/create@workspace:packages/create"
+  dependencies:
+    "@clack/prompts": "npm:^0.10.0"
+    pkgroll: "npm:^2.11.2"
+    publint: "npm:^0.3.9"
+    yaml: "npm:^2.7.0"
+  bin:
+    create: dist/bin.js
   languageName: unknown
   linkType: soft
+
+"@chachalog/types@workspace:packages/types":
+  version: 0.0.0-use.local
+  resolution: "@chachalog/types@workspace:packages/types"
+  languageName: unknown
+  linkType: soft
+
+"@clack/core@npm:0.4.1":
+  version: 0.4.1
+  resolution: "@clack/core@npm:0.4.1"
+  dependencies:
+    picocolors: "npm:^1.0.0"
+    sisteransi: "npm:^1.0.5"
+  checksum: 10c0/60c59e2d0017ce81567566c4f2a288f1738ef6356e25d9c56055be68aa449f75b6a7271b32c335213eb3a7af4b02db90de88c6999c432f09ca00c3d8004ea95b
+  languageName: node
+  linkType: hard
+
+"@clack/prompts@npm:^0.10.0":
+  version: 0.10.0
+  resolution: "@clack/prompts@npm:0.10.0"
+  dependencies:
+    "@clack/core": "npm:0.4.1"
+    picocolors: "npm:^1.0.0"
+    sisteransi: "npm:^1.0.5"
+  checksum: 10c0/f5dc45e50b7c87464bdde00e8fd81972ceac1b318a0017c8d28b88a41a62e680e53d6c579c869462ab7d802ec7565afda31ca4679984f4cefe7b44d1b521946f
+  languageName: node
+  linkType: hard
 
 "@esbuild/aix-ppc64@npm:0.24.2":
   version: 0.24.2
@@ -4290,6 +4324,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"sisteransi@npm:^1.0.5":
+  version: 1.0.5
+  resolution: "sisteransi@npm:1.0.5"
+  checksum: 10c0/230ac975cca485b7f6fe2b96a711aa62a6a26ead3e6fb8ba17c5a00d61b8bed0d7adc21f5626b70d7c33c62ff4e63933017a6462942c719d1980bb0b1207ad46
+  languageName: node
+  linkType: hard
+
 "slice-ansi@npm:^3.0.0":
   version: 3.0.0
   resolution: "slice-ansi@npm:3.0.0"
@@ -4895,7 +4936,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"yaml@npm:^2.0.0":
+"yaml@npm:^2.0.0, yaml@npm:^2.7.0":
   version: 2.7.0
   resolution: "yaml@npm:2.7.0"
   bin:

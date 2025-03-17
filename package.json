@@ -27,10 +27,10 @@
 		"dist"
 	],
 	"workspaces": [
-		"types"
+		"packages/*"
 	],
 	"scripts": {
-		"build": "tsc && pkgroll --clean-dist --minify && dts-buddy types/index.d.ts && publint"
+		"build": "tsc && pkgroll --clean-dist --minify && dts-buddy packages/types/index.d.ts && publint"
 	},
 	"devDependencies": {
 		"@actions/github": "^6.0.0",
