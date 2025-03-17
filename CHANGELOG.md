@@ -1,5 +1,15 @@
 # chachalog Changelog
 
+## 0.2.0
+
+### Breaking Changes
+
+* Configuration must now be a function: `defineConfig(() => config)`
+
+### Other changes
+
+* New command: `chachalog doctor`, to help check the configuration (#5)
+
 ## 0.1.2
 
 * Properly extract release notes from the changelog.
