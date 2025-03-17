@@ -29,7 +29,7 @@ export default async function yarn({
 				prefix: "npm",
 				name: stringifyIdent(ws.manifest.name),
 				version: ws.manifest.version,
-				path: npath.fromPortablePath(cwd),
+				path: npath.fromPortablePath(ws.cwd),
 			},
 			async (version) => {
 				ws.manifest.version = version;
