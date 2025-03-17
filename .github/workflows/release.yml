@@ -28,11 +28,12 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version-file: '.node-version'
-      - run: corepack enable && yarn && yarn build
+      - name: Build and publish
+        run: |
+          corepack enable && yarn
+          yarn workspaces foreach -A --topological-dev run build
+          yarn config set npmAuthToken '${{ secrets.NPM_TOKEN }}'
+          yarn workspaces foreach --all npm publish --tolerate-republish
       - run: npx chachalog publish-release
         env:
           GITHUB_TOKEN: '${{ secrets.GITHUB_TOKEN }}'
-      - run: |
-          # Publish all packages to npm
-          yarn config set npmAuthToken '${{ secrets.NPM_TOKEN }}'
-          yarn workspaces foreach --all npm publish --tolerate-republish
