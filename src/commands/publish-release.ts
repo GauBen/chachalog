@@ -1,7 +1,7 @@
 import fs from "node:fs/promises";
 import path from "node:path";
-import type { CommandWithConfig } from "../bin.ts";
 import { remark } from "remark";
+import type { CommandWithConfig } from "../bin.ts";
 
 export default async function publishRelease({ config }: CommandWithConfig) {
 	for (const pkg of config.packages) {

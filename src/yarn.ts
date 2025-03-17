@@ -1,6 +1,5 @@
-import fs from "node:fs/promises";
 import process from "node:process";
-import { Configuration, type Ident, Manifest, Project, type Workspace } from "@yarnpkg/core";
+import { Configuration, type Ident, Project, type Workspace } from "@yarnpkg/core";
 import { stringifyIdent } from "@yarnpkg/core/structUtils";
 import { npath } from "@yarnpkg/fslib";
 import type { Manager, Package } from "./index.ts";
@@ -21,27 +20,30 @@ export default async function yarn({
 		strict: false,
 	});
 	const { project } = await Project.find(configuration, npath.toPortablePath(cwd));
-	const packages: Package[] = project.workspaces
+	const packages = project.workspaces
 		.filter((ws): ws is Workspace & { manifest: { name: Ident; version: string } } =>
 			Boolean(ws.manifest.name && !ws.manifest.private && ws.manifest.version),
 		)
-		.map(({ cwd, manifest }) => ({
-			prefix: "npm",
-			name: stringifyIdent(manifest.name),
-			version: manifest.version,
-			path: npath.fromPortablePath(cwd),
-		}));
-	const weakSet = new WeakSet(packages);
+		.map<[Package, (version: string) => Promise<void>]>((ws) => [
+			{
+				prefix: "npm",
+				name: stringifyIdent(ws.manifest.name),
+				version: ws.manifest.version,
+				path: npath.fromPortablePath(cwd),
+			},
+			async (version) => {
+				ws.manifest.version = version;
+				await ws.persistManifest();
+			},
+		]);
+	const map = new WeakMap(packages);
 
 	return {
-		packages,
+		packages: packages.map(([pkg]) => pkg),
 		async setVersion(pkg, version) {
-			if (!weakSet.has(pkg)) return;
-			const file = npath.join(pkg.path, Manifest.fileName);
-			const previous = await fs.readFile(file, "utf8");
-			// Update the version with a regex to preserve formatting
-			const updated = previous.replace(/("version"\s*:\s*")([^"]*)(")/, `$1${version}$3`);
-			await fs.writeFile(file, updated);
+			const write = map.get(pkg);
+			if (!write) return;
+			await write(version);
 			return true;
 		},
 	};
