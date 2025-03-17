@@ -1,0 +1,19 @@
+{
+  "name": "@chachalog/create",
+  "version": "0.0.0",
+  "license": "AGPL-3.0-only",
+  "type": "module",
+  "bin": "dist/bin.js",
+  "files": [
+    "template"
+  ],
+  "scripts": {
+    "build": "pkgroll --clean-dist --minify && publint"
+  },
+  "devDependencies": {
+    "@clack/prompts": "^0.10.0",
+    "pkgroll": "^2.11.2",
+    "publint": "^0.3.9",
+    "yaml": "^2.7.0"
+  }
+}

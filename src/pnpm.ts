@@ -9,7 +9,7 @@ export default async function pnpm({
 }: {
 	/** Current working directory. */
 	cwd?: string;
-}): Promise<Manager> {
+} = {}): Promise<Manager> {
 	const workspaceManifest = await readWorkspaceManifest(cwd);
 	const allProjects = await findWorkspacePackagesNoCheck(cwd, {
 		patterns: workspaceManifest?.packages,
