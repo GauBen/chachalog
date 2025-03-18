@@ -11,7 +11,7 @@ export interface Platform {
 	/** Creates or updates a comment on the active PR. */
 	upsertChangelogComment: (body: string) => MaybePromise<void>;
 	/** Gets the changelog entries from the active PR. */
-	getChangelogEntries: (dir: string) => MaybePromise<string[]>;
+	getChangelogEntries: (dir: string) => MaybePromise<Map<string, string>>;
 	/** Creates a PR for the next release. */
 	upsertReleasePr: (title: string, body: string) => MaybePromise<void>;
 	/** Creates a release. Will be called on every commit, ensure it is idempotent. */

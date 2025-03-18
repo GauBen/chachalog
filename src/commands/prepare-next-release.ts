@@ -4,11 +4,19 @@ import path from "node:path";
 import type { TopLevelContent } from "mdast";
 import { remark } from "remark";
 import semver from "semver";
+import { globSync } from "tinyglobby";
 import type { CommandWithConfig } from "../bin.ts";
-import { getChangelog } from "../changelog.ts";
+import { processEntries } from "../changelog/process.ts";
 
 export default async function prepareNextRelease({ config, dir, skipCommit }: CommandWithConfig) {
-	const changelogEntries = await getChangelog(dir);
+	const files = new Map<string, string>();
+	for (const name of globSync("*.md", { cwd: dir })) {
+		const file = path.join(dir, name);
+		const content = await fs.readFile(file, "utf-8");
+		files.set(file, content);
+		await fs.rm(file);
+	}
+	const changelogEntries = await processEntries(files, config.validator);
 
 	if (changelogEntries.size === 0) return;
 
@@ -27,7 +35,7 @@ export default async function prepareNextRelease({ config, dir, skipCommit }: Co
 			},
 		];
 
-		for (const [title, nodes] of changelogEntry.entries) {
+		for (const [title, nodes] of changelogEntry.namedEntries) {
 			const {
 				children: [paragraph],
 			} = remark().parse(title);
@@ -42,7 +50,7 @@ export default async function prepareNextRelease({ config, dir, skipCommit }: Co
 			});
 		}
 
-		if (changelogEntry.entries.size > 0 && changelogEntry.defaultEntry.length > 0) {
+		if (changelogEntry.namedEntries.size > 0 && changelogEntry.defaultEntry.length > 0) {
 			children.push({
 				type: "heading",
 				depth: 3,

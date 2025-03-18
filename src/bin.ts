@@ -4,6 +4,8 @@ import process from "node:process";
 import { styleText } from "node:util";
 import pkg from "chachalog/package.json" with { type: "json" };
 import { Builtins, Cli, Command, Option, UsageError } from "clipanion";
+import semver from "semver";
+import * as v from "valibot";
 import type { Package, UserConfig } from "./index.ts";
 
 /** Finds a config file in `dir`, returns its absolute path or throws. */
@@ -34,10 +36,45 @@ async function resolveConfig(config: UserConfig) {
 		if (!updated) console.error("[chachalog] setVersion failed for", pkg.name);
 	};
 
+	const packages: Package[] = [];
+
+	// Find duplicates
+	const paths = new Map<string, number>();
+	const names = new Map<string, number>();
+
+	for (const [i, manager] of managers.entries()) {
+		if (!manager.packages) continue;
+
+		for (const pkg of Array.isArray(manager.packages) ? manager.packages : [manager.packages]) {
+			if (names.has(pkg.name)) {
+				throw new UsageError(
+					`Package "${pkg.name}" reported by managers ${names.get(pkg.name)} and ${i + 1}`,
+				);
+			}
+
+			if (paths.has(pkg.path)) {
+				throw new UsageError(
+					`Package "${pkg.name}" at "${pkg.path}" reported by managers ${paths.get(pkg.path)} and ${i + 1}`,
+				);
+			}
+
+			names.set(pkg.name, i + 1);
+			paths.set(pkg.path, i + 1);
+			packages.push(pkg);
+		}
+	}
+
+	if (packages.length === 0) {
+		throw new UsageError(
+			"No packages found in the config. Try running `npx chachalog doctor` to diagnose the issue.",
+		);
+	}
+
 	return {
-		packages: managers.flatMap((manager) => manager.packages ?? []),
+		packages,
 		setVersion,
 		platform: await config.platform,
+		validator: v.record(v.picklist([...names.keys()]), v.picklist(semver.RELEASE_TYPES)),
 	};
 }
 
