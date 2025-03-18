@@ -4,6 +4,6 @@ chachalog: minor
 
 Package names and version bumps are now validated in changelog entries.
 
-# Breaking Changes
+# Breaking changes
 
 Platform must return files as `Map<string, string>`.

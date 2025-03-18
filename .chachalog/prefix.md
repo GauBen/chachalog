@@ -3,6 +3,6 @@ chachalog: minor
 '@chachalog/create': patch
 ---
 
-# Breaking Changes
+# Breaking changes
 
 Remove `prefix` and `stringifyPackage`.

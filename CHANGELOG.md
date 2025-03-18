@@ -2,7 +2,7 @@
 
 ## 0.2.0
 
-### Breaking Changes
+### Breaking changes
 
 * Configuration must now be a function: `defineConfig(() => config)`
 
