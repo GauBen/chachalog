@@ -1,6 +1,6 @@
-import * as p from "@clack/prompts";
-import process from "node:process";
 import fs from "node:fs/promises";
+import process from "node:process";
+import * as p from "@clack/prompts";
 import * as yaml from "yaml";
 import { commentPr, release } from "./github.ts";
 

@@ -86,11 +86,11 @@ export default async function github({
 				if (files.data.length < per_page) break;
 			}
 
-			const files = [];
+			const files = new Map<string, string>();
 
 			for (const { filename } of changelogEntries) {
 				const contents = fs.readFileSync(filename, "utf-8");
-				files.push(contents);
+				files.set(filename, contents);
 			}
 
 			return files;

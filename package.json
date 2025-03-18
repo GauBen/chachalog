@@ -30,7 +30,8 @@
 		"packages/*"
 	],
 	"scripts": {
-		"build": "tsc && pkgroll --clean-dist --minify && dts-buddy packages/types/index.d.ts && publint"
+		"build": "tsc && pkgroll --clean-dist --minify && dts-buddy packages/types/index.d.ts && publint",
+		"test": "node --experimental-test-coverage --test '**/*.test.ts'"
 	},
 	"devDependencies": {
 		"@actions/github": "^6.0.0",
@@ -46,13 +47,14 @@
 		"@yarnpkg/fslib": "^3.1.2",
 		"clipanion": "^4.0.0-rc.4",
 		"dts-buddy": "git+https://github.com/GauBen/dts-buddy.git#commit=af9f317b5b1575ca5236f8d76f0c98e804769232",
-		"fast-glob": "^3.3.3",
 		"pkgroll": "^2.11.2",
 		"publint": "^0.3.9",
 		"remark": "^15.0.1",
 		"remark-frontmatter": "^5.0.0",
 		"semver": "^7.7.1",
+		"tinyglobby": "^0.2.12",
 		"typescript": "^5.8.2",
+		"valibot": "^1.0.0-rc.4",
 		"vfile-matter": "^5.0.0"
 	},
 	"packageManager": "yarn@4.7.0"
