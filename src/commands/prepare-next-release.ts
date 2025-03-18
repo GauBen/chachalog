@@ -50,21 +50,23 @@ export default async function prepareNextRelease({ config, dir, skipCommit }: Co
 			});
 		}
 
-		if (changelogEntry.namedEntries.size > 0 && changelogEntry.defaultEntry.length > 0) {
+		if (changelogEntry.defaultEntry.length > 0) {
+			if (changelogEntry.namedEntries.size > 0) {
+				children.push({
+					type: "heading",
+					depth: 3,
+					children: [{ type: "text", value: "Other changes" }],
+				});
+			}
+
 			children.push({
-				type: "heading",
-				depth: 3,
-				children: [{ type: "text", value: "Other changes" }],
+				type: "list",
+				children: changelogEntry.defaultEntry.map((node) => ({
+					type: "listItem",
+					children: [node],
+				})),
 			});
 		}
-
-		children.push({
-			type: "list",
-			children: changelogEntry.defaultEntry.map((node) => ({
-				type: "listItem",
-				children: [node],
-			})),
-		});
 
 		const changelog = remark().parse(
 			await fs.readFile(path.join(pkg.path, "CHANGELOG.md"), "utf-8").catch((error) => {
