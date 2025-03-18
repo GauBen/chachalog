@@ -1,5 +1,19 @@
 # chachalog Changelog
 
+## 0.3.0
+
+### Breaking changes
+
+* Platform must return files as `Map<string, string>`.
+
+* Remove `prefix` and `stringifyPackage`.
+
+### Other changes
+
+* Package names and version bumps are now validated in changelog entries.
+
+* Prevent superfluous whitespace in changelogs.
+
 ## 0.2.0
 
 ### Breaking changes

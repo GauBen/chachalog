@@ -1,5 +1,11 @@
 # @chachalog/create Changelog
 
+## 0.0.4
+
+### Breaking changes
+
+* Remove `prefix` and `stringifyPackage`.
+
 ## 0.0.3
 
 * Add `-vv` flag (double verbose) to print debug information in Yarn workflows.
