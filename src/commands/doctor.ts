@@ -1,13 +1,13 @@
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { styleText } from "node:util";
-import type { Platform, UserConfig } from "../index.ts";
+import type { Package, Platform, UserConfig } from "../index.ts";
 
 export default async function doctor(config: UserConfig) {
 	if (!config.platform) throw new Error("Missing platform in config");
 	await Promise.resolve(config.platform).then(
 		(platform) => {
-			console.log(styleText("bgGreenBright", "Platform loaded successfully:"));
+			console.log(styleText("greenBright", "Platform loaded successfully:"));
 			const checks: {
 				[key in keyof Platform]: Platform[key] extends Function
 					? "function"
@@ -39,7 +39,7 @@ export default async function doctor(config: UserConfig) {
 			if (!ok) console.log(styleText("redBright", "Platform is not fully defined."));
 		},
 		(error: Error) => {
-			console.log(styleText("bgRedBright", "Platform defined but failed to load:"));
+			console.log(styleText("redBright", "Platform defined but failed to load:"));
 			console.log(
 				styleText("redBright", `  ${String(error.message ?? error).replaceAll("\n", "\n  ")}`),
 			);
@@ -57,7 +57,7 @@ export default async function doctor(config: UserConfig) {
 			}
 		},
 	);
-	const output = [];
+	const output: Array<Promise<{ logs: string[]; packages?: Package[] }>> = [];
 	for (const [i, manager] of Array.isArray(config.managers)
 		? config.managers.entries()
 		: [config.managers].entries()) {
@@ -66,14 +66,16 @@ export default async function doctor(config: UserConfig) {
 				(manager) => {
 					const managerType = typeof manager;
 					if (managerType !== "object") {
-						return [
-							styleText("bgRedBright", `Manager #${i + 1} failed to load:`),
-							styleText("redBright", `  Expected object, received ${managerType}.`),
-						];
+						return {
+							logs: [
+								styleText("redBright", `Manager #${i + 1} failed to load:`),
+								styleText("redBright", `  Expected object, received ${managerType}.`),
+							],
+						};
 					}
 
 					const logs: string[] = [];
-					logs.push(styleText("bgGreenBright", `Manager #${i + 1} loaded successfully:`));
+					logs.push(styleText("greenBright", `Manager #${i + 1} loaded successfully:`));
 					const packages = Array.isArray(manager.packages)
 						? manager.packages
 						: manager.packages
@@ -104,18 +106,57 @@ export default async function doctor(config: UserConfig) {
 
 					if (packages.length === 0 && setVersionType === "undefined")
 						logs.push(styleText("redBright", "  Manager is not defined."));
-					return logs;
+					return { logs, packages };
 				},
 				(error: Error) => {
-					return [
-						styleText("bgRedBright", `Manager #${i + 1} failed to load:`),
-						...String(error.message ?? error)
-							.split("\n")
-							.map((line) => styleText("redBright", `  ${line}`)),
-					];
+					return {
+						logs: [
+							styleText("redBright", `Manager #${i + 1} failed to load:`),
+							...String(error.message ?? error)
+								.split("\n")
+								.map((line) => styleText("redBright", `  ${line}`)),
+						],
+					};
 				},
 			),
 		);
 	}
-	for (const logs of await Promise.all(output)) console.log([logs].flat().join("\n"));
+
+	const managers = await Promise.all(output);
+	for (const { logs } of managers) console.log([logs].flat().join("\n"));
+
+	// Find duplicates
+	const paths = new Map<string, number>();
+	const names = new Map<string, number>();
+
+	for (const [i, manager] of managers.entries()) {
+		if (!manager.packages) continue;
+
+		for (const pkg of Array.isArray(manager.packages) ? manager.packages : [manager.packages]) {
+			if (names.has(pkg.name)) {
+				console.log(
+					styleText(
+						"redBright",
+						`x Package "${pkg.name}" reported by managers #${names.get(pkg.name)} and #${i + 1}.`,
+					),
+				);
+			}
+
+			if (paths.has(pkg.path)) {
+				console.log(
+					styleText(
+						"redBright",
+						`x Package path "${pkg.path}" reported by managers #${paths.get(pkg.path)} and #${i + 1}.`,
+					),
+				);
+			}
+
+			names.set(pkg.name, i + 1);
+			paths.set(pkg.path, i + 1);
+		}
+	}
+
+	if (names.size === 0)
+		console.log(styleText("redBright", "No packages reported by any managers."));
+	else console.log(styleText("greenBright", `${names.size} packages reported.`));
 }
