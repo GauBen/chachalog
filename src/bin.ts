@@ -4,9 +4,12 @@ import process from "node:process";
 import { styleText } from "node:util";
 import pkg from "chachalog/package.json" with { type: "json" };
 import { Builtins, Cli, Command, Option, UsageError } from "clipanion";
-import semver from "semver";
 import * as v from "valibot";
-import type { Package, UserConfig } from "./index.ts";
+import commentPr from "./commands/comment-pr.ts";
+import doctor from "./commands/doctor.ts";
+import prepareNextRelease from "./commands/prepare-next-release.ts";
+import publishRelease from "./commands/publish-release.ts";
+import { type Package, ReleaseTypes, type UserConfig } from "./index.ts";
 
 /** Finds a config file in `dir`, returns its absolute path or throws. */
 async function findConfigFile(dir: string) {
@@ -74,7 +77,7 @@ async function resolveConfig(config: UserConfig) {
 		packages,
 		setVersion,
 		platform: await config.platform,
-		validator: v.record(v.picklist([...names.keys()]), v.picklist(semver.RELEASE_TYPES)),
+		validator: v.record(v.picklist([...names.keys()]), v.picklist(ReleaseTypes)),
 	};
 }
 
@@ -130,7 +133,6 @@ await Cli.from(
 				description: "Create/update the changelog comment on the active PR",
 			});
 			override async executeWithConfig() {
-				const { default: commentPr } = await import("./commands/comment-pr.ts");
 				return commentPr(this);
 			}
 		},
@@ -141,7 +143,6 @@ await Cli.from(
 				description: "Create/update the next release PR",
 			});
 			async executeWithConfig() {
-				const { default: prepareNextRelease } = await import("./commands/prepare-next-release.ts");
 				return prepareNextRelease(this);
 			}
 		},
@@ -152,7 +153,6 @@ await Cli.from(
 				description: "Create a new release using the changelog",
 			});
 			async executeWithConfig() {
-				const { default: publishRelease } = await import("./commands/publish-release.ts");
 				return publishRelease(this);
 			}
 		},
@@ -164,7 +164,6 @@ await Cli.from(
 				description: "Ensures the configuration is correct",
 			});
 			async execute() {
-				const { default: doctor } = await import("./commands/doctor.ts");
 				try {
 					const rawConfig = await loadConfig(this.dir);
 					if (typeof rawConfig !== "function")

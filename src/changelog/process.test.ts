@@ -23,6 +23,22 @@ I'm a basic changelog entry
 		assert.deepStrictEqual(namedEntries, new Map());
 	});
 
+	await test("basic section", async () => {
+		const { defaultEntry, namedEntries } = await processEntry(`---
+
+---
+
+# Section
+I'm a basic changelog entry
+`);
+
+		assert.deepStrictEqual(defaultEntry, []);
+		assert.deepStrictEqual(
+			Object.fromEntries([...namedEntries].map(([title, children]) => [title, toMd(children)])),
+			{ Section: `I'm a basic changelog entry\n` },
+		);
+	});
+
 	await test("complex", async () => {
 		const { bumps, defaultEntry, namedEntries } = await processEntry(`---
 # Comment

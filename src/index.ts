@@ -46,3 +46,16 @@ export interface UserConfig {
 export function defineConfig(config: () => MaybePromise<UserConfig>) {
 	return config;
 }
+
+/** Re-export from semver, but that treeshakes. */
+export const ReleaseTypes = [
+	"major",
+	"premajor",
+	"minor",
+	"preminor",
+	"patch",
+	"prepatch",
+	"prerelease",
+] as const;
+
+export type ReleaseTypes = (typeof ReleaseTypes)[number];

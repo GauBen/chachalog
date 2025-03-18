@@ -2,9 +2,9 @@ import { UsageError } from "clipanion";
 import type { BlockContent, DefinitionContent, Root, TopLevelContent } from "mdast";
 import { remark } from "remark";
 import remarkFrontmatter from "remark-frontmatter";
-import semver, { type ReleaseType } from "semver";
 import * as v from "valibot";
 import { matter } from "vfile-matter";
+import { ReleaseTypes } from "../index.ts";
 
 declare module "vfile" {
 	interface DataMap {
@@ -73,14 +73,14 @@ export async function processEntries(
 	files: Map<string, string>,
 	validator: v.RecordSchema<
 		v.PicklistSchema<string[], any>,
-		v.PicklistSchema<ReleaseType[], any>,
+		v.PicklistSchema<readonly ReleaseTypes[], any>,
 		any
 	>,
 ) {
 	const changelog = new Map<
 		string,
 		{
-			bump: ReleaseType;
+			bump: ReleaseTypes;
 			defaultEntry: Array<BlockContent | DefinitionContent>;
 			namedEntries: MdMap;
 		}
@@ -99,12 +99,9 @@ export async function processEntries(
 
 				changelog.set(pkg, {
 					bump: previous?.bump
-						? semver.RELEASE_TYPES[
-								// RELEASE_TYPES starts at "major" and ends at "prerelease"
-								Math.min(
-									semver.RELEASE_TYPES.indexOf(previous.bump),
-									semver.RELEASE_TYPES.indexOf(bump),
-								)
+						? ReleaseTypes[
+								// ReleaseTypes starts at "major" and ends at "prerelease"
+								Math.min(ReleaseTypes.indexOf(previous.bump), ReleaseTypes.indexOf(bump))
 							]
 						: bump,
 					defaultEntry: [...(previous?.defaultEntry ?? []), ...current.defaultEntry],

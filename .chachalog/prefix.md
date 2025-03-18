@@ -1,6 +1,6 @@
 ---
 chachalog: minor
-@chachalog/create: patch
+'@chachalog/create': patch
 ---
 
 # Breaking Changes
