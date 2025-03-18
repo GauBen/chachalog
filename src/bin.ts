@@ -4,7 +4,7 @@ import process from "node:process";
 import { styleText } from "node:util";
 import pkg from "chachalog/package.json" with { type: "json" };
 import { Builtins, Cli, Command, Option, UsageError } from "clipanion";
-import { type Package, type UserConfig, stringifyPackage } from "./index.ts";
+import type { Package, UserConfig } from "./index.ts";
 
 /** Finds a config file in `dir`, returns its absolute path or throws. */
 async function findConfigFile(dir: string) {
@@ -31,7 +31,7 @@ async function resolveConfig(config: UserConfig) {
 			// Written as updated = ... || updated to avoid short-circuiting
 			if (manager.setVersion) updated = (await manager.setVersion(pkg, version)) || updated;
 		}
-		if (!updated) console.error("[chachalog] setVersion failed for", stringifyPackage(pkg));
+		if (!updated) console.error("[chachalog] setVersion failed for", pkg.name);
 	};
 
 	return {

@@ -19,8 +19,6 @@ export interface Platform {
 }
 
 export interface Package {
-	/** Package format prefix. */
-	prefix: string;
 	/** Package name. */
 	name: string;
 	/** Package version. */
@@ -47,8 +45,4 @@ export interface UserConfig {
 
 export function defineConfig(config: () => MaybePromise<UserConfig>) {
 	return config;
-}
-
-export function stringifyPackage(pkg: Package) {
-	return `${pkg.prefix}:${pkg.name}`;
 }

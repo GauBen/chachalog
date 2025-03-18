@@ -9,7 +9,6 @@ export default defineConfig(() => ({
 	platform: github(),
 	managers: {
 		packages: {
-			prefix: "git",
 			name: "root",
 			path: path.resolve(".."),
 			version: fs.readFileSync(".chachalog/.version", "utf-8").trim(),

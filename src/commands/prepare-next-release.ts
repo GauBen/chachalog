@@ -6,7 +6,6 @@ import { remark } from "remark";
 import semver from "semver";
 import type { CommandWithConfig } from "../bin.ts";
 import { getChangelog } from "../changelog.ts";
-import { stringifyPackage } from "../index.ts";
 
 export default async function prepareNextRelease({ config, dir, skipCommit }: CommandWithConfig) {
 	const changelogEntries = await getChangelog(dir);
@@ -14,7 +13,7 @@ export default async function prepareNextRelease({ config, dir, skipCommit }: Co
 	if (changelogEntries.size === 0) return;
 
 	for (const pkg of config.packages) {
-		const changelogEntry = changelogEntries.get(stringifyPackage(pkg));
+		const changelogEntry = changelogEntries.get(pkg.name);
 		if (!changelogEntry) continue;
 		const version = semver.inc(pkg.version, changelogEntry.bump);
 		if (!version) throw new Error("bump failed");

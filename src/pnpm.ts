@@ -20,7 +20,6 @@ export default async function pnpm({
 		)
 		.map<[Package, (version: string) => Promise<void>]>((project) => [
 			{
-				prefix: "npm",
 				name: project.manifest.name,
 				version: project.manifest.version,
 				path: project.rootDirRealPath,

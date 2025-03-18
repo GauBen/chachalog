@@ -1,7 +1,7 @@
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { styleText } from "node:util";
-import { type Platform, type UserConfig, stringifyPackage } from "../index.ts";
+import type { Platform, UserConfig } from "../index.ts";
 
 export default async function doctor(config: UserConfig) {
 	if (!config.platform) throw new Error("Missing platform in config");
@@ -86,9 +86,7 @@ export default async function doctor(config: UserConfig) {
 						),
 					);
 					for (const pkg of packages) {
-						logs.push(
-							`    . ${stringifyPackage(pkg)}${styleText("dim", `@${pkg.version} in ${pkg.path}`)}`,
-						);
+						logs.push(`    . ${pkg.name}${styleText("dim", `@${pkg.version} in ${pkg.path}`)}`);
 					}
 					const setVersionType = typeof manager.setVersion;
 					if (setVersionType === "function") {

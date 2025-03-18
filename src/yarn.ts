@@ -26,7 +26,6 @@ export default async function yarn({
 		)
 		.map<[Package, (version: string) => Promise<void>]>((ws) => [
 			{
-				prefix: "npm",
 				name: stringifyIdent(ws.manifest.name),
 				version: ws.manifest.version,
 				path: npath.fromPortablePath(ws.cwd),

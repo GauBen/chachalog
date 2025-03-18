@@ -38,7 +38,7 @@ export default async function publishRelease({ config }: CommandWithConfig) {
 		});
 
 		const title = `${pkg.name} @ v${version}`;
-		const tag = `${pkg.prefix}/${pkg.name}@${version}`;
+		const tag = `${pkg.name}@${version}`;
 		await config.platform.createRelease(tag, title, body);
 	}
 }
