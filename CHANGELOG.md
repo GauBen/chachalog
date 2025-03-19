@@ -1,5 +1,9 @@
 # chachalog Changelog
 
+## 0.3.3
+
+* New option: `allowedBumps` to restrict semver bumps.
+
 ## 0.3.2
 
 * New command `npx chachalog prompt` to choose bumps locally.

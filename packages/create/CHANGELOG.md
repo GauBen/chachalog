@@ -1,5 +1,9 @@
 # @chachalog/create Changelog
 
+## 0.0.5
+
+* New option: `allowedBumps` to restrict semver bumps.
+
 ## 0.0.4
 
 ### Breaking changes
