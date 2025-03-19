@@ -12,7 +12,7 @@ declare module "vfile" {
 	}
 }
 
-type MdMap = Map<string, Array<BlockContent | DefinitionContent>>;
+export type MdChildren = Array<BlockContent | DefinitionContent>;
 
 /**
  * Processes a single changelog entry (as a markdown string) to extract version bumps and release
@@ -31,9 +31,9 @@ export async function processEntry(content: string) {
 	const bumps = data.matter ?? {};
 
 	/** Default entry where lines go if not under a title. Called "Other Changes" by default. */
-	const defaultEntry: Array<BlockContent | DefinitionContent> = [];
+	const defaultEntry: MdChildren = [];
 	/** All non-default entries under a title. */
-	const namedEntries: MdMap = new Map();
+	const namedEntries: Map<string, MdChildren> = new Map();
 	/** Current title, undefined if not under a title. */
 	let entry: string | undefined;
 
@@ -76,8 +76,8 @@ export async function processEntries(
 		string,
 		{
 			bump: ReleaseTypes;
-			defaultEntry: Array<BlockContent | DefinitionContent>;
-			namedEntries: MdMap;
+			releaseEntries: Map<ReleaseTypes, MdChildren>;
+			namedEntries: Map<string, MdChildren>;
 		}
 	>();
 
@@ -88,9 +88,13 @@ export async function processEntries(
 				const previous = changelog.get(pkg);
 
 				// Deep merge previous and current named entries
-				const namedEntries: MdMap = previous?.namedEntries ?? new Map();
+				const namedEntries: Map<string, MdChildren> = previous?.namedEntries ?? new Map();
 				for (const [title, content] of current.namedEntries)
 					namedEntries.set(title, [...(namedEntries.get(title) ?? []), ...content]);
+
+				const releaseEntries: Map<ReleaseTypes, MdChildren> = previous?.releaseEntries ?? new Map();
+				if (current.defaultEntry.length > 0)
+					releaseEntries.set(bump, [...(releaseEntries.get(bump) ?? []), ...current.defaultEntry]);
 
 				changelog.set(pkg, {
 					bump: previous?.bump
@@ -99,7 +103,7 @@ export async function processEntries(
 								Math.min(ReleaseTypes.indexOf(previous.bump), ReleaseTypes.indexOf(bump))
 							]
 						: bump,
-					defaultEntry: [...(previous?.defaultEntry ?? []), ...current.defaultEntry],
+					releaseEntries,
 					namedEntries,
 				});
 			}

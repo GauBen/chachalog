@@ -49,7 +49,7 @@ No section
 
 <!-- I'm ignored -->
 
-# Section 1
+# > Section 1
 
 I'm a basic changelog entry
 
@@ -68,7 +68,7 @@ I'm a super changelog entry
 		assert.deepStrictEqual(
 			Object.fromEntries([...namedEntries].map(([title, children]) => [title, toMd(children)])),
 			{
-				"Section 1": "I'm a basic changelog entry\n",
+				"\\> Section 1": "I'm a basic changelog entry\n",
 				"Section *2*": `I'm a super changelog entry
 
 #### Title with [link](https://example.com) and **bold**
@@ -117,11 +117,13 @@ I'm a basic changelog entry
 
 		assert.deepStrictEqual(
 			Object.fromEntries(
-				[...result].map(([pkg, { bump, defaultEntry, namedEntries }]) => [
+				[...result].map(([pkg, { bump, releaseEntries, namedEntries }]) => [
 					pkg,
 					{
 						bump,
-						defaultEntry: toMd(defaultEntry),
+						releaseEntries: Object.fromEntries(
+							[...releaseEntries].map(([bump, children]) => [bump, toMd(children)]),
+						),
 						namedEntries: Object.fromEntries(
 							[...namedEntries].map(([title, children]) => [title, toMd(children)]),
 						),
@@ -131,7 +133,7 @@ I'm a basic changelog entry
 			{
 				"pkg-a": {
 					bump: "patch",
-					defaultEntry: "",
+					releaseEntries: {},
 					namedEntries: { "Section 1": "I'm a basic changelog entry\n" },
 				},
 			},
@@ -176,11 +178,13 @@ Hello
 
 		assert.deepStrictEqual(
 			Object.fromEntries(
-				[...result].map(([pkg, { bump, defaultEntry, namedEntries }]) => [
+				[...result].map(([pkg, { bump, releaseEntries, namedEntries }]) => [
 					pkg,
 					{
 						bump,
-						defaultEntry: toMd(defaultEntry),
+						releaseEntries: Object.fromEntries(
+							[...releaseEntries].map(([bump, children]) => [bump, toMd(children)]),
+						),
 						namedEntries: Object.fromEntries(
 							[...namedEntries].map(([title, children]) => [title, toMd(children)]),
 						),
@@ -190,24 +194,18 @@ Hello
 			{
 				"pkg-a": {
 					bump: "major",
-					defaultEntry: "Different entry\n\nNo section\n",
-					namedEntries: {
-						"Section 1": "I'm a basic changelog entry\n",
-					},
+					releaseEntries: { major: "Different entry\n", minor: "No section\n" },
+					namedEntries: { "Section 1": "I'm a basic changelog entry\n" },
 				},
 				"pkg-b": {
 					bump: "minor",
-					defaultEntry: "No section\n",
-					namedEntries: {
-						"Section 1": "I'm a basic changelog entry\n\nHello\n",
-					},
+					releaseEntries: { minor: "No section\n" },
+					namedEntries: { "Section 1": "I'm a basic changelog entry\n\nHello\n" },
 				},
 				"pkg-c": {
 					bump: "patch",
-					defaultEntry: "",
-					namedEntries: {
-						"Section 1": "Hello\n",
-					},
+					releaseEntries: {},
+					namedEntries: { "Section 1": "Hello\n" },
 				},
 			},
 		);
