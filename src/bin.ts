@@ -7,6 +7,7 @@ import { Builtins, Cli, Command, Option, UsageError } from "clipanion";
 import commentPr from "./commands/comment-pr.ts";
 import doctor from "./commands/doctor.ts";
 import prepareNextRelease from "./commands/prepare-next-release.ts";
+import prompt from "./commands/prompt.ts";
 import publishRelease from "./commands/publish-release.ts";
 import { type Package, ReleaseTypes, type UserConfig } from "./index.ts";
 
@@ -24,7 +25,10 @@ async function findConfigFile(dir: string) {
 }
 
 /** Transforms a raw config into a usable one. */
-async function resolveConfig(config: UserConfig) {
+async function resolveLocalConfig(config: UserConfig) {
+	// Ignore the rejection if platform fails to initialize
+	Promise.resolve(config.platform).catch(() => {});
+
 	const managers = Array.isArray(config.managers)
 		? await Promise.all(config.managers)
 		: [await config.managers];
@@ -75,7 +79,6 @@ async function resolveConfig(config: UserConfig) {
 	return {
 		packages,
 		setVersion,
-		platform: await config.platform,
 		validator: (bumps: unknown) => {
 			const result: Record<string, ReleaseTypes> = {};
 			if (typeof bumps !== "object" || !bumps) throw new Error("frontmatter should be an object");
@@ -89,6 +92,14 @@ async function resolveConfig(config: UserConfig) {
 			if (errors.length > 0) throw new Error(errors.join(", "));
 			return result;
 		},
+	};
+}
+
+/** Transforms a raw config into a usable one. */
+async function resolveConfig(config: UserConfig) {
+	return {
+		...(await resolveLocalConfig(config)),
+		platform: await config.platform,
 	};
 }
 
@@ -115,6 +126,22 @@ async function loadConfig(dir: string) {
 	} finally {
 		await fs.rm(path.join(dir, "node_modules"), { recursive: true, force: true });
 	}
+}
+
+/** Runs a command with a resolved local config (not platform). */
+export abstract class CommandWithLocalConfig extends Command {
+	dir = Option.String("-d,--dir", ".chachalog", { description: "Chachalog directory" });
+	skipCommit = Option.Boolean("--skip-commit", false, { description: "Skip commiting changes" });
+	config!: Awaited<ReturnType<typeof resolveLocalConfig>>;
+
+	async execute() {
+		this.config = await loadConfig(this.dir)
+			.then((fn) => fn())
+			.then(resolveLocalConfig);
+		return this.executeWithLocalConfig();
+	}
+
+	abstract executeWithLocalConfig(): Promise<number | void>;
 }
 
 /** Runs a command with a resolved config. */
@@ -181,6 +208,17 @@ await Cli.from(
 				} catch (error) {
 					console.error(styleText("redBright", "Something went wrong during diagnostic"), error);
 				}
+			}
+		},
+		class extends CommandWithLocalConfig {
+			dir = Option.String("-d,--dir", ".chachalog", { description: "Chachalog directory" });
+			static paths = [["prompt"]];
+			static usage = Command.Usage({
+				category: "Helpers",
+				description: "Interactively create a new changelog entry",
+			});
+			async executeWithLocalConfig() {
+				await prompt(this);
 			}
 		},
 	],
