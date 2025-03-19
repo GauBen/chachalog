@@ -1,5 +1,9 @@
 # chachalog Changelog
 
+## 0.3.2
+
+* New command `npx chachalog prompt` to choose bumps locally.
+
 ## 0.3.1
 
 * Report duplicate packages in `npx chachalog doctor`. (#10)
