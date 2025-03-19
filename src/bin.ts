@@ -76,16 +76,23 @@ async function resolveLocalConfig(config: UserConfig) {
 		);
 	}
 
+	const allowedBumps = Array.isArray(config.allowedBumps)
+		? config.allowedBumps
+		: config.allowedBumps
+			? [config.allowedBumps]
+			: ReleaseTypes;
+
 	return {
 		packages,
 		setVersion,
+		allowedBumps,
 		validator: (bumps: unknown) => {
 			const result: Record<string, ReleaseTypes> = {};
 			if (typeof bumps !== "object" || !bumps) throw new Error("frontmatter should be an object");
 			const errors: string[] = [];
 			for (const [key, value] of Object.entries(bumps)) {
 				if (!names.has(key)) errors.push(`package "${key}" not found`);
-				if (!ReleaseTypes.includes(value as ReleaseTypes))
+				if (!allowedBumps.includes(value as ReleaseTypes))
 					errors.push(`bump "${value}" for package "${key}" is invalid`);
 				result[key] = value as ReleaseTypes;
 			}

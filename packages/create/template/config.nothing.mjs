@@ -6,6 +6,7 @@ import { defineConfig } from "chachalog";
 import github from "chachalog/github";
 
 export default defineConfig(() => ({
+	allowedBumps: ["patch", "minor", "major"],
 	platform: github(),
 	managers: {
 		packages: {

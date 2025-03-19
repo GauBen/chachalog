@@ -39,6 +39,8 @@ export interface Manager {
 }
 
 export interface UserConfig {
+	/** List of allowed semver bumps. Defaults to all. */
+	allowedBumps?: ReleaseTypes | [ReleaseTypes, ...ReleaseTypes[]];
 	managers: MaybeArray<MaybePromise<Manager>>;
 	platform: MaybePromise<Platform>;
 }

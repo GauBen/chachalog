@@ -3,7 +3,7 @@ import path from "node:path";
 import * as p from "@clack/prompts";
 import * as yaml from "yaml";
 import type { CommandWithLocalConfig } from "../bin.ts";
-import { ReleaseTypes } from "../index.ts";
+import type { ReleaseTypes } from "../index.ts";
 
 /** Interactively create a new changelog entry */
 export default async function prompt({ config, dir }: CommandWithLocalConfig) {
@@ -20,7 +20,7 @@ export default async function prompt({ config, dir }: CommandWithLocalConfig) {
 			message: `Bump for ${pkg.name}`,
 			options: [
 				{ value: null, label: "Skip", hint: "I don't want to bump" },
-				...ReleaseTypes.map((value) => ({ value })),
+				...config.allowedBumps.map((value) => ({ value })),
 			],
 		});
 
