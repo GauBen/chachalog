@@ -2,7 +2,6 @@ import { UsageError } from "clipanion";
 import type { BlockContent, DefinitionContent, Root, TopLevelContent } from "mdast";
 import { remark } from "remark";
 import remarkFrontmatter from "remark-frontmatter";
-import * as v from "valibot";
 import { matter } from "vfile-matter";
 import { ReleaseTypes } from "../index.ts";
 
@@ -71,11 +70,7 @@ export async function processEntry(content: string) {
 /** Processes multiple changelog entries. */
 export async function processEntries(
 	files: Map<string, string>,
-	validator: v.RecordSchema<
-		v.PicklistSchema<string[], any>,
-		v.PicklistSchema<readonly ReleaseTypes[], any>,
-		any
-	>,
+	validator: (bumps: unknown) => Record<string, ReleaseTypes>,
 ) {
 	const changelog = new Map<
 		string,
@@ -89,7 +84,7 @@ export async function processEntries(
 	for (const [file, content] of files) {
 		try {
 			const current = await processEntry(content);
-			for (const [pkg, bump] of Object.entries(v.parse(validator, current.bumps))) {
+			for (const [pkg, bump] of Object.entries(validator(current.bumps))) {
 				const previous = changelog.get(pkg);
 
 				// Deep merge previous and current named entries

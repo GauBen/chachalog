@@ -3,7 +3,6 @@ import { describe, suite, test } from "node:test";
 import { UsageError } from "clipanion";
 import type { RootContent } from "mdast";
 import { remark } from "remark";
-import * as v from "valibot";
 import { processEntries, processEntry } from "./process.ts";
 
 const toMd = (children: RootContent[]) => remark().stringify({ type: "root", children });
@@ -113,7 +112,7 @@ I'm a basic changelog entry
 `,
 				],
 			]),
-			v.record(v.picklist(["pkg-a"]), v.picklist(["major", "minor", "patch"])),
+			(bumps) => bumps as Record<string, "major" | "minor" | "patch">,
 		);
 
 		assert.deepStrictEqual(
@@ -172,7 +171,7 @@ Hello
 `,
 				],
 			]),
-			v.record(v.picklist(["pkg-a", "pkg-b", "pkg-c"]), v.picklist(["major", "minor", "patch"])),
+			(bumps) => bumps as Record<string, "major" | "minor" | "patch">,
 		);
 
 		assert.deepStrictEqual(
@@ -226,11 +225,11 @@ pkg-a: invalid
 `,
 					],
 				]),
-				v.record(v.picklist(["pkg-a"], "d"), v.picklist(["major", "minor", "patch"])),
+				() => {
+					throw new Error("hello");
+				},
 			),
-			new UsageError(
-				'Error processing file.md: Invalid type: Expected ("major" | "minor" | "patch") but received "invalid"',
-			),
+			new UsageError("Error processing file.md: hello"),
 		);
 	});
 });

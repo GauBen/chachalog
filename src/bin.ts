@@ -4,12 +4,11 @@ import process from "node:process";
 import { styleText } from "node:util";
 import pkg from "chachalog/package.json" with { type: "json" };
 import { Builtins, Cli, Command, Option, UsageError } from "clipanion";
-import * as v from "valibot";
 import commentPr from "./commands/comment-pr.ts";
 import doctor from "./commands/doctor.ts";
 import prepareNextRelease from "./commands/prepare-next-release.ts";
 import publishRelease from "./commands/publish-release.ts";
-import { type Package, ReleaseTypes, type UserConfig } from "./index.ts";
+import { ReleaseTypes, type Package, type UserConfig } from "./index.ts";
 
 /** Finds a config file in `dir`, returns its absolute path or throws. */
 async function findConfigFile(dir: string) {
@@ -77,7 +76,19 @@ async function resolveConfig(config: UserConfig) {
 		packages,
 		setVersion,
 		platform: await config.platform,
-		validator: v.record(v.picklist([...names.keys()]), v.picklist(ReleaseTypes)),
+		validator: (bumps: unknown) => {
+			const result: Record<string, ReleaseTypes> = {};
+			if (typeof bumps !== "object" || !bumps) throw new Error("frontmatter should be an object");
+			const errors: string[] = [];
+			for (const [key, value] of Object.entries(bumps)) {
+				if (!names.has(key)) errors.push(`package "${key}" not found`);
+				if (!ReleaseTypes.includes(value as ReleaseTypes))
+					errors.push(`bump "${value}" for package "${key}" is invalid`);
+				result[key] = value as ReleaseTypes;
+			}
+			if (errors.length > 0) throw new Error(errors.join(", "));
+			return result;
+		},
 	};
 }
 
