@@ -1,6 +1,6 @@
 import type { BlockContent, DefinitionContent, TopLevelContent } from "mdast";
-import { ReleaseTypes } from "../index.ts";
 import { remark } from "remark";
+import { ReleaseTypes } from "../index.ts";
 import type { MdChildren } from "./process.ts";
 
 export function writeChangelog({

@@ -1,8 +1,8 @@
-import test, { suite } from "node:test";
-import { processEntries, type MdChildren } from "./process.ts";
-import { insertChangelog, writeChangelog } from "./write.ts";
-import { remark } from "remark";
 import assert from "node:assert";
+import test, { suite } from "node:test";
+import { remark } from "remark";
+import { type MdChildren, processEntries } from "./process.ts";
+import { insertChangelog, writeChangelog } from "./write.ts";
 
 suite("writeChangelog", async () => {
 	await test("complex", async () => {

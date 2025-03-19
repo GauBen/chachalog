@@ -8,7 +8,7 @@ import commentPr from "./commands/comment-pr.ts";
 import doctor from "./commands/doctor.ts";
 import prepareNextRelease from "./commands/prepare-next-release.ts";
 import publishRelease from "./commands/publish-release.ts";
-import { ReleaseTypes, type Package, type UserConfig } from "./index.ts";
+import { type Package, ReleaseTypes, type UserConfig } from "./index.ts";
 
 /** Finds a config file in `dir`, returns its absolute path or throws. */
 async function findConfigFile(dir: string) {
@@ -176,10 +176,7 @@ await Cli.from(
 			});
 			async execute() {
 				try {
-					const rawConfig = await loadConfig(this.dir);
-					if (typeof rawConfig !== "function")
-						console.log(styleText("red", "Config should be a function"));
-					const config = typeof rawConfig === "function" ? await rawConfig() : rawConfig;
+					const config = await loadConfig(this.dir).then((fn) => fn());
 					await doctor(config);
 				} catch (error) {
 					console.error(styleText("redBright", "Something went wrong during diagnostic"), error);
