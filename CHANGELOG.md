@@ -1,5 +1,11 @@
 # chachalog Changelog
 
+## 0.3.1
+
+* Report duplicate packages in `npx chachalog doctor`. (#10)
+
+* Group changelog entries per release type (major, minor, patch...) in the CHANGELOG.md file.
+
 ## 0.3.0
 
 ### Breaking changes
