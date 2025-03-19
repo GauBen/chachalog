@@ -38,7 +38,7 @@
 		"@biomejs/biome": "^1.9.4",
 		"@clack/prompts": "^0.10.0",
 		"@pnpm/logger": "^1000.0.0",
-		"@pnpm/workspace.find-packages": "^1000.0.16",
+		"@pnpm/workspace.find-packages": "^1000.0.17",
 		"@pnpm/workspace.read-manifest": "^1000.1.1",
 		"@types/mdast": "^4.0.4",
 		"@types/node": "^20.17.24",
@@ -55,7 +55,7 @@
 		"semver": "^7.7.1",
 		"tinyglobby": "^0.2.12",
 		"typescript": "^5.8.2",
-		"vfile-matter": "^5.0.0",
+		"vfile-matter": "^5.0.1",
 		"yaml": "^2.7.0"
 	},
 	"packageManager": "yarn@4.7.0"

@@ -668,13 +668,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@pnpm/cli-utils@npm:1000.0.16":
-  version: 1000.0.16
-  resolution: "@pnpm/cli-utils@npm:1000.0.16"
+"@pnpm/cli-utils@npm:1000.0.17":
+  version: 1000.0.17
+  resolution: "@pnpm/cli-utils@npm:1000.0.17"
   dependencies:
     "@pnpm/cli-meta": "npm:1000.0.4"
-    "@pnpm/config": "npm:1002.5.3"
-    "@pnpm/default-reporter": "npm:1001.3.7"
+    "@pnpm/config": "npm:1002.5.4"
+    "@pnpm/default-reporter": "npm:1001.3.8"
     "@pnpm/error": "npm:1000.0.2"
     "@pnpm/manifest-utils": "npm:1000.0.6"
     "@pnpm/package-is-installable": "npm:1000.0.6"
@@ -684,7 +684,7 @@ __metadata:
     load-json-file: "npm:^6.2.0"
   peerDependencies:
     "@pnpm/logger": ">=5.1.0 <1001.0.0"
-  checksum: 10c0/aa50f1c78c508d2a49e78f71a6ef55475bef09a63ca73b4d2ab78a53346b975d457d133dfcf151df87d27acf83a689a2917449086e4b3b76bea4750d5d407fd9
+  checksum: 10c0/0c885c28440c09d1e4de042391320f2db76d79877570bb008cd2a92fc3f6b35769121abd65afbfb3b0a7fd514aa1a2348c9f24e44c5db72c1007846d8ba4db9e
   languageName: node
   linkType: hard
 
@@ -702,9 +702,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@pnpm/config@npm:1002.5.3":
-  version: 1002.5.3
-  resolution: "@pnpm/config@npm:1002.5.3"
+"@pnpm/config@npm:1002.5.4":
+  version: 1002.5.4
+  resolution: "@pnpm/config@npm:1002.5.4"
   dependencies:
     "@pnpm/catalogs.config": "npm:1000.0.2"
     "@pnpm/catalogs.types": "npm:1000.0.0"
@@ -714,7 +714,7 @@ __metadata:
     "@pnpm/git-utils": "npm:1000.0.0"
     "@pnpm/matcher": "npm:1000.0.0"
     "@pnpm/npm-conf": "npm:3.0.0"
-    "@pnpm/pnpmfile": "npm:1001.0.7"
+    "@pnpm/pnpmfile": "npm:1001.0.8"
     "@pnpm/read-project-manifest": "npm:1000.0.7"
     "@pnpm/types": "npm:1000.2.1"
     "@pnpm/workspace.read-manifest": "npm:1000.1.1"
@@ -731,7 +731,7 @@ __metadata:
     read-ini-file: "npm:4.0.0"
     realpath-missing: "npm:^1.1.0"
     which: "npm:@pnpm/which@^3.0.1"
-  checksum: 10c0/8f536f6878cecbe14f7fe862f7ba2ebb2231ee044a909e961a23ca04ca83a93c14a9010d5ace547ae385cdc21c6afe4afe247cbffa59709c373881080bfaf16e
+  checksum: 10c0/9b3a640622e764857e6574813ee7660663ac3cc6d1a07c078f8c9733eb3d93797bc844ef7c465c4710a74a828f249a41266d681888432043a81d7d081fa4cc89
   languageName: node
   linkType: hard
 
@@ -789,12 +789,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@pnpm/default-reporter@npm:1001.3.7":
-  version: 1001.3.7
-  resolution: "@pnpm/default-reporter@npm:1001.3.7"
+"@pnpm/default-reporter@npm:1001.3.8":
+  version: 1001.3.8
+  resolution: "@pnpm/default-reporter@npm:1001.3.8"
   dependencies:
     "@pnpm/cli-meta": "npm:1000.0.4"
-    "@pnpm/config": "npm:1002.5.3"
+    "@pnpm/config": "npm:1002.5.4"
     "@pnpm/core-loggers": "npm:1000.1.4"
     "@pnpm/dedupe.issues-renderer": "npm:1000.0.1"
     "@pnpm/dedupe.types": "npm:1000.0.0"
@@ -816,7 +816,7 @@ __metadata:
     string-length: "npm:^4.0.2"
   peerDependencies:
     "@pnpm/logger": ">=5.1.0 <1001.0.0"
-  checksum: 10c0/43e9e0a21e1f55d9e10352ddd663fd1cdfa68b6d96f54b4f612e9a96774c7787ecc1ac87b9d64b154c4ce6734b2e22c3bdb1cdd29a1d4140452946d8fecb9b65
+  checksum: 10c0/f01d20ccd23c781081aed4d2f9e1cda002b14305910944e660cb530c3ba9d007813539d8ed5d2540e4e30e612898367ce036b9a3b39e0b23e2d061dd84d2983f
   languageName: node
   linkType: hard
 
@@ -840,14 +840,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@pnpm/fetcher-base@npm:1000.0.5":
-  version: 1000.0.5
-  resolution: "@pnpm/fetcher-base@npm:1000.0.5"
+"@pnpm/fetcher-base@npm:1000.0.6":
+  version: 1000.0.6
+  resolution: "@pnpm/fetcher-base@npm:1000.0.6"
   dependencies:
-    "@pnpm/resolver-base": "npm:1000.1.4"
+    "@pnpm/resolver-base": "npm:1000.2.0"
     "@pnpm/types": "npm:1000.2.1"
     "@types/ssri": "npm:^7.1.5"
-  checksum: 10c0/0b112b6e44feb5abdafa3069c055628268471e6bd24d7c583f1222df854a301d1f6712273a8087e8bb17c0f41545ff81690f3b86289b2f3f9a846fe16c91604e
+  checksum: 10c0/74de9f2265463f2271b1c36b49dd8a5234d143c5e69c69fb8748e6fe25a4d16fb6914ff6ff5777295d6fe22d82c45dc8309e4ed1d0b452d18fcd7eb705f613ce
   languageName: node
   linkType: hard
 
@@ -999,22 +999,22 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@pnpm/pnpmfile@npm:1001.0.7":
-  version: 1001.0.7
-  resolution: "@pnpm/pnpmfile@npm:1001.0.7"
+"@pnpm/pnpmfile@npm:1001.0.8":
+  version: 1001.0.8
+  resolution: "@pnpm/pnpmfile@npm:1001.0.8"
   dependencies:
     "@pnpm/core-loggers": "npm:1000.1.4"
     "@pnpm/crypto.hash": "npm:1000.1.1"
     "@pnpm/error": "npm:1000.0.2"
     "@pnpm/hooks.types": "npm:1001.0.4"
     "@pnpm/lockfile.types": "npm:1001.0.4"
-    "@pnpm/store-controller-types": "npm:1001.0.3"
+    "@pnpm/store-controller-types": "npm:1001.0.4"
     "@pnpm/types": "npm:1000.2.1"
     chalk: "npm:^4.1.2"
     path-absolute: "npm:^1.0.1"
   peerDependencies:
     "@pnpm/logger": ">=5.1.0 <1001.0.0"
-  checksum: 10c0/e03fdc8b6fcd34fbcfa45e0282633d82476429417f36f608dd69ba7dde776317a8304a0913e77314256d4a3b7e0b323877a38de4f08d93b54465019b5c6bf7f4
+  checksum: 10c0/4aaab863ec80466c248a4acc5e42417bfa65750477f51c0c2afd2d023ba5f408a33cfa3f60805fc8977094cb41e2fa2bab07275a31e0081f5289b9e7e3cffa25
   languageName: node
   linkType: hard
 
@@ -1054,23 +1054,23 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@pnpm/resolver-base@npm:1000.1.4":
-  version: 1000.1.4
-  resolution: "@pnpm/resolver-base@npm:1000.1.4"
+"@pnpm/resolver-base@npm:1000.2.0":
+  version: 1000.2.0
+  resolution: "@pnpm/resolver-base@npm:1000.2.0"
   dependencies:
     "@pnpm/types": "npm:1000.2.1"
-  checksum: 10c0/d0c57d5694c7d4b9fd5f715ad892ad6e023fbd3f5d8d61161ef431a739649598850f4900b6fe24ece7bbe9b467f92e015a62fe3d7a403e176573fa943a372cc3
+  checksum: 10c0/32296541c501128c8eb2b3d682a01a034388a5529de69cc7706ac5c221d65fdefc3ea1a216ebc1077b5af6131a71d8262f519a5270137f0786f20ca4a1400a2c
   languageName: node
   linkType: hard
 
-"@pnpm/store-controller-types@npm:1001.0.3":
-  version: 1001.0.3
-  resolution: "@pnpm/store-controller-types@npm:1001.0.3"
+"@pnpm/store-controller-types@npm:1001.0.4":
+  version: 1001.0.4
+  resolution: "@pnpm/store-controller-types@npm:1001.0.4"
   dependencies:
-    "@pnpm/fetcher-base": "npm:1000.0.5"
-    "@pnpm/resolver-base": "npm:1000.1.4"
+    "@pnpm/fetcher-base": "npm:1000.0.6"
+    "@pnpm/resolver-base": "npm:1000.2.0"
     "@pnpm/types": "npm:1000.2.1"
-  checksum: 10c0/9e17d5477153e8b774dc00867d148e1c41929b58a6648f70c8a90a6d7d5c45d96a7a4fd1be5e124728a69059f126428070d49b2da2f6d4a36b238045549269c2
+  checksum: 10c0/c9543b93745040d917db3734a4a2081fa4b2c181314e0522812a624233d9a9947748c2332c1dcb0840661db97e9492e95c44c4df9312841f19c3cd60db55fa14
   languageName: node
   linkType: hard
 
@@ -1104,18 +1104,18 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@pnpm/workspace.find-packages@npm:^1000.0.16":
-  version: 1000.0.16
-  resolution: "@pnpm/workspace.find-packages@npm:1000.0.16"
+"@pnpm/workspace.find-packages@npm:^1000.0.17":
+  version: 1000.0.17
+  resolution: "@pnpm/workspace.find-packages@npm:1000.0.17"
   dependencies:
-    "@pnpm/cli-utils": "npm:1000.0.16"
+    "@pnpm/cli-utils": "npm:1000.0.17"
     "@pnpm/constants": "npm:1001.1.0"
     "@pnpm/fs.find-packages": "npm:1000.0.7"
     "@pnpm/types": "npm:1000.2.1"
     "@pnpm/util.lex-comparator": "npm:3.0.1"
   peerDependencies:
     "@pnpm/logger": ">=5.1.0 <1001.0.0"
-  checksum: 10c0/c86099c43bb716c83bec618407c08eb74a3b972332c9f37e7d764d0dda4e806d3ac036e4919947dbb96d6bec42524cfb72a3b2e8965d3336c869c0326e19ad48
+  checksum: 10c0/2e8006afe7ce1cdacec3933e00cf14d03afa8bfdfc3fe932a815d2ecd34f47a41d98e66b797351d81f7e953cf2a69e6a63cd86c877179faf027ddc86f84e85f0
   languageName: node
   linkType: hard
 
@@ -1934,7 +1934,7 @@ __metadata:
     "@biomejs/biome": "npm:^1.9.4"
     "@clack/prompts": "npm:^0.10.0"
     "@pnpm/logger": "npm:^1000.0.0"
-    "@pnpm/workspace.find-packages": "npm:^1000.0.16"
+    "@pnpm/workspace.find-packages": "npm:^1000.0.17"
     "@pnpm/workspace.read-manifest": "npm:^1000.1.1"
     "@types/mdast": "npm:^4.0.4"
     "@types/node": "npm:^20.17.24"
@@ -1951,7 +1951,7 @@ __metadata:
     semver: "npm:^7.7.1"
     tinyglobby: "npm:^0.2.12"
     typescript: "npm:^5.8.2"
-    vfile-matter: "npm:^5.0.0"
+    vfile-matter: "npm:^5.0.1"
     yaml: "npm:^2.7.0"
   bin:
     chachalog: dist/bin.js
@@ -4794,13 +4794,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"vfile-matter@npm:^5.0.0":
-  version: 5.0.0
-  resolution: "vfile-matter@npm:5.0.0"
+"vfile-matter@npm:^5.0.1":
+  version: 5.0.1
+  resolution: "vfile-matter@npm:5.0.1"
   dependencies:
     vfile: "npm:^6.0.0"
     yaml: "npm:^2.0.0"
-  checksum: 10c0/48cc17cdc83b07a77888f2881a0c60e052531af5a23ab6e589683848129d1672031a85578d7c48c2260b9c18d838bf3799cff591b2d4b54dc7e01a66c5d79806
+  checksum: 10c0/0032ebd359e322392ee6ce513f51db8576ae56fff70a6e2eedb3a62116711e3898d5fef49e2b09d23829620b0f35899a88746af195f61e48b8ec26b5d9a50ec3
   languageName: node
   linkType: hard
 

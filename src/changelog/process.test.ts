@@ -24,7 +24,6 @@ I'm a basic changelog entry
 
 	await test("basic section", async () => {
 		const { defaultEntry, namedEntries } = await processEntry(`---
-
 ---
 
 # Section

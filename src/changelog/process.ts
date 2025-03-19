@@ -7,7 +7,7 @@ import { ReleaseTypes } from "../index.ts";
 
 declare module "vfile" {
 	interface DataMap {
-		matter: unknown;
+		matter: NonNullable<unknown>;
 		tree: Root & { children: TopLevelContent[] };
 	}
 }
@@ -28,7 +28,7 @@ export async function processEntry(content: string) {
 		})
 		.process(content);
 
-	const bumps = data.matter ?? {};
+	const bumps = data.matter!;
 
 	/** Default entry where lines go if not under a title. Called "Other Changes" by default. */
 	const defaultEntry: MdChildren = [];
