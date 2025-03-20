@@ -1942,7 +1942,6 @@ __metadata:
     "@types/unist": "npm:^3.0.3"
     "@yarnpkg/core": "npm:^4.2.1"
     "@yarnpkg/fslib": "npm:^3.1.2"
-    change-case: "npm:^5.4.4"
     clipanion: "npm:^4.0.0-rc.4"
     dts-buddy: "git+https://github.com/GauBen/dts-buddy.git#commit=af9f317b5b1575ca5236f8d76f0c98e804769232"
     pkgroll: "npm:^2.11.2"
@@ -1976,13 +1975,6 @@ __metadata:
     ansi-styles: "npm:^4.1.0"
     supports-color: "npm:^7.1.0"
   checksum: 10c0/4a3fef5cc34975c898ffe77141450f679721df9dde00f6c304353fa9c8b571929123b26a0e4617bde5018977eb655b31970c297b91b63ee83bb82aeb04666880
-  languageName: node
-  linkType: hard
-
-"change-case@npm:^5.4.4":
-  version: 5.4.4
-  resolution: "change-case@npm:5.4.4"
-  checksum: 10c0/2a9c2b9c9ad6ab2491105aaf506db1a9acaf543a18967798dcce20926c6a173aa63266cb6189f3086e3c14bf7ae1f8ea4f96ecc466fcd582310efa00372f3734
   languageName: node
   linkType: hard
 

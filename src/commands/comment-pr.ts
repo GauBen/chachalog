@@ -1,5 +1,4 @@
 import path from "node:path";
-import { sentenceCase } from "change-case";
 import { UsageError } from "clipanion";
 import type { RootContent } from "mdast";
 import { remark } from "remark";
@@ -8,6 +7,8 @@ import type { CommandWithConfig } from "../bin.ts";
 import { processEntries } from "../changelog/process.ts";
 import { writeChangelog } from "../changelog/write.ts";
 import { ReleaseTypes } from "../index.ts";
+
+const sentenceCase = (s: string) => s && s[0].toUpperCase() + s.slice(1);
 
 export default async function commentPr({ config, dir }: CommandWithConfig) {
 	try {
@@ -21,21 +22,16 @@ export default async function commentPr({ config, dir }: CommandWithConfig) {
 		);
 
 		const conventionnalCommit = title.match(/^(\w+).*?(!)?:([\s\S]*)/);
-		let suggestedBump = config.allowedBumps[0];
-		if (conventionnalCommit?.[2]) {
-			suggestedBump =
-				ReleaseTypes.find((bump) => config.allowedBumps.includes(bump)) ?? suggestedBump;
-		} else if (conventionnalCommit?.[1] === "feat") {
-			suggestedBump =
-				(["minor", "preminor"] as const).find((bump) =>
-					(config.allowedBumps as string[]).includes(bump),
-				) ?? suggestedBump;
-		} else if (conventionnalCommit?.[1] === "fix") {
-			suggestedBump =
-				(["patch", "prepatch"] as const).find((bump) =>
-					(config.allowedBumps as string[]).includes(bump),
-				) ?? suggestedBump;
-		}
+		const suggestedBump =
+			ReleaseTypes.slice(
+				conventionnalCommit?.[2]
+					? 0
+					: conventionnalCommit?.[1] === "feat"
+						? 2
+						: conventionnalCommit?.[1] === "fix"
+							? 4
+							: 0,
+			).find((bump) => config.allowedBumps.includes(bump)) ?? config.allowedBumps[0];
 
 		const filename = `${dir}/${Buffer.from(crypto.getRandomValues(new Uint8Array(6))).toString("base64url")}.md`;
 		const content = `---\n# Describe desired version bumps\n${

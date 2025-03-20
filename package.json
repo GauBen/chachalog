@@ -46,7 +46,6 @@
 		"@types/unist": "^3.0.3",
 		"@yarnpkg/core": "^4.2.1",
 		"@yarnpkg/fslib": "^3.1.2",
-		"change-case": "^5.4.4",
 		"clipanion": "^4.0.0-rc.4",
 		"dts-buddy": "git+https://github.com/GauBen/dts-buddy.git#commit=af9f317b5b1575ca5236f8d76f0c98e804769232",
 		"pkgroll": "^2.11.2",
