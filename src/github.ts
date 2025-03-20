@@ -21,7 +21,7 @@ export default async function github({
 	return {
 		username,
 		email,
-		async createChangelogEntryLink(filename: string, frontmatter: string) {
+		async createChangelogEntryLink(filename: string, content: string) {
 			const { data: pr } = await octokit.rest.pulls.get({
 				owner: context.repo.owner,
 				repo: context.repo.repo,
@@ -30,7 +30,7 @@ export default async function github({
 
 			const url = new URL(`new/${pr.head.ref}`, `${(pr.head.repo ?? pr.base.repo).html_url}/`);
 			url.searchParams.set("filename", filename);
-			url.searchParams.set("value", `${frontmatter}\n\n${pr.title} (#${pr.number})`);
+			url.searchParams.set("value", content);
 
 			return url.toString();
 		},
@@ -62,13 +62,13 @@ export default async function github({
 			}
 		},
 		async getChangelogEntries(dir: string, packagePaths: Array<[string, string]>) {
-			const {
-				data: { title },
-			} = await octokit.rest.pulls.get({
+			const { data: pr } = await octokit.rest.pulls.get({
 				owner: context.repo.owner,
 				repo: context.repo.repo,
 				pull_number: context.issue.number,
 			});
+			const title = `${pr.title} (#${pr.number})`;
+
 			const changedPackages: string[] = [];
 			const unchangedPackages = new Map(packagePaths);
 			const changelogEntries: RestEndpointMethodTypes["pulls"]["listFiles"]["response"]["data"] =

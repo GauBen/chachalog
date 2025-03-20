@@ -7,7 +7,7 @@ export interface Platform {
 	/** Email address to use when creating git commits. */
 	email: string;
 	/** Creates a link that prompts the user to create a changelog entry starting with `frontmatter`. */
-	createChangelogEntryLink: (filename: string, frontmatter: string) => MaybePromise<string>;
+	createChangelogEntryLink: (filename: string, content: string) => MaybePromise<string>;
 	/** Creates or updates a comment on the active PR. */
 	upsertChangelogComment: (body: string) => MaybePromise<void>;
 	/** Gets the changelog entries from the active PR. */

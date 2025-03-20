@@ -19,17 +19,17 @@ export default async function commentPr({ config, dir }: CommandWithConfig) {
 			packagePaths,
 		);
 
-		const conventionnalCommit = title.match(/^(\w+).*?(!)?:/);
+		const conventionnalCommit = title.match(/^(\w+).*?(!)?:([\s\S]*)/);
 		let suggestedBump = config.allowedBumps[0];
-		if (conventionnalCommit?.[1]) {
+		if (conventionnalCommit?.[2]) {
 			suggestedBump =
 				ReleaseTypes.find((bump) => config.allowedBumps.includes(bump)) ?? suggestedBump;
-		} else if (conventionnalCommit?.[0] === "feat") {
+		} else if (conventionnalCommit?.[1] === "feat") {
 			suggestedBump =
 				(["minor", "preminor"] as const).find((bump) =>
 					(config.allowedBumps as string[]).includes(bump),
 				) ?? suggestedBump;
-		} else if (conventionnalCommit?.[0] === "fix") {
+		} else if (conventionnalCommit?.[1] === "fix") {
 			suggestedBump =
 				(["patch", "prepatch"] as const).find((bump) =>
 					(config.allowedBumps as string[]).includes(bump),
@@ -37,12 +37,11 @@ export default async function commentPr({ config, dir }: CommandWithConfig) {
 		}
 
 		const filename = `${dir}/${Buffer.from(crypto.getRandomValues(new Uint8Array(6))).toString("base64url")}.md`;
-		const frontmatter =
+		const content = `---\n# Describe desired version bumps\n${
 			changedPackages.length > 0
-				? `---\n# Describe desired version bumps\n${yaml.stringify(
-						Object.fromEntries(changedPackages.map((name) => [name, suggestedBump])),
-					)}\n---`
-				: "---\n# Describe desired version bumps\n\n---";
+				? yaml.stringify(Object.fromEntries(changedPackages.map((name) => [name, suggestedBump])))
+				: ""
+		}\n---\n\n${conventionnalCommit?.[3] ?? title}`;
 
 		const bumps = await processEntries(entries, config.validator);
 
@@ -70,7 +69,7 @@ export default async function commentPr({ config, dir }: CommandWithConfig) {
 					children: [
 						{
 							type: "link",
-							url: await config.platform.createChangelogEntryLink(filename, frontmatter),
+							url: await config.platform.createChangelogEntryLink(filename, content),
 							children: [{ type: "text", value: "Create a new entry" }],
 						},
 					],
