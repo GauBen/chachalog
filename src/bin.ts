@@ -138,7 +138,6 @@ async function loadConfig(dir: string) {
 /** Runs a command with a resolved local config (not platform). */
 export abstract class CommandWithLocalConfig extends Command {
 	dir = Option.String("-d,--dir", ".chachalog", { description: "Chachalog directory" });
-	skipCommit = Option.Boolean("--skip-commit", false, { description: "Skip commiting changes" });
 	config!: Awaited<ReturnType<typeof resolveLocalConfig>>;
 
 	async execute() {
@@ -218,7 +217,6 @@ await Cli.from(
 			}
 		},
 		class extends CommandWithLocalConfig {
-			dir = Option.String("-d,--dir", ".chachalog", { description: "Chachalog directory" });
 			static paths = [["prompt"]];
 			static usage = Command.Usage({
 				category: "Helpers",
