@@ -10,7 +10,7 @@ export function writeChangelog({
 	releaseEntries: Map<ReleaseTypes, Array<BlockContent | DefinitionContent>>;
 	namedEntries: Map<string, Array<BlockContent | DefinitionContent>>;
 }) {
-	const children: TopLevelContent[] = [];
+	const children: Array<BlockContent | DefinitionContent> = [];
 
 	for (const [title, nodes] of namedEntries) {
 		const {
