@@ -40,8 +40,8 @@ export default async function commentPr({ config, dir }: CommandWithConfig) {
 		const content = `---\n# Describe desired version bumps\n${
 			changedPackages.length > 0
 				? yaml.stringify(Object.fromEntries(changedPackages.map((name) => [name, suggestedBump])))
-				: ""
-		}\n---\n\n${conventionnalCommit?.[3] ?? title}`;
+				: "\n"
+		}---\n\n${conventionnalCommit?.[3] ?? title}`;
 
 		const bumps = await processEntries(entries, config.validator);
 
