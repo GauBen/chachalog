@@ -1,11 +1,12 @@
 import path from "node:path";
+import { sentenceCase } from "change-case";
 import { UsageError } from "clipanion";
 import type { RootContent } from "mdast";
 import { remark } from "remark";
+import * as yaml from "yaml";
 import type { CommandWithConfig } from "../bin.ts";
 import { processEntries } from "../changelog/process.ts";
 import { writeChangelog } from "../changelog/write.ts";
-import * as yaml from "yaml";
 import { ReleaseTypes } from "../index.ts";
 
 export default async function commentPr({ config, dir }: CommandWithConfig) {
@@ -41,7 +42,7 @@ export default async function commentPr({ config, dir }: CommandWithConfig) {
 			changedPackages.length > 0
 				? yaml.stringify(Object.fromEntries(changedPackages.map((name) => [name, suggestedBump])))
 				: "\n"
-		}---\n\n${conventionnalCommit?.[3] ?? title}`;
+		}---\n\n${sentenceCase((conventionnalCommit?.[3] ?? title).trim())}`;
 
 		const bumps = await processEntries(entries, config.validator);
 
