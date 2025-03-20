@@ -20,6 +20,10 @@
 			"types": "./dist/pnpm.d.ts",
 			"import": "./dist/pnpm.js"
 		},
+		"./npm": {
+			"types": "./dist/npm.d.ts",
+			"import": "./dist/npm.js"
+		},
 		"./package.json": "./package.json"
 	},
 	"bin": "dist/bin.js",
