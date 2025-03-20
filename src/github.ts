@@ -100,7 +100,7 @@ export default async function github({
 				owner: context.repo.owner,
 				repo: context.repo.repo,
 				base: "main",
-				head: "release",
+				head: `${context.repo.owner}:release`,
 				state: "open",
 			});
 
