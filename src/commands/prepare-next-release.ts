@@ -29,7 +29,7 @@ export default async function prepareNextRelease({ config, dir, skipCommit }: Co
 
 		const changelogFile = await config.getChangelogFile(pkg);
 		const original = await fs.readFile(changelogFile, "utf-8").catch((error) => {
-			if (error.code === "ENOENT") return `# ${pkg.name} Changelog\n`;
+			if (error.code === "ENOENT") return config.getNewChangelog(pkg);
 			throw error;
 		});
 
@@ -46,11 +46,12 @@ export default async function prepareNextRelease({ config, dir, skipCommit }: Co
 	git("config", "user.email", config.platform.email);
 	git("switch", "-c", "release");
 	git("add", ".");
-	git("commit", "-m", "chore: release");
+	git("commit", "-m", config.releaseMessage);
 	git("push", "--force", "origin", "release");
 
 	await config.platform.upsertReleasePr(
-		"chore: release",
+		config.releaseBranch,
+		config.releaseMessage,
 		"Merge this PR to release the next version",
 	);
 }

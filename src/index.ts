@@ -16,7 +16,7 @@ export interface Platform {
 		packagePaths: Array<[string, string]>,
 	) => MaybePromise<{ title: string; entries: Map<string, string>; changedPackages: string[] }>;
 	/** Creates a PR for the next release. */
-	upsertReleasePr: (title: string, body: string) => MaybePromise<void>;
+	upsertReleasePr: (branch: string, title: string, body: string) => MaybePromise<void>;
 	/** Creates a release. Will be called on every commit, ensure it is idempotent. */
 	createRelease: (tag: string, title: string, body: string) => MaybePromise<void>;
 }
@@ -46,12 +46,22 @@ export interface UserConfig {
 	allowedBumps?: ReleaseTypes | [ReleaseTypes, ...ReleaseTypes[]];
 	platform: MaybePromise<Platform>;
 	managers: MaybeArray<MaybePromise<Manager>>;
+	/** Branch to use to create release PRs. Defaults to `release`. */
+	releaseBranch?: string;
+	/** Commit message to use when creating a release. Defaults to `chore: release`. */
+	releaseMessage?: string;
 	/**
 	 * Returns the path to the changelog file for a package.
 	 *
 	 * @default `pkg => path.join(pkg.path, "CHANGELOG.md")`
 	 */
 	getChangelogFile?: (pkg: Package) => MaybePromise<string>;
+	/**
+	 * Returns a changelog initialized for a package.
+	 *
+	 * @default `pkg => `# ${pkg.name} Changelog\n``
+	 */
+	getNewChangelog?: (pkg: Package) => MaybePromise<string>;
 }
 
 export function defineConfig(config: () => MaybePromise<UserConfig>) {

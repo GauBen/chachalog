@@ -2,4 +2,4 @@
 chachalog: patch
 ---
 
-Changelog path is now configurable.
+Changelog path, default and release branches, commit message are now configurable.

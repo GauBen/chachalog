@@ -86,7 +86,10 @@ async function resolveLocalConfig(config: UserConfig) {
 		packages,
 		setVersion,
 		allowedBumps,
+		releaseBranch: config.releaseBranch ?? "release",
+		releaseMessage: config.releaseMessage ?? "chore: release",
 		getChangelogFile: config.getChangelogFile ?? ((pkg) => path.join(pkg.path, "CHANGELOG.md")),
+		getNewChangelog: config.getNewChangelog ?? ((pkg) => `# ${pkg.name} Changelog\n`),
 		validator: (bumps: unknown) => {
 			const result: Record<string, ReleaseTypes> = {};
 			if (typeof bumps !== "object" || !bumps) throw new Error("frontmatter should be an object");

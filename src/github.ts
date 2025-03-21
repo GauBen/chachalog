@@ -7,7 +7,13 @@ import type { Platform } from "./index.ts";
 export default async function github({
 	username = "github-actions[bot]",
 	email = "41898282+github-actions[bot]@users.noreply.github.com",
-}: { username?: string; email?: string } = {}): Promise<Platform> {
+	base = "main",
+}: {
+	username?: string;
+	email?: string;
+	/** Base branch. Defaults to `main`. */
+	base?: string;
+} = {}): Promise<Platform> {
 	const token = process.env.GITHUB_TOKEN;
 
 	if (!token) {
@@ -111,12 +117,12 @@ export default async function github({
 
 			return { title, entries, changedPackages };
 		},
-		async upsertReleasePr(title: string, body: string) {
+		async upsertReleasePr(branch: string, title: string, body: string) {
 			const { data: pulls } = await octokit.rest.pulls.list({
 				owner: context.repo.owner,
 				repo: context.repo.repo,
-				base: "main",
-				head: `${context.repo.owner}:release`,
+				base,
+				head: `${branch}:release`,
 				state: "open",
 			});
 
@@ -132,8 +138,8 @@ export default async function github({
 				await octokit.rest.pulls.create({
 					owner: context.repo.owner,
 					repo: context.repo.repo,
-					base: "main",
-					head: "release",
+					base,
+					head: branch,
 					title,
 					body,
 				});
