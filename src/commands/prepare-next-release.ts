@@ -27,15 +27,14 @@ export default async function prepareNextRelease({ config, dir, skipCommit }: Co
 		if (!version) throw new Error("bump failed");
 		await config.setVersion(pkg, version);
 
-		const original = await fs
-			.readFile(path.join(pkg.path, "CHANGELOG.md"), "utf-8")
-			.catch((error) => {
-				if (error.code === "ENOENT") return `# ${pkg.name} Changelog\n`;
-				throw error;
-			});
+		const changelogFile = await config.getChangelogFile(pkg);
+		const original = await fs.readFile(changelogFile, "utf-8").catch((error) => {
+			if (error.code === "ENOENT") return `# ${pkg.name} Changelog\n`;
+			throw error;
+		});
 
 		const updated = insertChangelog(original, version, changelogEntry);
-		await fs.writeFile(path.join(pkg.path, "CHANGELOG.md"), updated);
+		await fs.writeFile(changelogFile, updated);
 	}
 
 	if (skipCommit) return;

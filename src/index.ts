@@ -44,8 +44,14 @@ export interface Manager {
 export interface UserConfig {
 	/** List of allowed semver bumps. Defaults to all. */
 	allowedBumps?: ReleaseTypes | [ReleaseTypes, ...ReleaseTypes[]];
-	managers: MaybeArray<MaybePromise<Manager>>;
 	platform: MaybePromise<Platform>;
+	managers: MaybeArray<MaybePromise<Manager>>;
+	/**
+	 * Returns the path to the changelog file for a package.
+	 *
+	 * @default `pkg => path.join(pkg.path, "CHANGELOG.md")`
+	 */
+	getChangelogFile?: (pkg: Package) => MaybePromise<string>;
 }
 
 export function defineConfig(config: () => MaybePromise<UserConfig>) {

@@ -1,19 +1,17 @@
 import fs from "node:fs/promises";
-import path from "node:path";
 import { remark } from "remark";
 import type { CommandWithConfig } from "../bin.ts";
 
 export default async function publishRelease({ config }: CommandWithConfig) {
 	for (const pkg of config.packages) {
+		const changelogFile = await config.getChangelogFile(pkg);
 		try {
-			await fs.access(path.join(pkg.path, "CHANGELOG.md"));
+			await fs.access(changelogFile);
 		} catch {
 			continue;
 		}
 
-		const changelog = remark().parse(
-			await fs.readFile(path.join(pkg.path, "CHANGELOG.md"), "utf-8"),
-		);
+		const changelog = remark().parse(await fs.readFile(changelogFile, "utf-8"));
 		const release = changelog.children.findIndex(
 			(node) => node.type === "heading" && node.depth === 2,
 		);
