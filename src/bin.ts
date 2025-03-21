@@ -82,10 +82,22 @@ async function resolveLocalConfig(config: UserConfig) {
 			? [config.allowedBumps]
 			: ReleaseTypes;
 
+	const bumpTitles: Record<ReleaseTypes, string> = {
+		major: "Breaking Changes",
+		premajor: "Upcoming Breaking Changes",
+		minor: "New Features",
+		preminor: "Upcoming New Features",
+		patch: "Bug Fixes",
+		prepatch: "Upcoming Bug Fixes",
+		prerelease: "Upcoming Changes",
+		...config.bumpTitles,
+	};
+
 	return {
 		packages,
 		setVersion,
 		allowedBumps,
+		bumpTitles,
 		releaseBranch: config.releaseBranch ?? "release",
 		releaseMessage: config.releaseMessage ?? "chore: release",
 		getChangelogFile: config.getChangelogFile ?? ((pkg) => path.join(pkg.path, "CHANGELOG.md")),

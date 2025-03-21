@@ -3,6 +3,17 @@ import test, { suite } from "node:test";
 import { remark } from "remark";
 import { type MdChildren, processEntries } from "./process.ts";
 import { insertChangelog, writeChangelog } from "./write.ts";
+import type { ReleaseTypes } from "../index.ts";
+
+const bumpTitles: Record<ReleaseTypes, string> = {
+	major: "Breaking changes",
+	minor: "New features",
+	patch: "Bug fixes",
+	premajor: "premajor changes",
+	preminor: "preminor changes",
+	prepatch: "prepatch changes",
+	prerelease: "prerelease changes",
+};
 
 suite("writeChangelog", async () => {
 	await test("complex", async () => {
@@ -46,11 +57,11 @@ Hello
 
 * I'm a basic changelog entry
 
-### major changes
+### Breaking changes
 
 * Different entry
 
-### minor changes
+### New features
 
 * No section
 `,
@@ -60,7 +71,7 @@ Hello
 
 * Hello
 
-### minor changes
+### New features
 
 * No section
 `,
@@ -74,7 +85,7 @@ Hello
 			Object.fromEntries(
 				[...entries].map(([pkg, entry]) => [
 					pkg,
-					remark.stringify({ type: "root", children: writeChangelog(entry) }),
+					remark.stringify({ type: "root", children: writeChangelog(entry, bumpTitles) }),
 				]),
 			),
 			expected,
@@ -84,12 +95,18 @@ Hello
 	test("invalid", () => {
 		assert.throws(
 			() =>
-				writeChangelog({
-					releaseEntries: new Map(),
-					namedEntries: new Map([
-						["> Section 1", [{ type: "paragraph", children: [{ type: "text", value: "Hello" }] }]],
-					]),
-				}),
+				writeChangelog(
+					{
+						releaseEntries: new Map(),
+						namedEntries: new Map([
+							[
+								"> Section 1",
+								[{ type: "paragraph", children: [{ type: "text", value: "Hello" }] }],
+							],
+						]),
+					},
+					bumpTitles,
+				),
 			new Error("Title parsing failed"),
 		);
 	});
@@ -106,7 +123,7 @@ suite("insertChangelog", () => {
 		};
 
 		assert.strictEqual(
-			insertChangelog("# Changelog", version, changelogEntry),
+			insertChangelog("# Changelog", version, changelogEntry, bumpTitles),
 			`# Changelog
 
 ## 1.0.0
@@ -118,7 +135,7 @@ suite("insertChangelog", () => {
 		);
 
 		assert.strictEqual(
-			insertChangelog("# Changelog\n\n## 0.1.0", version, changelogEntry),
+			insertChangelog("# Changelog\n\n## 0.1.0", version, changelogEntry, bumpTitles),
 			`# Changelog
 
 ## 1.0.0

@@ -44,7 +44,11 @@ export interface Manager {
 export interface UserConfig {
 	/** List of allowed semver bumps. Defaults to all. */
 	allowedBumps?: ReleaseTypes | [ReleaseTypes, ...ReleaseTypes[]];
+	/** Title to use for each release type. */
+	bumpTitles: Partial<Record<ReleaseTypes, string>>;
+	/** Platform (git host) to use. */
 	platform: MaybePromise<Platform>;
+	/** List of package managers. */
 	managers: MaybeArray<MaybePromise<Manager>>;
 	/** Branch to use to create release PRs. Defaults to `release`. */
 	releaseBranch?: string;

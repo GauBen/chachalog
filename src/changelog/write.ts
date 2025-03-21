@@ -3,13 +3,16 @@ import { remark } from "remark";
 import { ReleaseTypes } from "../index.ts";
 import type { MdChildren } from "./process.ts";
 
-export function writeChangelog({
-	releaseEntries,
-	namedEntries,
-}: {
-	releaseEntries: Map<ReleaseTypes, Array<BlockContent | DefinitionContent>>;
-	namedEntries: Map<string, Array<BlockContent | DefinitionContent>>;
-}) {
+export function writeChangelog(
+	{
+		releaseEntries,
+		namedEntries,
+	}: {
+		releaseEntries: Map<ReleaseTypes, Array<BlockContent | DefinitionContent>>;
+		namedEntries: Map<string, Array<BlockContent | DefinitionContent>>;
+	},
+	bumpTitles: Record<ReleaseTypes, string>,
+) {
 	const children: Array<BlockContent | DefinitionContent> = [];
 
 	for (const [title, nodes] of namedEntries) {
@@ -38,7 +41,7 @@ export function writeChangelog({
 				children.push({
 					type: "heading",
 					depth: 3,
-					children: [{ type: "text", value: `${release} changes` }],
+					children: [{ type: "text", value: bumpTitles[release] }],
 				});
 			}
 
@@ -62,12 +65,13 @@ export function insertChangelog(
 		releaseEntries: Map<ReleaseTypes, MdChildren>;
 		namedEntries: Map<string, MdChildren>;
 	},
+	bumpTitles: Record<ReleaseTypes, string>,
 ) {
 	const changelog = remark().parse(original);
 
 	const children: TopLevelContent[] = [
 		{ type: "heading", depth: 2, children: [{ type: "text", value: version }] },
-		...writeChangelog(changelogEntry),
+		...writeChangelog(changelogEntry, bumpTitles),
 	];
 
 	const insertIndex = changelog.children.findIndex(

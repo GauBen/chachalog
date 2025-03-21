@@ -33,7 +33,7 @@ export default async function prepareNextRelease({ config, dir, skipCommit }: Co
 			throw error;
 		});
 
-		const updated = insertChangelog(original, version, changelogEntry);
+		const updated = insertChangelog(original, version, changelogEntry, config.bumpTitles);
 		await fs.writeFile(changelogFile, updated);
 	}
 

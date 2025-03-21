@@ -52,7 +52,7 @@ export default async function commentPr({ config, dir }: CommandWithConfig) {
 								type: "html",
 								value: `<details><summary><code>${key}</code> ${value.bump}</summary>`,
 							},
-							{ type: "blockquote", children: writeChangelog(value) },
+							{ type: "blockquote", children: writeChangelog(value, config.bumpTitles) },
 							{ type: "html", value: "</details>" },
 						])
 					: [
