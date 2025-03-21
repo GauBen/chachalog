@@ -1,5 +1,11 @@
 # chachalog Changelog
 
+## 0.3.4
+
+* Suggest packages and bumps in PR comment. (#16)
+
+* More detailed PR comment. (#15)
+
 ## 0.3.3
 
 * New option: `allowedBumps` to restrict semver bumps.
