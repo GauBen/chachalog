@@ -21,7 +21,7 @@ export default async function github({
 	return {
 		username,
 		email,
-		async createChangelogEntryLink(filename: string, frontmatter: string) {
+		async createChangelogEntryLink(filename: string, content: string) {
 			const { data: pr } = await octokit.rest.pulls.get({
 				owner: context.repo.owner,
 				repo: context.repo.repo,
@@ -30,7 +30,7 @@ export default async function github({
 
 			const url = new URL(`new/${pr.head.ref}`, `${(pr.head.repo ?? pr.base.repo).html_url}/`);
 			url.searchParams.set("filename", filename);
-			url.searchParams.set("value", `${frontmatter}\n\n${pr.title} (#${pr.number})`);
+			url.searchParams.set("value", content);
 
 			return url.toString();
 		},
@@ -61,7 +61,16 @@ export default async function github({
 				});
 			}
 		},
-		async getChangelogEntries(dir: string) {
+		async getChangelogEntries(dir: string, packagePaths: Array<[string, string]>) {
+			const { data: pr } = await octokit.rest.pulls.get({
+				owner: context.repo.owner,
+				repo: context.repo.repo,
+				pull_number: context.issue.number,
+			});
+			const title = `${pr.title} (#${pr.number})`;
+
+			const changedPackages: string[] = [];
+			const unchangedPackages = new Map(packagePaths);
 			const changelogEntries: RestEndpointMethodTypes["pulls"]["listFiles"]["response"]["data"] =
 				[];
 			const per_page = 100;
@@ -76,6 +85,13 @@ export default async function github({
 				});
 
 				for (const file of files.data) {
+					for (const [path, name] of unchangedPackages) {
+						if (file.filename.startsWith(path)) {
+							changedPackages.push(name);
+							unchangedPackages.delete(path);
+						}
+					}
+
 					// Only consider additions to changelog entries
 					if (!["added", "modified", "renamed", "copied", "changed"].includes(file.status))
 						continue;
@@ -86,14 +102,14 @@ export default async function github({
 				if (files.data.length < per_page) break;
 			}
 
-			const files = new Map<string, string>();
+			const entries = new Map<string, string>();
 
 			for (const { filename } of changelogEntries) {
 				const contents = fs.readFileSync(filename, "utf-8");
-				files.set(filename, contents);
+				entries.set(filename, contents);
 			}
 
-			return files;
+			return { title, entries, changedPackages };
 		},
 		async upsertReleasePr(title: string, body: string) {
 			const { data: pulls } = await octokit.rest.pulls.list({
