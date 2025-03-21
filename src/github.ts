@@ -122,7 +122,7 @@ export default async function github({
 				owner: context.repo.owner,
 				repo: context.repo.repo,
 				base,
-				head: `${branch}:release`,
+				head: `${context.repo.owner}:${branch}`,
 				state: "open",
 			});
 
