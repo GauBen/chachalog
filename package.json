@@ -31,17 +31,18 @@
 	],
 	"scripts": {
 		"build": "tsc && pkgroll --clean-dist --minify && dts-buddy packages/types/index.d.ts && publint",
-		"test": "node --experimental-test-coverage --test '**/*.test.ts'"
+		"test": "node --experimental-test-coverage --test '**/*.test.ts'",
+		"format": "biome format --write ."
 	},
 	"devDependencies": {
 		"@actions/github": "^6.0.0",
-		"@biomejs/biome": "^1.9.4",
+		"@biomejs/biome": "^2.0.0-beta.1",
 		"@clack/prompts": "^0.10.0",
 		"@pnpm/logger": "^1000.0.0",
 		"@pnpm/workspace.find-packages": "^1000.0.17",
 		"@pnpm/workspace.read-manifest": "^1000.1.1",
 		"@types/mdast": "^4.0.4",
-		"@types/node": "^20.17.24",
+		"@types/node": "^20.17.27",
 		"@types/semver": "^7.5.8",
 		"@types/unist": "^3.0.3",
 		"@yarnpkg/core": "^4.2.1",

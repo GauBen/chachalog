@@ -1,5 +1,5 @@
 import process from "node:process";
-import { type Project, findWorkspacePackagesNoCheck } from "@pnpm/workspace.find-packages";
+import { findWorkspacePackagesNoCheck, type Project } from "@pnpm/workspace.find-packages";
 import { readWorkspaceManifest } from "@pnpm/workspace.read-manifest";
 import type { Manager, Package } from "./index.ts";
 

@@ -1,9 +1,9 @@
 import assert from "node:assert";
 import test, { suite } from "node:test";
 import { remark } from "remark";
+import type { ReleaseTypes } from "../index.ts";
 import { type MdChildren, processEntries } from "./process.ts";
 import { insertChangelog, writeChangelog } from "./write.ts";
-import type { ReleaseTypes } from "../index.ts";
 
 const bumpTitles: Record<ReleaseTypes, string> = {
 	major: "Breaking changes",
