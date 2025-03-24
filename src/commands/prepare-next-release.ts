@@ -1,15 +1,21 @@
 import { execFileSync } from "node:child_process";
 import fs from "node:fs/promises";
 import path from "node:path";
+import type { TopLevelContent } from "mdast";
+import { remark } from "remark";
 import semver from "semver";
 import { globSync } from "tinyglobby";
+import pkg from "../../package.json" with { type: "json" };
 import type { CommandWithConfig } from "../bin.ts";
 import { processEntries } from "../changelog/process.ts";
 import { insertChangelog, writeChangelog } from "../changelog/write.ts";
-import type { TopLevelContent } from "mdast";
-import { remark } from "remark";
 
-export default async function prepareNextRelease({ config, dir, skipCommit }: CommandWithConfig) {
+export default async function prepareNextRelease({
+	config,
+	dir,
+	skipCommit,
+	latestVersion,
+}: CommandWithConfig) {
 	const files = new Map<string, string>();
 	for (const name of globSync("*.md", { cwd: dir })) {
 		const file = path.join(dir, name);
@@ -53,6 +59,19 @@ export default async function prepareNextRelease({ config, dir, skipCommit }: Co
 	}
 
 	if (skipCommit) return;
+
+	const nextVersion = await latestVersion;
+	if (nextVersion) {
+		body.push({
+			type: "paragraph",
+			children: [
+				{
+					type: "text",
+					value: `Chachalog ${nextVersion} is available, you are running chachalog ${pkg.version}`,
+				},
+			],
+		});
+	}
 
 	const git = (...args: string[]) =>
 		execFileSync("git", args, { stdio: "inherit", encoding: "utf-8" });

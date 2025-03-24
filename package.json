@@ -31,8 +31,9 @@
 	],
 	"scripts": {
 		"build": "tsc && pkgroll --clean-dist --minify && dts-buddy packages/types/index.d.ts && publint",
+		"check": "biome check --fix",
 		"test": "node --experimental-test-coverage --test '**/*.test.ts'",
-		"format": "biome format --write ."
+		"format": "biome format --write"
 	},
 	"devDependencies": {
 		"@actions/github": "^6.0.0",

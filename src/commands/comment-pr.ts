@@ -41,6 +41,7 @@ export default async function commentPr({ config, dir }: CommandWithConfig) {
 		}---\n\n${sentenceCase((conventionnalCommit?.[3] ?? title).trim())}`;
 
 		const bumps = await processEntries(entries, config.validator);
+		const url = await config.platform.createChangelogEntryLink(filename, content);
 
 		const body = remark().stringify({
 			type: "root",
@@ -66,7 +67,7 @@ export default async function commentPr({ config, dir }: CommandWithConfig) {
 					children: [
 						{
 							type: "link",
-							url: await config.platform.createChangelogEntryLink(filename, content),
+							url,
 							children: [{ type: "text", value: "Create a new entry" }],
 						},
 					],

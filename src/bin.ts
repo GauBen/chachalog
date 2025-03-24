@@ -4,12 +4,24 @@ import process from "node:process";
 import { styleText } from "node:util";
 import pkg from "chachalog/package.json" with { type: "json" };
 import { Builtins, Cli, Command, Option, UsageError } from "clipanion";
+import semver from "semver";
 import commentPr from "./commands/comment-pr.ts";
 import doctor from "./commands/doctor.ts";
 import prepareNextRelease from "./commands/prepare-next-release.ts";
 import prompt from "./commands/prompt.ts";
 import publishRelease from "./commands/publish-release.ts";
 import { type Package, ReleaseTypes, type UserConfig } from "./index.ts";
+
+/** A promise to the latest version of Chachalog if greater than the current one. */
+const latestVersion = fetch("https://registry.npmjs.org/chachalog/latest", {
+	signal: AbortSignal.timeout(1000),
+})
+	.then((response) => {
+		if (!response.ok) throw new Error("Network response was not ok");
+		return response.json();
+	})
+	.then((data: { version: string }) => (semver.gt(data.version, pkg.version) ? data.version : null))
+	.catch(() => null);
 
 /** Finds a config file in `dir`, returns its absolute path or throws. */
 async function findConfigFile(dir: string) {
@@ -171,6 +183,7 @@ export abstract class CommandWithConfig extends Command {
 	dir = Option.String("-d,--dir", ".chachalog", { description: "Chachalog directory" });
 	skipCommit = Option.Boolean("--skip-commit", false, { description: "Skip commiting changes" });
 	config!: Awaited<ReturnType<typeof resolveConfig>>;
+	latestVersion = latestVersion;
 
 	async execute() {
 		this.config = await loadConfig(this.dir)

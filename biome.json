@@ -27,6 +27,7 @@
 			"complexity": {
 				"noBannedTypes": "off"
 			},
+			"style": { "useTemplate": "error" },
 			"suspicious": {
 				"noConfusingVoidType": "off"
 			}
