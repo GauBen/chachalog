@@ -1,5 +1,13 @@
 # chachalog Changelog
 
+## 0.3.5
+
+* Changelog path, default and release branches, commit message are now configurable.
+
+* Make bump titles configurable, with good defaults.
+
+* Release PR body contains formatted bump details.
+
 ## 0.3.4
 
 * Suggest packages and bumps in PR comment. (#16)
