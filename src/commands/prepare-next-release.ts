@@ -5,7 +5,9 @@ import semver from "semver";
 import { globSync } from "tinyglobby";
 import type { CommandWithConfig } from "../bin.ts";
 import { processEntries } from "../changelog/process.ts";
-import { insertChangelog } from "../changelog/write.ts";
+import { insertChangelog, writeChangelog } from "../changelog/write.ts";
+import type { TopLevelContent } from "mdast";
+import { remark } from "remark";
 
 export default async function prepareNextRelease({ config, dir, skipCommit }: CommandWithConfig) {
 	const files = new Map<string, string>();
@@ -19,6 +21,13 @@ export default async function prepareNextRelease({ config, dir, skipCommit }: Co
 
 	if (changelogEntries.size === 0) return;
 
+	const body: TopLevelContent[] = [
+		{ type: "heading", depth: 2, children: [{ type: "text", value: "🦜 Chachalog" }] },
+		{
+			type: "paragraph",
+			children: [{ type: "text", value: "This PR will bump the following packages:" }],
+		},
+	];
 	for (const pkg of config.packages) {
 		const changelogEntry = changelogEntries.get(pkg.name);
 		if (!changelogEntry) continue;
@@ -35,6 +44,12 @@ export default async function prepareNextRelease({ config, dir, skipCommit }: Co
 
 		const updated = insertChangelog(original, version, changelogEntry, config.bumpTitles);
 		await fs.writeFile(changelogFile, updated);
+
+		body.push(
+			{ type: "html", value: `<details><summary><code>${pkg.name}</code> ${version}</summary>` },
+			{ type: "blockquote", children: writeChangelog(changelogEntry, config.bumpTitles) },
+			{ type: "html", value: "</details>" },
+		);
 	}
 
 	if (skipCommit) return;
@@ -52,6 +67,6 @@ export default async function prepareNextRelease({ config, dir, skipCommit }: Co
 	await config.platform.upsertReleasePr(
 		config.releaseBranch,
 		config.releaseMessage,
-		"Merge this PR to release the next version",
+		remark().stringify({ type: "root", children: body }),
 	);
 }
