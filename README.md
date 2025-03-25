@@ -50,6 +50,16 @@ Chachalog is a modern take on changelog editing. Its workflow is largely inspire
 
 - Not tied to a specific language or ecosystem. Other package managers/other languages can be supported by implementing a plugin.
 
+## Plugins
+
+Chachalog is designed to be extensible. It ships with some plugins:
+
+- `chachalog/yarn`: Yarn plugin, based on [`@yarnpkg/core`](https://npmjs.com/package/@yarnpkg/core). Supports monorepos with package.json workspaces. Compatible with npm.
+
+- `chachalog/pnpm`: pnpm plugin, based on [`@pnpm/core`](https://npmjs.com/package/@pnpm/core). Supports monorepos with `pnpm-workspace.yaml`. Supports `package.{json,json5,yaml}`, as pnpm does.
+
+- `chachalog/github`: GitHub plugin, based on [`@octokit/core`](https://npmjs.com/package/@octokit/core). Supports creating pull requests and comments.
+
 ---
 
 Chachalog is named after chachalacas, a bird species native to the Americas.
