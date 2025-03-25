@@ -112,6 +112,8 @@ async function resolveLocalConfig(config: UserConfig) {
 		bumpTitles,
 		releaseBranch: config.releaseBranch ?? "release",
 		releaseMessage: config.releaseMessage ?? "chore: release",
+		prereleaseIdentifier: config.prereleaseIdentifier ?? "next",
+		prereleaseIdentifierBase: config.prereleaseIdentifierBase ?? "1",
 		getChangelogFile: config.getChangelogFile ?? ((pkg) => path.join(pkg.path, "CHANGELOG.md")),
 		getNewChangelog: config.getNewChangelog ?? ((pkg) => `# ${pkg.name} Changelog\n`),
 		validator: (bumps: unknown) => {
