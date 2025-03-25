@@ -41,8 +41,8 @@ I'm a basic changelog entry
 				[
 					"patch.md",
 					`---
-pkg-c: patch
 pkg-b: patch
+pkg-c: patch
 ---
 ## Section 1
 Hello

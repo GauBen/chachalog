@@ -54,6 +54,10 @@ export interface UserConfig {
 	releaseBranch?: string;
 	/** Commit message to use when creating a release. Defaults to `chore: release`. */
 	releaseMessage?: string;
+	/** Prerelease identifier to use when creating a prerelease, default to `next`. */
+	prereleaseIdentifier?: string;
+	/** Base prerelease identifier to use when creating a prerelease, default to `1`. */
+	prereleaseIdentifierBase?: "1" | "0";
 	/**
 	 * Returns the path to the changelog file for a package.
 	 *

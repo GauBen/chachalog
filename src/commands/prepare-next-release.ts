@@ -38,7 +38,12 @@ export default async function prepareNextRelease({
 		const changelogEntry = changelogEntries.get(pkg.name);
 		if (!changelogEntry) continue;
 
-		const version = semver.inc(pkg.version, changelogEntry.bump);
+		const version = semver.inc(
+			pkg.version,
+			changelogEntry.bump,
+			config.prereleaseIdentifier,
+			config.prereleaseIdentifierBase,
+		);
 		if (!version) throw new Error("bump failed");
 		await config.setVersion(pkg, version);
 
