@@ -58,21 +58,8 @@ export function writeChangelog(
 	return children;
 }
 
-export function insertChangelog(
-	original: string,
-	version: string,
-	changelogEntry: {
-		releaseEntries: Map<ReleaseTypes, MdChildren>;
-		namedEntries: Map<string, MdChildren>;
-	},
-	bumpTitles: Record<ReleaseTypes, string>,
-) {
+export function insertChangelog(original: string, version: string, children: TopLevelContent[]) {
 	const changelog = remark().parse(original);
-
-	const children: TopLevelContent[] = [
-		{ type: "heading", depth: 2, children: [{ type: "text", value: version }] },
-		...writeChangelog(changelogEntry, bumpTitles),
-	];
 
 	const insertIndex = changelog.children.findIndex(
 		(node) => node.type === "heading" && node.depth === 2,
@@ -80,6 +67,7 @@ export function insertChangelog(
 	changelog.children.splice(
 		insertIndex < 0 ? changelog.children.length : insertIndex,
 		0,
+		{ type: "heading", depth: 2, children: [{ type: "text", value: version }] },
 		...children,
 	);
 

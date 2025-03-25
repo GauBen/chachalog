@@ -115,34 +115,27 @@ Hello
 suite("insertChangelog", () => {
 	test("basic", () => {
 		const version = "1.0.0";
-		const changelogEntry = {
-			releaseEntries: new Map(),
-			namedEntries: new Map<string, MdChildren>([
-				["Section 1", [{ type: "paragraph", children: [{ type: "text", value: "Hello" }] }]],
-			]),
-		};
-
 		assert.strictEqual(
-			insertChangelog("# Changelog", version, changelogEntry, bumpTitles),
+			insertChangelog("# Changelog", version, [
+				{ type: "paragraph", children: [{ type: "text", value: "Hello" }] },
+			]),
 			`# Changelog
 
 ## 1.0.0
 
-### Section 1
-
-* Hello
+Hello
 `,
 		);
 
 		assert.strictEqual(
-			insertChangelog("# Changelog\n\n## 0.1.0", version, changelogEntry, bumpTitles),
+			insertChangelog("# Changelog\n\n## 0.1.0", version, [
+				{ type: "paragraph", children: [{ type: "text", value: "Hello" }] },
+			]),
 			`# Changelog
 
 ## 1.0.0
 
-### Section 1
-
-* Hello
+Hello
 
 ## 0.1.0
 `,

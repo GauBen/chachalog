@@ -48,12 +48,14 @@ export default async function prepareNextRelease({
 			throw error;
 		});
 
-		const updated = insertChangelog(original, version, changelogEntry, config.bumpTitles);
+		const children = writeChangelog(changelogEntry, config.bumpTitles);
+
+		const updated = insertChangelog(original, version, children);
 		await fs.writeFile(changelogFile, updated);
 
 		body.push(
 			{ type: "html", value: `<details><summary><code>${pkg.name}</code> ${version}</summary>` },
-			{ type: "blockquote", children: writeChangelog(changelogEntry, config.bumpTitles) },
+			{ type: "blockquote", children },
 			{ type: "html", value: "</details>" },
 		);
 	}
