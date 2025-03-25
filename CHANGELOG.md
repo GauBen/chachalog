@@ -1,5 +1,11 @@
 # chachalog Changelog
 
+## 0.3.6
+
+* Suggest latest version in PR body.
+
+* Support prereleases. (#20)
+
 ## 0.3.5
 
 * Changelog path, default and release branches, commit message are now configurable.
