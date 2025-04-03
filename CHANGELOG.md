@@ -1,5 +1,9 @@
 # chachalog Changelog
 
+## 0.3.7
+
+* Prevent the prompt from creating empty entries.
+
 ## 0.3.6
 
 * Suggest latest version in PR body.
