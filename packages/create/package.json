@@ -1,6 +1,10 @@
 {
   "name": "@chachalog/create",
   "version": "0.0.5",
+  "repository": {
+    "url": "https://github.com/GauBen/chachalog",
+    "directory": "packages/create"
+  },
   "license": "AGPL-3.0-only",
   "type": "module",
   "bin": "dist/bin.js",

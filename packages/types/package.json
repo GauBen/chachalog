@@ -1,6 +1,10 @@
 {
 	"name": "@chachalog/types",
 	"version": "0.3.7",
+	"repository": {
+		"url": "https://github.com/GauBen/chachalog",
+		"directory": "packages/types"
+	},
 	"license": "AGPL-3.0-only",
 	"type": "module",
 	"types": "./index.d.ts",
