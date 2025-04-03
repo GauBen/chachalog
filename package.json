@@ -1,6 +1,9 @@
 {
 	"name": "chachalog",
 	"version": "0.3.7",
+	"repository": {
+		"url": "https://github.com/GauBen/chachalog"
+	},
 	"license": "AGPL-3.0-only",
 	"type": "module",
 	"exports": {
@@ -32,8 +35,8 @@
 	"scripts": {
 		"build": "tsc && pkgroll --clean-dist --minify && dts-buddy packages/types/index.d.ts && publint",
 		"check": "biome check --fix",
-		"test": "node --experimental-test-coverage --test '**/*.test.ts'",
-		"format": "biome format --write"
+		"format": "biome format --write",
+		"test": "node --experimental-test-coverage --test '**/*.test.ts'"
 	},
 	"devDependencies": {
 		"@actions/github": "^6.0.0",
