@@ -34,7 +34,16 @@ export default async function prompt({ config, dir }: CommandWithLocalConfig) {
 		bumps[pkg.name] = bump;
 	}
 
-	const entry = await p.text({ message: "Changelog entry", placeholder: "Markdown supported" });
+	if (Object.keys(bumps).length === 0) {
+		p.outro("Nothing to bump, exiting...");
+		return 0;
+	}
+
+	const entry = await p.text({
+		message: "Changelog entry",
+		placeholder: "Markdown supported",
+		defaultValue: "",
+	});
 
 	if (p.isCancel(entry)) {
 		p.cancel("You were so close!");
