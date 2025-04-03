@@ -60,5 +60,5 @@
 		"vfile-matter": "^5.0.1",
 		"yaml": "^2.7.0"
 	},
-	"packageManager": "yarn@4.7.0"
+	"packageManager": "yarn@4.8.1"
 }

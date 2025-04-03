@@ -7,6 +7,7 @@ on:
 permissions:
   contents: write
   pull-requests: write
+  id-token: write
 
 jobs:
   prepare-next-release:
@@ -33,7 +34,7 @@ jobs:
           corepack enable && yarn
           yarn workspaces foreach -Avv --topological-dev run build
           yarn config set npmAuthToken '${{ secrets.NPM_TOKEN }}'
-          yarn workspaces foreach -Avv --no-private npm publish --access public --tolerate-republish
+          yarn workspaces foreach -Avv --no-private npm publish --access public --tolerate-republish --provenance
       - run: npx chachalog publish-release
         env:
           GITHUB_TOKEN: '${{ secrets.GITHUB_TOKEN }}'
