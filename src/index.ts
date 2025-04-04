@@ -45,7 +45,7 @@ export interface UserConfig {
 	/** List of allowed semver bumps. Defaults to all. */
 	allowedBumps?: ReleaseTypes | [ReleaseTypes, ...ReleaseTypes[]];
 	/** Title to use for each release type. */
-	bumpTitles: Partial<Record<ReleaseTypes, string>>;
+	bumpTitles?: Partial<Record<ReleaseTypes, string>>;
 	/** Platform (git host) to use. */
 	platform: MaybePromise<Platform>;
 	/** List of package managers. */
