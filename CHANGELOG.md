@@ -1,5 +1,9 @@
 # chachalog Changelog
 
+## 0.3.8
+
+* Make `bumpTitles` optional in config file type.
+
 ## 0.3.7
 
 * Prevent the prompt from creating empty entries.
