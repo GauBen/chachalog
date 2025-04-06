@@ -1946,7 +1946,7 @@ __metadata:
     "@yarnpkg/core": "npm:^4.3.1"
     "@yarnpkg/fslib": "npm:^3.1.2"
     clipanion: "npm:^4.0.0-rc.4"
-    dts-buddy: "git+https://github.com/GauBen/dts-buddy.git#commit=af9f317b5b1575ca5236f8d76f0c98e804769232"
+    dts-buddy: "npm:^0.6.0"
     pkgroll: "npm:^2.12.1"
     publint: "npm:^0.3.10"
     remark: "npm:^15.0.1"
@@ -2225,9 +2225,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"dts-buddy@git+https://github.com/GauBen/dts-buddy.git#commit=af9f317b5b1575ca5236f8d76f0c98e804769232":
-  version: 0.5.5
-  resolution: "dts-buddy@https://github.com/GauBen/dts-buddy.git#commit=af9f317b5b1575ca5236f8d76f0c98e804769232"
+"dts-buddy@npm:^0.6.0":
+  version: 0.6.0
+  resolution: "dts-buddy@npm:0.6.0"
   dependencies:
     "@jridgewell/source-map": "npm:^0.3.5"
     "@jridgewell/sourcemap-codec": "npm:^1.4.15"
@@ -2238,10 +2238,10 @@ __metadata:
     tinyglobby: "npm:^0.2.10"
     ts-api-utils: "npm:^1.0.3"
   peerDependencies:
-    typescript: ">=5.0.4 <5.9"
+    typescript: ">=5.0.4 <5.8"
   bin:
-    dts-buddy: ./src/cli.js
-  checksum: 10c0/fd4bc0a1809386be71acf6bc46acec75167feaf0e9e1febb1f03069d85be0e8b025c52b806a435cd1df2c71baa7f0aa4214d97b18d4261cda100a23a8727ff1a
+    dts-buddy: src/cli.js
+  checksum: 10c0/2073b4163577f0ae83575e181030040056a7ab168b6ebe4c84e27e0a7b57c13e2f36525916ac361dd2b1582bc567d156cfa9ad7a1c82263a7734fa783a1f1b90
   languageName: node
   linkType: hard
 

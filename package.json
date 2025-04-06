@@ -52,7 +52,7 @@
 		"@yarnpkg/core": "^4.3.1",
 		"@yarnpkg/fslib": "^3.1.2",
 		"clipanion": "^4.0.0-rc.4",
-		"dts-buddy": "git+https://github.com/GauBen/dts-buddy.git#commit=af9f317b5b1575ca5236f8d76f0c98e804769232",
+		"dts-buddy": "^0.6.0",
 		"pkgroll": "^2.12.1",
 		"publint": "^0.3.10",
 		"remark": "^15.0.1",
