@@ -25,6 +25,8 @@ suite("writeChangelog", async () => {
 pkg-a: major
 ---
 Different entry
+
+On several lines
 `,
 				],
 				[
@@ -60,6 +62,8 @@ Hello
 ### Breaking changes
 
 * Different entry
+
+  On several lines
 
 ### New features
 
@@ -101,7 +105,7 @@ Hello
 						namedEntries: new Map([
 							[
 								"> Section 1",
-								[{ type: "paragraph", children: [{ type: "text", value: "Hello" }] }],
+								[[{ type: "paragraph", children: [{ type: "text", value: "Hello" }] }]],
 							],
 						]),
 					},

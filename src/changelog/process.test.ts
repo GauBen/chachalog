@@ -5,7 +5,8 @@ import type { RootContent } from "mdast";
 import { remark } from "remark";
 import { processEntries, processEntry } from "./process.ts";
 
-const toMd = (children: RootContent[]) => remark().stringify({ type: "root", children });
+const toMd = (documents: RootContent[][]) =>
+	documents.map((children) => remark().stringify({ type: "root", children })).join("\n");
 
 suite("processEntry", async () => {
 	await test("basic", async () => {
@@ -18,7 +19,7 @@ I'm a basic changelog entry
 `);
 
 		assert.deepStrictEqual(bumps, { foo: "bar", baz: 42 });
-		assert.deepStrictEqual(toMd(defaultEntry), `I'm a basic changelog entry\n`);
+		assert.deepStrictEqual(toMd([defaultEntry]), `I'm a basic changelog entry\n`);
 		assert.deepStrictEqual(namedEntries, new Map());
 	});
 
@@ -32,7 +33,7 @@ I'm a basic changelog entry
 
 		assert.deepStrictEqual(defaultEntry, []);
 		assert.deepStrictEqual(
-			Object.fromEntries([...namedEntries].map(([title, children]) => [title, toMd(children)])),
+			Object.fromEntries([...namedEntries].map(([title, children]) => [title, toMd([children])])),
 			{ Section: `I'm a basic changelog entry\n` },
 		);
 	});
@@ -63,9 +64,9 @@ I'm a super changelog entry
 > Quote with \`code\``);
 
 		assert.deepStrictEqual(bumps, { foo: "bar", baz: 42 });
-		assert.deepStrictEqual(toMd(defaultEntry), "No section\n");
+		assert.deepStrictEqual(toMd([defaultEntry]), "No section\n");
 		assert.deepStrictEqual(
-			Object.fromEntries([...namedEntries].map(([title, children]) => [title, toMd(children)])),
+			Object.fromEntries([...namedEntries].map(([title, children]) => [title, toMd([children])])),
 			{
 				"\\> Section 1": "I'm a basic changelog entry\n",
 				"Section *2*": `I'm a super changelog entry

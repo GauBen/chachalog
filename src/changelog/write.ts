@@ -1,18 +1,19 @@
 import type { BlockContent, DefinitionContent, TopLevelContent } from "mdast";
 import { remark } from "remark";
 import { ReleaseTypes } from "../index.ts";
+import type { MdChildren } from "./process.ts";
 
 export function writeChangelog(
 	{
 		releaseEntries,
 		namedEntries,
 	}: {
-		releaseEntries: Map<ReleaseTypes, Array<BlockContent | DefinitionContent>>;
-		namedEntries: Map<string, Array<BlockContent | DefinitionContent>>;
+		releaseEntries: Map<ReleaseTypes, MdChildren[]>;
+		namedEntries: Map<string, MdChildren[]>;
 	},
 	bumpTitles: Record<ReleaseTypes, string>,
 ) {
-	const children: Array<BlockContent | DefinitionContent> = [];
+	const children: MdChildren = [];
 
 	for (const [title, nodes] of namedEntries) {
 		const {
@@ -24,7 +25,7 @@ export function writeChangelog(
 			type: "list",
 			children: nodes.map((node) => ({
 				type: "listItem",
-				children: [node],
+				children: node,
 			})),
 		});
 	}
@@ -48,7 +49,7 @@ export function writeChangelog(
 				type: "list",
 				children: entries.map((node) => ({
 					type: "listItem",
-					children: [node],
+					children: node,
 				})),
 			});
 		}
