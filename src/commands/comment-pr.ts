@@ -7,6 +7,7 @@ import type { CommandWithConfig } from "../bin.ts";
 import { processEntries } from "../changelog/process.ts";
 import { writeChangelog } from "../changelog/write.ts";
 import { ReleaseTypes } from "../index.ts";
+import pkg from "../../package.json" with { type: "json" };
 
 const sentenceCase = (s: string) => s && s[0].toUpperCase() + s.slice(1);
 
@@ -68,7 +69,19 @@ export default async function commentPr({ config, dir }: CommandWithConfig) {
 						{
 							type: "link",
 							url,
-							children: [{ type: "text", value: "Create a new entry" }],
+							children: [{ type: "text", value: "Create a new entry online" }],
+						},
+						{
+							type: "text",
+							value: " or run ",
+						},
+						{
+							type: "inlineCode",
+							value: `npx chachalog@${pkg.version} prompt`,
+						},
+						{
+							type: "text",
+							value: " to create a new entry locally.",
 						},
 					],
 				},
