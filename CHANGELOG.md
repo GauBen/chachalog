@@ -1,5 +1,11 @@
 # chachalog Changelog
 
+## 0.3.9
+
+* Promote prompt in PR comment.
+
+* Properly group multi-line entries.
+
 ## 0.3.8
 
 * Make `bumpTitles` optional in config file type.
