@@ -1,7 +1,7 @@
 import process from "node:process";
 import { findWorkspacePackagesNoCheck, type Project } from "@pnpm/workspace.find-packages";
 import { readWorkspaceManifest } from "@pnpm/workspace.read-manifest";
-import type { Manager, Package } from "./index.ts";
+import type { Manager, Package } from "../index.ts";
 
 /** pnpm plugin. Suppports pnpm-workspaces.yaml and package.{json,json5,yaml} files. */
 export default async function pnpm({

@@ -1,0 +1,4 @@
+packages:
+  - 'packages/*'
+  - 'packages/foo/sub-foo'
+  - '!packages/ignore-me'

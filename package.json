@@ -12,16 +12,16 @@
 			"import": "./dist/index.js"
 		},
 		"./yarn": {
-			"types": "./dist/yarn.d.ts",
-			"import": "./dist/yarn.js"
+			"types": "./dist/managers/yarn.d.ts",
+			"import": "./dist/managers/yarn.js"
 		},
 		"./github": {
 			"types": "./dist/github.d.ts",
 			"import": "./dist/github.js"
 		},
 		"./pnpm": {
-			"types": "./dist/pnpm.d.ts",
-			"import": "./dist/pnpm.js"
+			"types": "./dist/managers/pnpm.d.ts",
+			"import": "./dist/managers/pnpm.js"
 		},
 		"./package.json": "./package.json"
 	},
@@ -36,7 +36,7 @@
 		"build": "tsc && pkgroll --clean-dist --minify && dts-buddy packages/types/index.d.ts && publint",
 		"check": "biome check --fix",
 		"format": "biome format --write",
-		"test": "node --experimental-test-coverage --test '**/*.test.ts'"
+		"test": "node --experimental-test-coverage --test-coverage-exclude='**/*.test.ts' --test '**/*.test.ts'"
 	},
 	"devDependencies": {
 		"@actions/github": "^6.0.0",

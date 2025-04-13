@@ -1,5 +1,5 @@
 import assert from "node:assert";
-import { describe, suite, test } from "node:test";
+import { suite, test } from "node:test";
 import { UsageError } from "clipanion";
 import type { RootContent } from "mdast";
 import { remark } from "remark";
@@ -98,7 +98,7 @@ I'm a super changelog entry
 	});
 });
 
-describe("processEntries", async () => {
+suite("processEntries", async () => {
 	await test("basic", async () => {
 		const result = await processEntries(
 			new Map([
