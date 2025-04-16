@@ -1,5 +1,9 @@
 # chachalog Changelog
 
+## 0.3.10
+
+* Suggest all packages in frontmatter comment.
+
 ## 0.3.9
 
 * Promote prompt in PR comment.
