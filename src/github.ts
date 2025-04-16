@@ -75,7 +75,7 @@ export default async function github({
 			});
 			const title = `${pr.title} (#${pr.number})`;
 
-			const changedPackages: string[] = [];
+			const changedPackages = new Set<string>();
 			const unchangedPackages = new Map(packagePaths);
 			const changelogEntries: RestEndpointMethodTypes["pulls"]["listFiles"]["response"]["data"] =
 				[];
@@ -93,7 +93,7 @@ export default async function github({
 				for (const file of files.data) {
 					for (const [path, name] of unchangedPackages) {
 						if (file.filename.startsWith(path)) {
-							changedPackages.push(name);
+							changedPackages.add(name);
 							unchangedPackages.delete(path);
 						}
 					}

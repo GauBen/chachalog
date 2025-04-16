@@ -9,7 +9,31 @@ import { writeChangelog } from "../changelog/write.ts";
 import { ReleaseTypes } from "../index.ts";
 import pkg from "../../package.json" with { type: "json" };
 
-const sentenceCase = (s: string) => s && s[0].toUpperCase() + s.slice(1);
+export const sentenceCase = (s: string) => s && s[0].toUpperCase() + s.slice(1);
+export const suggestBump = (title: string, allowedBumps: readonly ReleaseTypes[]) => {
+	const [, type, breaking, message] = title.match(/^(\w+).*?(!)?:([\s\S]*)/) ?? [];
+	return {
+		bump:
+			ReleaseTypes.slice(breaking ? 0 : type === "feat" ? 2 : 4).find((bump) =>
+				allowedBumps.includes(bump),
+			) ?? allowedBumps[0],
+		message: sentenceCase((message ?? title).trim()),
+	};
+};
+
+export const suggestEntry = (
+	{ bump, message }: { bump: string; message: string },
+	packages: Array<{ name: string; changed: boolean }>,
+	allowedBumps: readonly ReleaseTypes[],
+) => {
+	return `---\n# Allowed version bumps: ${allowedBumps.join(", ")}\n${packages
+		.map(({ name, changed }) => {
+			const line = yaml.stringify({ [name]: bump });
+			if (changed) return line;
+			return `# ${line}`;
+		})
+		.join("")}---\n\n${message}`;
+};
 
 export default async function commentPr({ config, dir }: CommandWithConfig) {
 	try {
@@ -21,25 +45,14 @@ export default async function commentPr({ config, dir }: CommandWithConfig) {
 			dir,
 			packagePaths,
 		);
-
-		const conventionnalCommit = title.match(/^(\w+).*?(!)?:([\s\S]*)/);
-		const suggestedBump =
-			ReleaseTypes.slice(
-				conventionnalCommit?.[2]
-					? 0
-					: conventionnalCommit?.[1] === "feat"
-						? 2
-						: conventionnalCommit?.[1] === "fix"
-							? 4
-							: 0,
-			).find((bump) => config.allowedBumps.includes(bump)) ?? config.allowedBumps[0];
+		const packages = config.packages.map(({ name }) => ({
+			name,
+			changed: changedPackages.has(name),
+		}));
 
 		const filename = `${dir}/${Buffer.from(crypto.getRandomValues(new Uint8Array(6))).toString("base64url")}.md`;
-		const content = `---\n# Describe desired version bumps\n${
-			changedPackages.length > 0
-				? yaml.stringify(Object.fromEntries(changedPackages.map((name) => [name, suggestedBump])))
-				: "\n"
-		}---\n\n${sentenceCase((conventionnalCommit?.[3] ?? title).trim())}`;
+		const suggestion = suggestBump(title, config.allowedBumps);
+		const content = suggestEntry(suggestion, packages, config.allowedBumps);
 
 		const bumps = await processEntries(entries, config.validator);
 		const url = await config.platform.createChangelogEntryLink(filename, content);
@@ -60,7 +73,14 @@ export default async function commentPr({ config, dir }: CommandWithConfig) {
 					: [
 							{
 								type: "paragraph",
-								children: [{ type: "text", value: "No changelog entries detected" }],
+								children: [
+									{ type: "text", value: "No changelog entries detected. " },
+									{
+										type: "link",
+										url: "https://github.com/GauBen/chachalog#readme",
+										children: [{ type: "text", value: "Learn more about Chachalog." }],
+									},
+								],
 							},
 						]) satisfies RootContent[]),
 				{

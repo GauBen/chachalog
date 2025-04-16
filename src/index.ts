@@ -14,7 +14,7 @@ export interface Platform {
 	getChangelogEntries: (
 		dir: string,
 		packagePaths: Array<[string, string]>,
-	) => MaybePromise<{ title: string; entries: Map<string, string>; changedPackages: string[] }>;
+	) => MaybePromise<{ title: string; entries: Map<string, string>; changedPackages: Set<string> }>;
 	/** Creates a PR for the next release. */
 	upsertReleasePr: (branch: string, title: string, body: string) => MaybePromise<void>;
 	/** Creates a release. Will be called on every commit, ensure it is idempotent. */
