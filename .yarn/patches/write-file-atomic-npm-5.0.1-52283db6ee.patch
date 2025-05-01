@@ -1,0 +1,13 @@
+diff --git a/lib/index.js b/lib/index.js
+index 6013894cd1f4fc0d87d4b1979d8d60c15adf3a98..dcae2ff5aa29a883fee16e834d3815e38f2cece4 100644
+--- a/lib/index.js
++++ b/lib/index.js
+@@ -28,7 +28,7 @@ const threadId = (function getId () {
+ let invocations = 0
+ function getTmpname (filename) {
+   return filename + '.' +
+-    MurmurHash3(__filename)
++    MurmurHash3("__filename")
+       .hash(String(process.pid))
+       .hash(String(threadId))
+       .hash(String(++invocations))
