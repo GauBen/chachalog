@@ -1,5 +1,9 @@
 # chachalog Changelog
 
+## 0.3.11
+
+* Ensure all pnpm dependencies are properly bundled. (#25)
+
 ## 0.3.10
 
 * Suggest all packages in frontmatter comment.
