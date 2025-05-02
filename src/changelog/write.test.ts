@@ -48,6 +48,7 @@ pkg-c: patch
 ---
 ## Section 1
 Hello
+## Lonely title
 `,
 				],
 			]),

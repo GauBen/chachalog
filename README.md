@@ -78,6 +78,48 @@ Don't forget to check **Allow GitHub Actions to create and approve pull requests
 
 Run `npx chachalog doctor` to check if everything is set up correctly.
 
+## Features
+
+- Changelog entries can contain titles. When a title is present, it will create a separate section in the changelog file.
+
+  ```markdown
+  ---
+  foo: minor
+  ---
+
+  I'm in the default section.
+
+  ## Screenshots
+
+  Here comes an amazing new feature:
+
+  <img ... />
+  ```
+
+  Will be added to the changelog as:
+
+  ```markdown
+  ## 1.1.0
+
+  ### Screenshots
+
+  - Here comes an amazing new feature:
+
+    <img ... />
+
+  ### New Features
+
+  - I'm in the default section.
+  ```
+
+  Empty sections are not added to the changelog, you'll never have a lonely title in your changelog.
+
+- To enable "prerelease" mode, add `allowedBumps: ["prerelease"]` to your `.chachalog/config.mjs` file. This will restrict all version increments to `prerelease` bumps.
+
+  You can customize your version bumps further by setting `prereleaseIdentifier` and `prereleaseIdentifierBase` in your config file.
+
+  You may also want to add `--tag next` to your `npm publish` command in `.github/workflows/release.yml` to publish your packages with the `next` tag instead of `latest`.
+
 ## Why Chachalog?
 
 Chachalog is a modern take on changelog editing. Its workflow is largely inspired by [Changesets](https://github.com/changesets/changesets), but tries to address some of its shortcomings:
