@@ -36,8 +36,7 @@
 		"build": "tsc && rolldown -c && dts-buddy packages/types/index.d.ts && publint",
 		"check": "biome check --fix",
 		"format": "biome format --write",
-		"test": "node --experimental-test-coverage --test-coverage-exclude='**/*.test.ts' --test-coverage-exclude='dist/**' --test '**/*.test.ts'",
-		"test:bundle": "node --test --test-name-pattern='chachalog' 'src/managers/**.test.ts'"
+		"test": "node --experimental-test-coverage --test-coverage-exclude='**/*.test.ts' --test-coverage-exclude='dist/**' --test '**/*.test.ts'"
 	},
 	"resolutions": {
 		"write-file-atomic@npm:^5.0.0": "patch:write-file-atomic@npm%3A5.0.1#~/.yarn/patches/write-file-atomic-npm-5.0.1-52283db6ee.patch",

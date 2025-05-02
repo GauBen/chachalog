@@ -12,4 +12,4 @@ jobs:
         with:
           node-version-file: '.node-version'
       - run: corepack enable && yarn && yarn build && yarn test
-      - run: rm -rf node_modules && yarn test:bundle
+      - run: rm -rf node_modules && node --test --test-name-pattern='chachalog' 'src/managers/**.test.ts'
