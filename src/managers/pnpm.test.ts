@@ -1,7 +1,7 @@
 import assert from "node:assert";
 import { cpSync, rmSync } from "node:fs";
+import path from "node:path";
 import test, { afterEach, beforeEach, suite } from "node:test";
-import path from "path";
 
 const cwd = "_fixtures-pnpm-live";
 
