@@ -15,9 +15,9 @@
     "build": "pkgroll --clean-dist --minify && publint"
   },
   "devDependencies": {
-    "@clack/prompts": "^0.10.0",
-    "pkgroll": "^2.12.1",
-    "publint": "^0.3.10",
+    "@clack/prompts": "^0.10.1",
+    "pkgroll": "^2.12.2",
+    "publint": "^0.3.12",
     "yaml": "^2.7.1"
   }
 }

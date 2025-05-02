@@ -3,11 +3,11 @@ import { UsageError } from "clipanion";
 import type { RootContent } from "mdast";
 import { remark } from "remark";
 import * as yaml from "yaml";
+import pkg from "../../package.json" with { type: "json" };
 import type { CommandWithConfig } from "../bin.ts";
 import { processEntries } from "../changelog/process.ts";
 import { writeChangelog } from "../changelog/write.ts";
 import { ReleaseTypes } from "../index.ts";
-import pkg from "../../package.json" with { type: "json" };
 
 export const sentenceCase = (s: string) => s && s[0].toUpperCase() + s.slice(1);
 export const suggestBump = (title: string, allowedBumps: readonly ReleaseTypes[]) => {

@@ -1,0 +1,13 @@
+diff --git a/lib/miscUtils.js b/lib/miscUtils.js
+index 794c266469c1d652b1d5e781fe79c3b109ceae7c..3b01375154770b38a1ee3ae4acdaaebf18247e07 100644
+--- a/lib/miscUtils.js
++++ b/lib/miscUtils.js
+@@ -277,7 +277,7 @@ exports.DefaultStream = DefaultStream;
+ // Webpack has this annoying tendency to replace dynamic requires by a stub
+ // code that simply throws when called. It's all fine and dandy in the context
+ // of a web application, but is quite annoying when working with Node projects!
+-const realRequire = eval(`require`);
++const realRequire = require;
+ function dynamicRequireNode(path) {
+     return realRequire(fslib_1.npath.fromPortablePath(path));
+ }
