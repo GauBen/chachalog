@@ -1,5 +1,5 @@
 diff --git a/lib/miscUtils.js b/lib/miscUtils.js
-index 794c266469c1d652b1d5e781fe79c3b109ceae7c..3b01375154770b38a1ee3ae4acdaaebf18247e07 100644
+index 794c266469c1d652b1d5e781fe79c3b109ceae7c..b2ec5ad8fbd17f8cf5b1adbd768bd82d5538dd3b 100644
 --- a/lib/miscUtils.js
 +++ b/lib/miscUtils.js
 @@ -277,7 +277,7 @@ exports.DefaultStream = DefaultStream;
@@ -11,3 +11,12 @@ index 794c266469c1d652b1d5e781fe79c3b109ceae7c..3b01375154770b38a1ee3ae4acdaaebf
  function dynamicRequireNode(path) {
      return realRequire(fslib_1.npath.fromPortablePath(path));
  }
+@@ -292,7 +292,7 @@ function dynamicRequireNoCache(path) {
+     try {
+         result = dynamicRequireNode(physicalPath);
+         const freshCacheEntry = realRequire.cache[physicalPath];
+-        const dynamicModule = eval(`module`);
++        const dynamicModule = module;
+         const freshCacheIndex = dynamicModule.children.indexOf(freshCacheEntry);
+         if (freshCacheIndex !== -1) {
+             dynamicModule.children.splice(freshCacheIndex, 1);
