@@ -6,9 +6,9 @@ import { remark } from "remark";
 import semver from "semver";
 import { globSync } from "tinyglobby";
 import pkg from "../../package.json" with { type: "json" };
-import type { CommandWithConfig } from "../bin.ts";
 import { processEntries } from "../changelog/process.ts";
 import { insertChangelog, writeChangelog } from "../changelog/write.ts";
+import type { CommandWithConfig } from "../config.ts";
 
 export default async function prepareNextRelease({
 	config,
