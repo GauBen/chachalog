@@ -2,7 +2,7 @@ import fs from "node:fs/promises";
 import path from "node:path";
 import * as p from "@clack/prompts";
 import * as yaml from "yaml";
-import type { CommandWithLocalConfig } from "../bin.ts";
+import type { CommandWithLocalConfig } from "../config.ts";
 import type { ReleaseTypes } from "../index.ts";
 
 /** Interactively create a new changelog entry */
