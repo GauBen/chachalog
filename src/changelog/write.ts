@@ -1,4 +1,4 @@
-import type { BlockContent, DefinitionContent, TopLevelContent } from "mdast";
+import type { TopLevelContent } from "mdast";
 import { remark } from "remark";
 import { ReleaseTypes } from "../index.ts";
 import type { MdChildren } from "./process.ts";
