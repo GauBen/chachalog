@@ -3,7 +3,6 @@ import test, { mock, suite } from "node:test";
 import { UsageError } from "clipanion";
 import pkg from "../../package.json" with { type: "json" };
 import { createContext, createMockPlatform } from "../config.test.ts";
-import type { Package } from "../index.ts";
 import commentPr, { sentenceCase, suggestBump, suggestEntry } from "./comment-pr.ts";
 
 suite("sentenceCase", () => {
@@ -79,11 +78,10 @@ Hello world`,
 
 suite("commentPr", () => {
 	test("empty", async () => {
-		const packages: Package[] = [{ name: "foo", path: "/pkgs/foo", version: "1.0.0" }];
 		const platform = createMockPlatform();
 		const context = await createContext({
 			allowedBumps: ["patch", "minor", "major"],
-			managers: [{ packages }],
+			managers: { packages: { name: "foo", path: "/pkgs/foo", version: "1.0.0" } },
 			platform,
 		});
 		await commentPr(context);
@@ -112,7 +110,6 @@ No changelog entries detected. [Learn more about Chachalog.](https://github.com/
 	});
 
 	test("with entries", async () => {
-		const packages: Package[] = [{ name: "foo", path: "/pkgs/foo", version: "1.0.0" }];
 		const platform = createMockPlatform({
 			getChangelogEntries: mock.fn(() => ({
 				title: "feat: hello world",
@@ -138,7 +135,7 @@ I am in my own section`,
 		});
 		const context = await createContext({
 			allowedBumps: ["patch", "minor", "major"],
-			managers: [{ packages }],
+			managers: { packages: { name: "foo", path: "/pkgs/foo", version: "1.0.0" } },
 			platform,
 		});
 		await commentPr(context);
@@ -194,11 +191,11 @@ Hello world`,
 		});
 		const context = await createContext({
 			allowedBumps: ["patch", "minor", "major"],
-			managers: [{ packages: { name: "foo", path: "/pkgs/foo", version: "1.0.0" } }],
+			managers: { packages: { name: "foo", path: "/pkgs/foo", version: "1.0.0" } },
 			platform,
 		});
 		await assert.rejects(
-			() => commentPr(context),
+			commentPr(context),
 			new UsageError('Error processing custom/aaa.md: bump "invalid" for package "foo" is invalid'),
 		);
 

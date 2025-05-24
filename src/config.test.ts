@@ -6,7 +6,7 @@ export const createMockPlatform = (custom: Partial<Platform> = {}) =>
 	({
 		email: "chachalog@example.com",
 		username: "chachalog",
-		createChangelogEntryLink: mock.fn((filename: string, content: string) => "https://example.com"),
+		createChangelogEntryLink: mock.fn(() => "https://example.com"),
 		createRelease: mock.fn(),
 		getChangelogEntries: mock.fn(() => ({
 			title: "feat: hello world",
@@ -22,7 +22,7 @@ export const createMockPlatform = (custom: Partial<Platform> = {}) =>
 
 export const createContext = async (
 	config: UserConfig,
-): Promise<InstanceType<typeof CommandWithConfig>> => {
+): Promise<CommandWithConfig> => {
 	const resolved = await resolveConfig(config);
 	return new (class extends CommandWithConfig {
 		config = resolved;
