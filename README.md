@@ -56,7 +56,7 @@ Here's what to expect when enabling all the features:
 
 <p align="center"><img src="./assets/down.svg" alt="↓" width="27" height="94"></p>
 
-5. **Chachalog will use changelog files to create a new release on GitHub.**
+6. **Chachalog will use changelog files to create a new release on GitHub.**
 
    ![GitHub screenshot of the release created by Chachalog](assets/release.png)
 
@@ -64,7 +64,7 @@ Here's what to expect when enabling all the features:
 
 <p align="center"><img src="./assets/down-alt.svg" alt="↓" width="27" height="94"></p>
 
-6. Celebrate! 🎉
+7. Celebrate! 🎉
 
 All Chachalog features are opt-in. You can choose the features you want during the installation process, or at any time by editing the workflow files.
 
