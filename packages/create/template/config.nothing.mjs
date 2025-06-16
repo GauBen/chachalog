@@ -1,7 +1,6 @@
 /// @ts-check
 /// <reference types="@chachalog/types" />
 import fs from "node:fs";
-import path from "node:path";
 import { defineConfig } from "chachalog";
 import github from "chachalog/github";
 
@@ -11,7 +10,7 @@ export default defineConfig(() => ({
 	managers: {
 		packages: {
 			name: "root",
-			path: path.resolve(".."),
+			path: process.cwd(),
 			version: fs.readFileSync(".chachalog/.version", "utf-8").trim(),
 		},
 		setVersion(pkg, version) {
