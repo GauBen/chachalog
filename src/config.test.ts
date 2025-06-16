@@ -20,9 +20,7 @@ export const createMockPlatform = (custom: Partial<Platform> = {}) =>
 		[Key in keyof Platform]: Platform[Key] extends Function ? Mock<Platform[Key]> : Platform[Key];
 	};
 
-export const createContext = async (
-	config: UserConfig,
-): Promise<CommandWithConfig> => {
+export const createContext = async (config: UserConfig): Promise<CommandWithConfig> => {
 	const resolved = await resolveConfig(config);
 	return new (class extends CommandWithConfig {
 		config = resolved;

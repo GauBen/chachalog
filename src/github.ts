@@ -91,18 +91,24 @@ export default async function github({
 				});
 
 				for (const file of files.data) {
+					if (file.filename.startsWith(dir)) {
+						if (
+							["added", "modified", "renamed", "copied", "changed"].includes(file.status) &&
+							file.filename.endsWith(".md")
+						) {
+							// Only consider additions to changelog entries
+							changelogEntries.push(file);
+						}
+						// Ignore all other changes in the chachalog directory
+						continue;
+					}
+
 					for (const [path, name] of unchangedPackages) {
 						if (file.filename.startsWith(path)) {
 							changedPackages.add(name);
 							unchangedPackages.delete(path);
 						}
 					}
-
-					// Only consider additions to changelog entries
-					if (!["added", "modified", "renamed", "copied", "changed"].includes(file.status))
-						continue;
-					if (!file.filename.startsWith(dir) || !file.filename.endsWith(".md")) continue;
-					changelogEntries.push(file);
 				}
 
 				if (files.data.length < per_page) break;
