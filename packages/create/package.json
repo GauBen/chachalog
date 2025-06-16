@@ -1,6 +1,6 @@
 {
   "name": "@chachalog/create",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "repository": {
     "url": "https://github.com/GauBen/chachalog",
     "directory": "packages/create"
