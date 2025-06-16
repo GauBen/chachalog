@@ -1,5 +1,6 @@
 import fs from "node:fs";
 import { context, getOctokit } from "@actions/github";
+import * as core from "@actions/core";
 import type { RestEndpointMethodTypes } from "@octokit/plugin-rest-endpoint-methods";
 import { RequestError } from "@octokit/request-error";
 import type { Platform } from "./index.ts";
@@ -115,6 +116,8 @@ export default async function github({
 			}
 
 			const entries = new Map<string, string>();
+
+			core.setOutput("changelogEntries", changelogEntries.length);
 
 			for (const { filename } of changelogEntries) {
 				const contents = fs.readFileSync(filename, "utf-8");

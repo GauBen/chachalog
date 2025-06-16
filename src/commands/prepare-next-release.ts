@@ -85,10 +85,10 @@ export default async function prepareNextRelease({
 
 	git("config", "user.name", config.platform.username);
 	git("config", "user.email", config.platform.email);
-	git("switch", "-c", "release");
+	git("switch", "-c", config.releaseBranch);
 	git("add", ".");
 	git("commit", "-m", config.releaseMessage);
-	git("push", "--force", "origin", "release");
+	git("push", "--force", "origin", config.releaseBranch);
 
 	await config.platform.upsertReleasePr(
 		config.releaseBranch,

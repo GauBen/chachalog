@@ -43,6 +43,7 @@
 		"write-file-atomic@npm:^5.0.1": "patch:write-file-atomic@npm%3A5.0.1#~/.yarn/patches/write-file-atomic-npm-5.0.1-52283db6ee.patch"
 	},
 	"devDependencies": {
+		"@actions/core": "^1.11.1",
 		"@actions/github": "^6.0.1",
 		"@biomejs/biome": "^2.0.0-beta.5",
 		"@clack/prompts": "^0.11.0",
