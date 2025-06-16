@@ -686,6 +686,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@octokit/webhooks-types@npm:^7.6.1":
+  version: 7.6.1
+  resolution: "@octokit/webhooks-types@npm:7.6.1"
+  checksum: 10c0/7c2cb40f9ccd2bd392cf35c23f995ae0719ef35fd3bce0264ced5518cbf0a7087bd069bf5e5963fc33d0232726968db526912df3cb017c1bd1761c8849c31a30
+  languageName: node
+  linkType: hard
+
 "@oxc-project/runtime@npm:0.71.0":
   version: 0.71.0
   resolution: "@oxc-project/runtime@npm:0.71.0"
@@ -3036,6 +3043,7 @@ __metadata:
     "@actions/github": "npm:^6.0.1"
     "@biomejs/biome": "npm:^2.0.0-beta.5"
     "@clack/prompts": "npm:^0.11.0"
+    "@octokit/webhooks-types": "npm:^7.6.1"
     "@pnpm/logger": "npm:^1001.0.0"
     "@pnpm/worker": "npm:^1000.1.6"
     "@pnpm/workspace.find-packages": "npm:^1000.0.24"

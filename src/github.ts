@@ -1,8 +1,9 @@
 import fs from "node:fs";
-import { context, getOctokit } from "@actions/github";
 import * as core from "@actions/core";
+import { context, getOctokit } from "@actions/github";
 import type { RestEndpointMethodTypes } from "@octokit/plugin-rest-endpoint-methods";
 import { RequestError } from "@octokit/request-error";
+import type { PullRequestEvent } from "@octokit/webhooks-types";
 import type { Platform } from "./index.ts";
 
 export default async function github({
@@ -29,11 +30,7 @@ export default async function github({
 		username,
 		email,
 		async createChangelogEntryLink(filename: string, content: string) {
-			const { data: pr } = await octokit.rest.pulls.get({
-				owner: context.repo.owner,
-				repo: context.repo.repo,
-				pull_number: context.issue.number,
-			});
+			const { pull_request: pr } = context.payload as PullRequestEvent;
 
 			const url = new URL(`new/${pr.head.ref}`, `${(pr.head.repo ?? pr.base.repo).html_url}/`);
 			url.searchParams.set("filename", filename);
@@ -42,11 +39,13 @@ export default async function github({
 			return url.toString();
 		},
 		async upsertChangelogComment(body: string) {
+			const { pull_request: pr } = context.payload as PullRequestEvent;
+
 			const marker = "<!--🦜-->";
 			const comments = await octokit.rest.issues.listComments({
-				owner: context.repo.owner,
-				repo: context.repo.repo,
-				issue_number: context.issue.number,
+				owner: pr.base.repo.owner.login,
+				repo: pr.base.repo.name,
+				issue_number: pr.number,
 			});
 			const comment = comments.data.find(
 				(comment) => comment.user?.login === username && comment.body?.includes(marker),
@@ -54,26 +53,23 @@ export default async function github({
 
 			if (comment) {
 				await octokit.rest.issues.updateComment({
-					owner: context.repo.owner,
-					repo: context.repo.repo,
+					owner: pr.base.repo.owner.login,
+					repo: pr.base.repo.name,
 					comment_id: comment.id,
 					body: `${body}\n${marker}`,
 				});
 			} else {
 				await octokit.rest.issues.createComment({
-					owner: context.repo.owner,
-					repo: context.repo.repo,
-					issue_number: context.issue.number,
+					owner: pr.base.repo.owner.login,
+					repo: pr.base.repo.name,
+					issue_number: pr.number,
 					body: `${body}\n${marker}`,
 				});
 			}
 		},
 		async getChangelogEntries(dir: string, packagePaths: Array<[string, string]>) {
-			const { data: pr } = await octokit.rest.pulls.get({
-				owner: context.repo.owner,
-				repo: context.repo.repo,
-				pull_number: context.issue.number,
-			});
+			const { pull_request: pr } = context.payload as PullRequestEvent;
+
 			const title = `${pr.title} (#${pr.number})`;
 
 			const changedPackages = new Set<string>();
@@ -84,9 +80,9 @@ export default async function github({
 
 			for (let page = 1; page * per_page < 3000; page++) {
 				const files = await octokit.rest.pulls.listFiles({
-					owner: context.repo.owner,
-					repo: context.repo.repo,
-					pull_number: context.issue.number,
+					owner: pr.base.repo.owner.login,
+					repo: pr.base.repo.name,
+					pull_number: pr.number,
 					per_page,
 					page,
 				});
