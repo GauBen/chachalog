@@ -1,5 +1,9 @@
 # @chachalog/create Changelog
 
+## 0.0.6
+
+* Use the right root directory for the *nothing* manager.
+
 ## 0.0.5
 
 * New option: `allowedBumps` to restrict semver bumps.

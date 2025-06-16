@@ -1,5 +1,9 @@
 # chachalog Changelog
 
+## 0.3.12
+
+* Ignore changes in the `.chachalog` directory in bump suggestions.
+
 ## 0.3.11
 
 * Ensure all pnpm dependencies are properly bundled. (#25)
