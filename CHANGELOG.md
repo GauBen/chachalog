@@ -1,5 +1,9 @@
 # chachalog Changelog
 
+## 0.3.13
+
+* In GitHub workflows, write `changelogEntries` output variable.
+
 ## 0.3.12
 
 * Ignore changes in the `.chachalog` directory in bump suggestions.
