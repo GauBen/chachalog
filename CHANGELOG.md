@@ -1,5 +1,9 @@
 # chachalog Changelog
 
+## 0.3.14
+
+* Support running chachalog in forks. (#33)
+
 ## 0.3.13
 
 * In GitHub workflows, write `changelogEntries` output variable.
