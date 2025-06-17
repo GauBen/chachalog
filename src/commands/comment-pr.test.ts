@@ -202,7 +202,7 @@ Hello world`,
 		assert.equal(platform.upsertChangelogComment.mock.calls.length, 1);
 		assert.equal(
 			platform.upsertChangelogComment.mock.calls[0].arguments[0],
-			`## 🦜 Chachalog
+			`## [🦜](https://github.com/GauBen/chachalog) Chachalog
 
 Something went: Error processing custom/aaa.md: bump "invalid" for package "foo" is invalid
 
