@@ -100,7 +100,7 @@ Hello world`,
 		assert.equal(platform.upsertChangelogComment.mock.calls.length, 1);
 		assert.equal(
 			platform.upsertChangelogComment.mock.calls[0].arguments[0],
-			`## 🦜 Chachalog
+			`## [🦜](https://github.com/GauBen/chachalog) Chachalog
 
 No changelog entries detected. [Learn more about Chachalog.](https://github.com/GauBen/chachalog#readme)
 
@@ -154,7 +154,7 @@ Hello world`,
 		assert.equal(platform.upsertChangelogComment.mock.calls.length, 1);
 		assert.equal(
 			platform.upsertChangelogComment.mock.calls[0].arguments[0],
-			`## 🦜 Chachalog
+			`## [🦜](https://github.com/GauBen/chachalog) Chachalog
 
 <details><summary><code>foo</code> minor</summary>
 

@@ -60,7 +60,14 @@ export default async function commentPr({ config, dir }: CommandWithConfig) {
 		const body = remark().stringify({
 			type: "root",
 			children: [
-				{ type: "heading", depth: 2, children: [{ type: "text", value: "🦜 Chachalog" }] },
+				{
+					type: "heading",
+					depth: 2,
+					children: [
+						{ type: "link", url: pkg.homepage, children: [{ type: "text", value: "🦜" }] },
+						{ type: "text", value: " Chachalog" },
+					],
+				},
 				...((bumps.size > 0
 					? [...bumps].flatMap<RootContent>(([key, value]) => [
 							{

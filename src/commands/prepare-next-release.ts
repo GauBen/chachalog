@@ -28,7 +28,14 @@ export default async function prepareNextRelease({
 	if (changelogEntries.size === 0) return;
 
 	const body: TopLevelContent[] = [
-		{ type: "heading", depth: 2, children: [{ type: "text", value: "🦜 Chachalog" }] },
+		{
+			type: "heading",
+			depth: 2,
+			children: [
+				{ type: "link", url: pkg.homepage, children: [{ type: "text", value: "🦜" }] },
+				{ type: "text", value: " Chachalog" },
+			],
+		},
 		{
 			type: "paragraph",
 			children: [{ type: "text", value: "This PR will bump the following packages:" }],
