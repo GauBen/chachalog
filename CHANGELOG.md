@@ -1,5 +1,9 @@
 # chachalog Changelog
 
+## 0.3.15
+
+* Move to `pull_request_target` event to circumvent permission issues. (#35)
+
 ## 0.3.14
 
 * Support running chachalog in forks. (#33)
