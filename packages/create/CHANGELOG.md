@@ -1,5 +1,9 @@
 # @chachalog/create Changelog
 
+## 0.0.7
+
+* Move to `pull_request_target` event to circumvent permission issues. (#35)
+
 ## 0.0.6
 
 * Use the right root directory for the *nothing* manager.
