@@ -114,7 +114,9 @@ export default async function github({
 
 			for (const { filename } of changelogEntries) {
 				const { data: contents } = await octokit.rest.repos.getContent({
-					...context.repo,
+					// Load files from the head repo, not the base repo
+					owner: pr.head.repo.owner.login,
+					repo: pr.head.repo.name,
 					path: filename,
 					ref: pr.head.ref,
 					mediaType: { format: "raw" },
@@ -128,8 +130,7 @@ export default async function github({
 		},
 		async upsertReleasePr(branch: string, title: string, body: string) {
 			const { data: pulls } = await octokit.rest.pulls.list({
-				owner: context.repo.owner,
-				repo: context.repo.repo,
+				...context.repo,
 				base,
 				head: `${context.repo.owner}:${branch}`,
 				state: "open",
@@ -137,16 +138,14 @@ export default async function github({
 
 			if (pulls.length > 0) {
 				await octokit.rest.pulls.update({
-					owner: context.repo.owner,
-					repo: context.repo.repo,
+					...context.repo,
 					pull_number: pulls[0].number,
 					title,
 					body,
 				});
 			} else {
 				await octokit.rest.pulls.create({
-					owner: context.repo.owner,
-					repo: context.repo.repo,
+					...context.repo,
 					base,
 					head: branch,
 					title,
@@ -157,8 +156,7 @@ export default async function github({
 		async createRelease(tag, title, body) {
 			try {
 				await octokit.rest.repos.createRelease({
-					owner: context.repo.owner,
-					repo: context.repo.repo,
+					...context.repo,
 					tag_name: tag,
 					name: title,
 					body,
