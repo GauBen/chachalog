@@ -1,6 +1,6 @@
 export const commentPr = {
 	name: "Comment PR",
-	on: { pull_request: { branches: ["main"] } },
+	on: { pull_request_target: { branches: ["main"] } },
 	permissions: {
 		contents: "write",
 		"pull-requests": "write",

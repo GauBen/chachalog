@@ -1,4 +1,3 @@
-import fs from "node:fs";
 import * as core from "@actions/core";
 import { context, getOctokit } from "@actions/github";
 import type { RestEndpointMethodTypes } from "@octokit/plugin-rest-endpoint-methods";
@@ -43,8 +42,7 @@ export default async function github({
 
 			const marker = "<!--🦜-->";
 			const comments = await octokit.rest.issues.listComments({
-				owner: pr.base.repo.owner.login,
-				repo: pr.base.repo.name,
+				...context.repo,
 				issue_number: pr.number,
 			});
 			const comment = comments.data.find(
@@ -53,15 +51,13 @@ export default async function github({
 
 			if (comment) {
 				await octokit.rest.issues.updateComment({
-					owner: pr.base.repo.owner.login,
-					repo: pr.base.repo.name,
+					...context.repo,
 					comment_id: comment.id,
 					body: `${body}\n${marker}`,
 				});
 			} else {
 				await octokit.rest.issues.createComment({
-					owner: pr.base.repo.owner.login,
-					repo: pr.base.repo.name,
+					...context.repo,
 					issue_number: pr.number,
 					body: `${body}\n${marker}`,
 				});
@@ -69,6 +65,8 @@ export default async function github({
 		},
 		async getChangelogEntries(dir: string, packagePaths: Array<[string, string]>) {
 			const { pull_request: pr } = context.payload as PullRequestEvent;
+
+			if (!pr.head.repo) throw new Error("Pull request does not have a head repository.");
 
 			const title = `${pr.title} (#${pr.number})`;
 
@@ -80,8 +78,7 @@ export default async function github({
 
 			for (let page = 1; page * per_page < 3000; page++) {
 				const files = await octokit.rest.pulls.listFiles({
-					owner: pr.base.repo.owner.login,
-					repo: pr.base.repo.name,
+					...context.repo,
 					pull_number: pr.number,
 					per_page,
 					page,
@@ -89,13 +86,13 @@ export default async function github({
 
 				for (const file of files.data) {
 					if (file.filename.startsWith(dir)) {
+						// Only consider additions to changelog entries
 						if (
 							["added", "modified", "renamed", "copied", "changed"].includes(file.status) &&
 							file.filename.endsWith(".md")
-						) {
-							// Only consider additions to changelog entries
+						)
 							changelogEntries.push(file);
-						}
+
 						// Ignore all other changes in the chachalog directory
 						continue;
 					}
@@ -116,7 +113,14 @@ export default async function github({
 			core.setOutput("changelogEntries", changelogEntries.length);
 
 			for (const { filename } of changelogEntries) {
-				const contents = fs.readFileSync(filename, "utf-8");
+				const { data: contents } = await octokit.rest.repos.getContent({
+					...context.repo,
+					path: filename,
+					ref: pr.head.ref,
+					mediaType: { format: "raw" },
+				});
+				if (typeof contents !== "string")
+					throw new Error(`Expected ${filename} to be a file, but got ${typeof contents}`);
 				entries.set(filename, contents);
 			}
 
