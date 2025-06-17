@@ -1,6 +1,6 @@
 {
 	"name": "@chachalog/types",
-	"version": "0.3.15",
+	"version": "0.3.16",
 	"repository": {
 		"url": "https://github.com/GauBen/chachalog",
 		"directory": "packages/types"

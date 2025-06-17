@@ -1,5 +1,9 @@
 # chachalog Changelog
 
+## 0.3.16
+
+* Reference the head repo rather than the base repo in PR comment.
+
 ## 0.3.15
 
 * Move to `pull_request_target` event to circumvent permission issues. (#35)
