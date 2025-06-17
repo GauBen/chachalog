@@ -113,7 +113,7 @@ export default async function github({
 			core.setOutput("changelogEntries", changelogEntries.length);
 
 			for (const { filename } of changelogEntries) {
-				const contents = await octokit.rest.repos.getContent({
+				const { data: contents } = await octokit.rest.repos.getContent({
 					...context.repo,
 					path: filename,
 					ref: pr.head.ref,
