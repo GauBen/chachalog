@@ -119,12 +119,8 @@ export default async function github({
 					ref: pr.head.ref,
 					mediaType: { format: "raw" },
 				});
-				console.log(contents);
-				if (typeof contents !== "string") {
-					throw new Error(
-						`Expected content of ${filename} to be a string, but got ${typeof contents}`,
-					);
-				}
+				if (typeof contents !== "string")
+					throw new Error(`Expected ${filename} to be a file, but got ${typeof contents}`);
 				entries.set(filename, contents);
 			}
 
