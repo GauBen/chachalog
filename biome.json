@@ -27,9 +27,13 @@
 			"complexity": {
 				"noBannedTypes": "off"
 			},
-			"style": { "useTemplate": "error" },
+			"style": {
+				"noNonNullAssertion": "off",
+				"useTemplate": "error"
+			},
 			"suspicious": {
-				"noConfusingVoidType": "off"
+				"noConfusingVoidType": "off",
+				"noTemplateCurlyInString": "off"
 			}
 		}
 	}

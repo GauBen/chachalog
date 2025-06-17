@@ -16,7 +16,7 @@
   },
   "devDependencies": {
     "@clack/prompts": "^0.11.0",
-    "pkgroll": "^2.12.2",
+    "pkgroll": "^2.13.1",
     "publint": "^0.3.12",
     "yaml": "^2.8.0"
   }

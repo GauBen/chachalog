@@ -117,7 +117,7 @@ export default async function commentPr({ config, dir }: CommandWithConfig) {
 
 		await config.platform.upsertChangelogComment(body);
 	} catch (error) {
-		await config.platform.upsertChangelogComment(`## 🦜 Chachalog
+		await config.platform.upsertChangelogComment(`## [🦜](${pkg.homepage}) Chachalog
 
 Something went: ${(error as Error).message}
 
