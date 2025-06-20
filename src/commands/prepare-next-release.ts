@@ -1,4 +1,3 @@
-import { execFileSync } from "node:child_process";
 import fs from "node:fs/promises";
 import path from "node:path";
 import type { TopLevelContent } from "mdast";
@@ -13,7 +12,6 @@ import type { CommandWithConfig } from "../config.ts";
 export default async function prepareNextRelease({
 	config,
 	dir,
-	skipCommit,
 	latestVersion,
 }: CommandWithConfig) {
 	const files = new Map<string, string>();
@@ -72,8 +70,6 @@ export default async function prepareNextRelease({
 		);
 	}
 
-	if (skipCommit) return;
-
 	const nextVersion = await latestVersion;
 	if (nextVersion) {
 		body.push({
@@ -87,19 +83,5 @@ export default async function prepareNextRelease({
 		});
 	}
 
-	const git = (...args: string[]) =>
-		execFileSync("git", args, { stdio: "inherit", encoding: "utf-8" });
-
-	git("config", "user.name", config.platform.username);
-	git("config", "user.email", config.platform.email);
-	git("switch", "-c", config.releaseBranch);
-	git("add", ".");
-	git("commit", "-m", config.releaseMessage);
-	git("push", "--force", "origin", config.releaseBranch);
-
-	await config.platform.upsertReleasePr(
-		config.releaseBranch,
-		config.releaseMessage,
-		remark().stringify({ type: "root", children: body }),
-	);
+	await config.platform.upsertReleasePr(remark().stringify({ type: "root", children: body }));
 }

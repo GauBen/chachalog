@@ -79,8 +79,6 @@ export async function resolveLocalConfig(config: UserConfig) {
 		setVersion,
 		allowedBumps,
 		bumpTitles,
-		releaseBranch: config.releaseBranch ?? "release",
-		releaseMessage: config.releaseMessage ?? "chore: release",
 		prereleaseIdentifier: config.prereleaseIdentifier ?? "next",
 		prereleaseIdentifierBase: config.prereleaseIdentifierBase ?? "1",
 		getChangelogFile: config.getChangelogFile ?? ((pkg) => path.join(pkg.path, "CHANGELOG.md")),
@@ -176,7 +174,6 @@ export abstract class CommandWithLocalConfig extends Command {
 /** Runs a command with a resolved config. */
 export abstract class CommandWithConfig extends Command {
 	dir = Option.String("-d,--dir", ".chachalog", { description: "Chachalog directory" });
-	skipCommit = Option.Boolean("--skip-commit", false, { description: "Skip commiting changes" });
 	config!: Awaited<ReturnType<typeof resolveConfig>>;
 	latestVersion = latestVersion;
 

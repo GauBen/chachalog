@@ -1,3 +1,4 @@
+import { execFileSync } from "node:child_process";
 import * as core from "@actions/core";
 import { context, getOctokit } from "@actions/github";
 import type { RestEndpointMethodTypes } from "@octokit/plugin-rest-endpoint-methods";
@@ -5,15 +6,24 @@ import { RequestError } from "@octokit/request-error";
 import type { PullRequestEvent } from "@octokit/webhooks-types";
 import type { Platform } from "./index.ts";
 
+const git = (...args: string[]) =>
+	execFileSync("git", args, { stdio: "inherit", encoding: "utf-8" });
+
 export default async function github({
 	username = "github-actions[bot]",
 	email = "41898282+github-actions[bot]@users.noreply.github.com",
 	base = "main",
+	releaseBranch = "release",
+	releaseMessage = "chore: release",
 }: {
 	username?: string;
 	email?: string;
 	/** Base branch. Defaults to `main`. */
 	base?: string;
+	/** Branch to use to create release PRs. Defaults to `release`. */
+	releaseBranch?: string;
+	/** Commit message to use when creating a release. Defaults to `chore: release`. */
+	releaseMessage?: string;
 } = {}): Promise<Platform> {
 	const token = process.env.GITHUB_TOKEN;
 
@@ -128,11 +138,18 @@ export default async function github({
 
 			return { title, entries, changedPackages };
 		},
-		async upsertReleasePr(branch: string, title: string, body: string) {
+		async upsertReleasePr(body: string) {
+			git("config", "user.name", username);
+			git("config", "user.email", email);
+			git("switch", "-c", releaseBranch);
+			git("add", ".");
+			git("commit", "-m", releaseMessage);
+			git("push", "--force", "origin", releaseBranch);
+
 			const { data: pulls } = await octokit.rest.pulls.list({
 				...context.repo,
 				base,
-				head: `${context.repo.owner}:${branch}`,
+				head: `${context.repo.owner}:${releaseBranch}`,
 				state: "open",
 			});
 
@@ -140,15 +157,15 @@ export default async function github({
 				await octokit.rest.pulls.update({
 					...context.repo,
 					pull_number: pulls[0].number,
-					title,
+					title: releaseMessage,
 					body,
 				});
 			} else {
 				await octokit.rest.pulls.create({
 					...context.repo,
 					base,
-					head: branch,
-					title,
+					head: releaseBranch,
+					title: releaseMessage,
 					body,
 				});
 			}
