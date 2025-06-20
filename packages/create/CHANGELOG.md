@@ -1,5 +1,9 @@
 # @chachalog/create Changelog
 
+## 0.0.8
+
+* Create workflows with Chachalog @0.4.
+
 ## 0.0.7
 
 * Move to `pull_request_target` event to circumvent permission issues. (#35)
