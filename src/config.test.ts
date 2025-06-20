@@ -20,11 +20,16 @@ export const createMockPlatform = (custom: Partial<Platform> = {}) =>
 		[Key in keyof Platform]: Platform[Key] extends Function ? Mock<Platform[Key]> : Platform[Key];
 	};
 
-export const createContext = async (config: UserConfig): Promise<CommandWithConfig> => {
+export const createContext = async (
+	config: UserConfig,
+	{ dir = "custom", latestVersion = null }: { dir?: string; latestVersion?: string | null } = {},
+): Promise<CommandWithConfig> => {
 	const resolved = await resolveConfig(config);
 	return new (class extends CommandWithConfig {
 		config = resolved;
-		dir = "custom";
+		dir = dir;
+		skipCommit = true;
+		latestVersion = Promise.resolve(latestVersion);
 		async executeWithConfig() {}
 	})();
 };
