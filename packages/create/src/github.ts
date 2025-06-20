@@ -11,7 +11,7 @@ export const commentPr = {
 			steps: [
 				{ uses: "actions/checkout@v4" },
 				{
-					run: "npx chachalog@0.3 comment-pr",
+					run: "npx chachalog@0.4 comment-pr",
 					env: { GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}" },
 				},
 			],
@@ -33,7 +33,7 @@ export const release = (prepare: boolean, publish: "yarn" | "pnpm" | "nothing" |
 				steps: [
 					{ uses: "actions/checkout@v4" },
 					{
-						run: "npx chachalog@0.3 prepare-next-release",
+						run: "npx chachalog@0.4 prepare-next-release",
 						env: { GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}" },
 					},
 				],
@@ -62,7 +62,7 @@ export const release = (prepare: boolean, publish: "yarn" | "pnpm" | "nothing" |
 								]
 							: []),
 					{
-						run: "npx chachalog@0.3 publish-release",
+						run: "npx chachalog@0.4 publish-release",
 						env: { GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}" },
 					},
 				],
