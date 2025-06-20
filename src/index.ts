@@ -16,7 +16,7 @@ export interface Platform {
 		packagePaths: Array<[string, string]>,
 	) => MaybePromise<{ title: string; entries: Map<string, string>; changedPackages: Set<string> }>;
 	/** Creates a PR for the next release. */
-	upsertReleasePr: (branch: string, title: string, body: string) => MaybePromise<void>;
+	upsertReleasePr: (body: string) => MaybePromise<void>;
 	/** Creates a release. Will be called on every commit, ensure it is idempotent. */
 	createRelease: (tag: string, title: string, body: string) => MaybePromise<void>;
 }
@@ -50,10 +50,6 @@ export interface UserConfig {
 	platform: MaybePromise<Platform>;
 	/** List of package managers. */
 	managers: MaybeArray<MaybePromise<Manager>>;
-	/** Branch to use to create release PRs. Defaults to `release`. */
-	releaseBranch?: string;
-	/** Commit message to use when creating a release. Defaults to `chore: release`. */
-	releaseMessage?: string;
 	/** Prerelease identifier to use when creating a prerelease, default to `next`. */
 	prereleaseIdentifier?: string;
 	/** Base prerelease identifier to use when creating a prerelease, default to `1`. */

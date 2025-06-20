@@ -28,7 +28,6 @@ export const createContext = async (
 	return new (class extends CommandWithConfig {
 		config = resolved;
 		dir = dir;
-		skipCommit = true;
 		latestVersion = Promise.resolve(latestVersion);
 		async executeWithConfig() {}
 	})();
