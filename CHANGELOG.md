@@ -1,5 +1,22 @@
 # chachalog Changelog
 
+## 0.4.0
+
+* Removed `--skip-commit` CLI flag. (#38)
+
+* `releaseBranch` and `releaseMessage` options moved from root level to `github()`. (#38)
+
+  ```diff
+   export default defineConfig(() => ({
+     allowedBumps: ["patch", "minor", "major"],
+  -  releaseMessage: "chore: release",
+     platform: github({
+  +    releaseMessage: "chore: release"
+     }),
+     managers: yarn()
+   }));
+  ```
+
 ## 0.3.16
 
 * Reference the head repo rather than the base repo in PR comment.
