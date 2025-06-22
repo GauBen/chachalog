@@ -120,7 +120,7 @@ Run `npx chachalog doctor` to check if everything is set up correctly.
 
   You may also want to add `--tag next` to your `npm publish` command in `.github/workflows/release.yml` to publish your packages with the `next` tag instead of `latest`.
 
-- It's common to introduce a release with a few sentences describing the changes. You can do so by adding a `intro.md` file next to other changelog entries (in `.chachalog/` by default). For instance:
+- It's common to introduce a release with a few sentences describing the changes. You can do so by adding an `intro.md` file next to other changelog entries (in `.chachalog/` by default). For instance:
 
   ```markdown
   <!-- Text placed before any title will apply to all packages. -->
