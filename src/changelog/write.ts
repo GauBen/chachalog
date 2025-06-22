@@ -15,7 +15,7 @@ export function writeChangelog(
 	},
 	bumpTitles: Record<ReleaseTypes, string>,
 ) {
-	const children: MdChildren = intro;
+	const children: MdChildren = [...intro];
 
 	for (const [title, nodes] of namedEntries) {
 		const {
