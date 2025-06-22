@@ -1,5 +1,39 @@
 # chachalog Changelog
 
+## 0.4.1
+
+This release is the first release to include user-requested features!
+
+*(this text was set in `.chachalog/intro.md`)*
+
+* New command `chachalog delete-pr-comment` to remove Chachalog comment created by `comment-pr`.
+
+* Introducing a new, special changelog entry: `intro.md`. (#41)
+
+  If an `intro.md` file exists, it will be used to introduce the upcoming release of all packages to be released:
+
+  ```md
+  <!-- intro.md -->
+  # foo
+
+  This major release...
+  ```
+
+  This line will be inserted in the `CHANGELOG.md` file for `foo`:
+
+  ```md
+  <!-- foo/CHANGELOG.md -->
+  # foo Changelog
+
+  ## 2.0.0
+
+  This major release...
+
+  (rest of the changelog)
+  ```
+
+  See #31 for the original feature request.
+
 ## 0.4.0
 
 * Removed `--skip-commit` CLI flag. (#38)
