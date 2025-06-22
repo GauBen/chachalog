@@ -115,6 +115,12 @@ No changelog entries detected. [Learn more about Chachalog.](https://github.com/
 				title: "feat: hello world",
 				entries: new Map([
 					[
+						"custom/intro.md",
+						`# foo
+This is the intro for foo.
+`,
+					],
+					[
 						"custom/aaa.md",
 						`---
 foo: minor
@@ -158,6 +164,8 @@ Hello world`,
 
 <details><summary><code>foo</code> minor</summary>
 
+> This is the intro for foo.
+>
 > ### Section
 >
 > * I am in my own section

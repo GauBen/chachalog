@@ -115,6 +115,12 @@ Package A intro
 			{ "pkg-a": `Package A intro\n` },
 		);
 	});
+
+	await test("empty", async () => {
+		const { defaultIntro, packageIntros } = await processIntro("");
+		assert.deepStrictEqual(defaultIntro, []);
+		assert.deepStrictEqual(packageIntros, new Map());
+	});
 });
 
 suite("processEntries", async () => {
@@ -262,6 +268,26 @@ pkg-a: invalid
 				},
 			),
 			new UsageError("Error processing file.md: hello"),
+		);
+	});
+
+	await test("invalid", async () => {
+		await assert.rejects(
+			processEntries(
+				new Map([
+					[
+						"intro.md",
+						`# bar
+The bar package does not exist.
+`,
+					],
+				]),
+				["foo"],
+				() => {
+					throw new Error("hello");
+				},
+			),
+			new UsageError('Package "bar" in intro.md not defined.'),
 		);
 	});
 });

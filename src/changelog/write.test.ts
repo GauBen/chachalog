@@ -51,13 +51,22 @@ Hello
 ## Lonely title
 `,
 				],
+				[
+					".chachalog/intro.md",
+					`# pkg-a
+
+Introducting the major changes for pkg-a.
+`,
+				],
 			]),
 			["pkg-a", "pkg-b", "pkg-c"],
 			(bumps) => bumps as Record<string, "major" | "minor" | "patch">,
 		);
 
 		const expected = {
-			"pkg-a": `### Section 1
+			"pkg-a": `Introducting the major changes for pkg-a.
+
+### Section 1
 
 * I'm a basic changelog entry
 
