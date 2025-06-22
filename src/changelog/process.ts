@@ -171,15 +171,16 @@ export async function processEntries(
 
 	if (intro) {
 		const { defaultIntro, packageIntros } = intro;
-		for (const [pkg, content] of packageIntros) {
+
+		// Throw if the intro contains a nonexistent package
+		for (const pkg of packageIntros.keys()) {
 			if (!packageNames.includes(pkg))
 				throw new UsageError(`Package "${pkg}" in intro.md not defined.`);
+		}
 
-			const entries = changelog.get(pkg);
-			if (!entries) continue;
-
-			entries.intro.push(...defaultIntro);
-			entries.intro.push(...content);
+		for (const [pkg, { intro }] of changelog) {
+			intro.push(...defaultIntro);
+			intro.push(...(packageIntros.get(pkg) ?? []));
 		}
 	}
 

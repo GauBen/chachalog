@@ -114,12 +114,7 @@ No changelog entries detected. [Learn more about Chachalog.](https://github.com/
 			getChangelogEntries: mock.fn(() => ({
 				title: "feat: hello world",
 				entries: new Map([
-					[
-						"custom/intro.md",
-						`# foo
-This is the intro for foo.
-`,
-					],
+					["custom/intro.md", `This is the intro for foo.`],
 					[
 						"custom/aaa.md",
 						`---
