@@ -9,6 +9,8 @@ import type { Platform } from "./index.ts";
 const git = (...args: string[]) =>
 	execFileSync("git", args, { stdio: "inherit", encoding: "utf-8" });
 
+const marker = "<!--🦜-->";
+
 export default async function github({
 	username = "github-actions[bot]",
 	email = "41898282+github-actions[bot]@users.noreply.github.com",
@@ -50,7 +52,6 @@ export default async function github({
 		async upsertChangelogComment(body: string) {
 			const { pull_request: pr } = context.payload as PullRequestEvent;
 
-			const marker = "<!--🦜-->";
 			const comments = await octokit.rest.issues.listComments({
 				...context.repo,
 				issue_number: pr.number,
@@ -70,6 +71,24 @@ export default async function github({
 					...context.repo,
 					issue_number: pr.number,
 					body: `${body}\n${marker}`,
+				});
+			}
+		},
+		async deleteChangelogComment() {
+			const { pull_request: pr } = context.payload as PullRequestEvent;
+
+			const comments = await octokit.rest.issues.listComments({
+				...context.repo,
+				issue_number: pr.number,
+			});
+			const comment = comments.data.find(
+				(comment) => comment.user?.login === username && comment.body?.includes(marker),
+			);
+
+			if (comment) {
+				await octokit.rest.issues.deleteComment({
+					...context.repo,
+					comment_id: comment.id,
 				});
 			}
 		},

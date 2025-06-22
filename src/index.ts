@@ -10,6 +10,8 @@ export interface Platform {
 	createChangelogEntryLink: (filename: string, content: string) => MaybePromise<string>;
 	/** Creates or updates a comment on the active PR. */
 	upsertChangelogComment: (body: string) => MaybePromise<void>;
+	/** Deletes Chachalog comment on the active PR. */
+	deleteChangelogComment: () => MaybePromise<void>;
 	/** Gets the changelog entries from the active PR. */
 	getChangelogEntries: (
 		dir: string,

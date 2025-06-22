@@ -14,6 +14,7 @@ export const createMockPlatform = (custom: Partial<Platform> = {}) =>
 			changedPackages: new Set(),
 		})),
 		upsertChangelogComment: mock.fn(),
+		deleteChangelogComment: mock.fn(),
 		upsertReleasePr: mock.fn(),
 		...custom,
 	}) as {

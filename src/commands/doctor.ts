@@ -20,6 +20,7 @@ export default async function doctor(config: UserConfig) {
 				email: "string",
 				getChangelogEntries: "function",
 				upsertChangelogComment: "function",
+				deleteChangelogComment: "function",
 				upsertReleasePr: "function",
 				username: "string",
 			};

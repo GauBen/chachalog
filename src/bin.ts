@@ -4,6 +4,7 @@ import { styleText } from "node:util";
 import pkg from "chachalog/package.json" with { type: "json" };
 import { Builtins, Cli, Command, Option } from "clipanion";
 import commentPr from "./commands/comment-pr.ts";
+import deletePrComment from "./commands/delete-pr-comment.ts";
 import doctor from "./commands/doctor.ts";
 import prepareNextRelease from "./commands/prepare-next-release.ts";
 import prompt from "./commands/prompt.ts";
@@ -17,7 +18,6 @@ await Cli.from(
 		class extends CommandWithConfig {
 			static paths = [["comment-pr"]];
 			static usage = Command.Usage({
-				category: "Commands",
 				description: "Create/update the changelog comment on the active PR",
 			});
 			override async executeWithConfig() {
@@ -27,7 +27,6 @@ await Cli.from(
 		class extends CommandWithConfig {
 			static paths = [["prepare-next-release"]];
 			static usage = Command.Usage({
-				category: "Commands",
 				description: "Create/update the next release PR",
 			});
 			async executeWithConfig() {
@@ -37,11 +36,20 @@ await Cli.from(
 		class extends CommandWithConfig {
 			static paths = [["publish-release"]];
 			static usage = Command.Usage({
-				category: "Commands",
 				description: "Create a new release using the changelog",
 			});
 			async executeWithConfig() {
 				return publishRelease(this);
+			}
+		},
+		class extends CommandWithConfig {
+			static paths = [["delete-pr-comment"]];
+			static usage = Command.Usage({
+				category: "Additional Commands",
+				description: "Delete Chachalog comment on the active PR",
+			});
+			async executeWithConfig() {
+				return deletePrComment(this);
 			}
 		},
 		class extends Command {
