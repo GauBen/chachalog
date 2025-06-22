@@ -1,3 +1,4 @@
+import { basename } from "node:path";
 import { UsageError } from "clipanion";
 import type { BlockContent, DefinitionContent, Root, TopLevelContent } from "mdast";
 import { remark } from "remark";
@@ -67,22 +68,76 @@ export async function processEntry(content: string) {
 	return { bumps, defaultEntry, namedEntries };
 }
 
+/** Processes the "intro.md" file, a special entry that contains the introduction to the release. */
+export async function processIntro(content: string) {
+	const { data } = await remark()
+		.use(() => (tree, file) => {
+			file.data.tree = tree as Root & { children: TopLevelContent[] };
+		})
+		.process(content);
+
+	/** Default intro where lines go if not under a title. */
+	const defaultIntro: MdChildren = [];
+	/** All package-specific intros. */
+	const packageIntros: Map<string, MdChildren> = new Map();
+	/** Current title, undefined if not under a title. */
+	let pkg: string | undefined;
+
+	for (const node of data.tree!.children) {
+		// Ignore HTML comments and YAML frontmatter
+		if (
+			(node.type === "html" && node.value.startsWith("<!--") && node.value.endsWith("-->")) ||
+			node.type === "yaml"
+		) {
+			continue;
+		}
+
+		// Heading <= 2 (#, ##) start a new entry
+		if (node.type === "heading" && node.depth <= 2) {
+			// Stringify the children of the title node to get the title
+			pkg = remark().stringify({ type: "root", children: node.children }).trim();
+			continue;
+		}
+
+		// If not under a title, add to default entry
+		if (!pkg) {
+			defaultIntro.push(node);
+			continue;
+		}
+
+		// If under a title, add to named entry
+		if (!packageIntros.has(pkg)) packageIntros.set(pkg, []);
+		packageIntros.get(pkg)?.push(node);
+	}
+
+	return { defaultIntro, packageIntros };
+}
+
 /** Processes multiple changelog entries. */
 export async function processEntries(
 	files: Map<string, string>,
+	packageNames: string[],
 	validator: (bumps: unknown) => Record<string, ReleaseTypes>,
 ) {
+	let intro: Awaited<ReturnType<typeof processIntro>> | undefined;
+
 	const changelog = new Map<
 		string,
 		{
 			bump: ReleaseTypes;
 			releaseEntries: Map<ReleaseTypes, MdChildren[]>;
 			namedEntries: Map<string, MdChildren[]>;
+			intro: MdChildren;
 		}
 	>();
 
 	for (const [file, content] of files) {
 		try {
+			if (basename(file) === "intro.md") {
+				intro = await processIntro(content);
+				continue;
+			}
+
 			const current = await processEntry(content);
 			for (const [pkg, bump] of Object.entries(validator(current.bumps))) {
 				const previous = changelog.get(pkg);
@@ -106,10 +161,25 @@ export async function processEntries(
 						: bump,
 					releaseEntries,
 					namedEntries,
+					intro: [],
 				});
 			}
 		} catch (error) {
 			throw new UsageError(`Error processing ${file}: ${(error as Error).message}`);
+		}
+	}
+
+	if (intro) {
+		const { defaultIntro, packageIntros } = intro;
+		for (const [pkg, content] of packageIntros) {
+			if (!packageNames.includes(pkg))
+				throw new UsageError(`Package "${pkg}" in intro.md not defined.`);
+
+			const entries = changelog.get(pkg);
+			if (!entries) continue;
+
+			entries.intro.push(...defaultIntro);
+			entries.intro.push(...content);
 		}
 	}
 

@@ -54,7 +54,11 @@ export default async function commentPr({ config, dir }: CommandWithConfig) {
 		const suggestion = suggestBump(title, config.allowedBumps);
 		const content = suggestEntry(suggestion, packages, config.allowedBumps);
 
-		const bumps = await processEntries(entries, config.validator);
+		const bumps = await processEntries(
+			entries,
+			config.packages.map((pkg) => pkg.name),
+			config.validator,
+		);
 		const url = await config.platform.createChangelogEntryLink(filename, content);
 
 		const body = remark().stringify({

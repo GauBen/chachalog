@@ -120,6 +120,28 @@ Run `npx chachalog doctor` to check if everything is set up correctly.
 
   You may also want to add `--tag next` to your `npm publish` command in `.github/workflows/release.yml` to publish your packages with the `next` tag instead of `latest`.
 
+- It's common to introduce a release with a few sentences describing the changes. You can do so by adding a `intro.md` file next to other changelog entries (in `.chachalog/` by default). For instance:
+
+  ```markdown
+  <!-- Text placed before any title will apply to all packages. -->
+
+  # bar
+
+  This major release is accompanied by a complete documentation overhaul...
+  ```
+
+  Create as many titles as wanted, and Chachalog will place your introduction in the appropriate changelog file.
+
+  ```markdown
+  # bar Changelog
+
+  ## 2.0.0
+
+  This major release is accompanied by a complete documentation overhaul...
+
+  <!-- Other entries will follow... -->
+  ```
+
 ## Why Chachalog?
 
 Chachalog is a modern take on changelog editing. Its workflow is largely inspired by [Changesets](https://github.com/changesets/changesets), but tries to address some of its shortcomings:

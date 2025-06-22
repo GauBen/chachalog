@@ -69,6 +69,8 @@ The next version should be inserted here:
 
 ## 2.0.0
 
+This major release is accompanied by a complete documentation overhaul...
+
 * This is a major change to the \`bar\` package.
 `,
 		);
@@ -89,6 +91,8 @@ This PR will bump the following packages:
 
 <details><summary><code>bar</code> 2.0.0</summary>
 
+> This major release is accompanied by a complete documentation overhaul...
+>
 > * This is a major change to the \`bar\` package.
 
 </details>
@@ -175,6 +179,8 @@ This PR will bump the following packages:
 
 <details><summary><code>bar</code> 2.0.0</summary>
 
+> This major release is accompanied by a complete documentation overhaul...
+>
 > * This is a major change to the \`bar\` package.
 
 </details>

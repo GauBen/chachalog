@@ -52,6 +52,7 @@ Hello
 `,
 				],
 			]),
+			["pkg-a", "pkg-b", "pkg-c"],
 			(bumps) => bumps as Record<string, "major" | "minor" | "patch">,
 		);
 
@@ -109,6 +110,7 @@ Hello
 								[[{ type: "paragraph", children: [{ type: "text", value: "Hello" }] }]],
 							],
 						]),
+						intro: [],
 					},
 					bumpTitles,
 				),

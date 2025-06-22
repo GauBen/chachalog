@@ -7,13 +7,15 @@ export function writeChangelog(
 	{
 		releaseEntries,
 		namedEntries,
+		intro,
 	}: {
 		releaseEntries: Map<ReleaseTypes, MdChildren[]>;
 		namedEntries: Map<string, MdChildren[]>;
+		intro: MdChildren;
 	},
 	bumpTitles: Record<ReleaseTypes, string>,
 ) {
-	const children: MdChildren = [];
+	const children: MdChildren = intro;
 
 	for (const [title, nodes] of namedEntries) {
 		const {

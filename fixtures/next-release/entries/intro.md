@@ -1,0 +1,3 @@
+# bar
+
+This major release is accompanied by a complete documentation overhaul...
