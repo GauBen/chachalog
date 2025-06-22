@@ -3,7 +3,7 @@ import { suite, test } from "node:test";
 import { UsageError } from "clipanion";
 import type { RootContent } from "mdast";
 import { remark } from "remark";
-import { processEntries, processEntry } from "./process.ts";
+import { processEntries, processEntry, processIntro } from "./process.ts";
 
 const toMd = (documents: RootContent[][]) =>
 	documents.map((children) => remark().stringify({ type: "root", children })).join("\n");
@@ -98,10 +98,45 @@ I'm a super changelog entry
 	});
 });
 
+suite("processIntro", async () => {
+	await test("basic", async () => {
+		const { defaultIntro, packageIntros } = await processIntro(`Global intro
+
+<!-- I'm ignored -->
+
+# pkg-a
+
+Package A intro
+`);
+
+		assert.deepStrictEqual(toMd([defaultIntro]), `Global intro\n`);
+		assert.deepStrictEqual(
+			Object.fromEntries([...packageIntros].map(([pkg, children]) => [pkg, toMd([children])])),
+			{ "pkg-a": `Package A intro\n` },
+		);
+	});
+
+	await test("empty", async () => {
+		const { defaultIntro, packageIntros } = await processIntro("");
+		assert.deepStrictEqual(defaultIntro, []);
+		assert.deepStrictEqual(packageIntros, new Map());
+	});
+});
+
 suite("processEntries", async () => {
 	await test("basic", async () => {
 		const result = await processEntries(
 			new Map([
+				[
+					"intro.md",
+					`Global intro
+
+<!-- I'm ignored -->
+
+# pkg-a
+Package A intro
+`,
+				],
 				[
 					"file.md",
 					`---
@@ -112,12 +147,13 @@ I'm a basic changelog entry
 `,
 				],
 			]),
+			["pkg-a"],
 			(bumps) => bumps as Record<string, "major" | "minor" | "patch">,
 		);
 
 		assert.deepStrictEqual(
 			Object.fromEntries(
-				[...result].map(([pkg, { bump, releaseEntries, namedEntries }]) => [
+				[...result].map(([pkg, { bump, releaseEntries, namedEntries, intro }]) => [
 					pkg,
 					{
 						bump,
@@ -127,6 +163,7 @@ I'm a basic changelog entry
 						namedEntries: Object.fromEntries(
 							[...namedEntries].map(([title, children]) => [title, toMd(children)]),
 						),
+						intro: toMd([intro]),
 					},
 				]),
 			),
@@ -135,6 +172,7 @@ I'm a basic changelog entry
 					bump: "patch",
 					releaseEntries: {},
 					namedEntries: { "Section 1": "I'm a basic changelog entry\n" },
+					intro: "Global intro\n\nPackage A intro\n",
 				},
 			},
 		);
@@ -173,6 +211,7 @@ Hello
 `,
 				],
 			]),
+			["pkg-a", "pkg-b", "pkg-c"],
 			(bumps) => bumps as Record<string, "major" | "minor" | "patch">,
 		);
 
@@ -223,11 +262,32 @@ pkg-a: invalid
 `,
 					],
 				]),
+				["pkg-a"],
 				() => {
 					throw new Error("hello");
 				},
 			),
 			new UsageError("Error processing file.md: hello"),
+		);
+	});
+
+	await test("invalid", async () => {
+		await assert.rejects(
+			processEntries(
+				new Map([
+					[
+						"intro.md",
+						`# bar
+The bar package does not exist.
+`,
+					],
+				]),
+				["foo"],
+				() => {
+					throw new Error("hello");
+				},
+			),
+			new UsageError('Package "bar" in intro.md not defined.'),
 		);
 	});
 });

@@ -21,7 +21,11 @@ export default async function prepareNextRelease({
 		files.set(file, content);
 		await fs.rm(file);
 	}
-	const changelogEntries = await processEntries(files, config.validator);
+	const changelogEntries = await processEntries(
+		files,
+		config.packages.map((pkg) => pkg.name),
+		config.validator,
+	);
 
 	if (changelogEntries.size === 0) return;
 
