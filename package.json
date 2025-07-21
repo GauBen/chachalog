@@ -1,10 +1,10 @@
 {
 	"name": "chachalog",
 	"version": "0.4.1",
+	"homepage": "https://github.com/GauBen/chachalog",
 	"repository": {
 		"url": "https://github.com/GauBen/chachalog"
 	},
-	"homepage": "https://github.com/GauBen/chachalog",
 	"license": "AGPL-3.0-only",
 	"type": "module",
 	"exports": {
@@ -37,6 +37,7 @@
 		"build": "tsc && rolldown -c && dts-buddy packages/types/index.d.ts && publint",
 		"check": "biome check --fix",
 		"format": "biome format --write",
+		"start": "node src/bin.ts",
 		"test": "node --experimental-test-coverage --test-coverage-exclude='**/*.test.ts' --test-coverage-exclude='dist/**' --test"
 	},
 	"resolutions": {

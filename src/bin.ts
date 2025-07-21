@@ -3,6 +3,7 @@ import process from "node:process";
 import { styleText } from "node:util";
 import pkg from "chachalog/package.json" with { type: "json" };
 import { Builtins, Cli, Command, Option } from "clipanion";
+import applyNextVersions from "./commands/apply-next-versions.ts";
 import commentPr from "./commands/comment-pr.ts";
 import deletePrComment from "./commands/delete-pr-comment.ts";
 import doctor from "./commands/doctor.ts";
@@ -40,6 +41,16 @@ await Cli.from(
 			});
 			async executeWithConfig() {
 				return publishRelease(this);
+			}
+		},
+		class extends CommandWithLocalConfig {
+			static paths = [["apply-next-versions"]];
+			static usage = Command.Usage({
+				category: "Additional Commands",
+				description: "Bump all versions according to changelog entries, does not delete entries",
+			});
+			async executeWithLocalConfig() {
+				return applyNextVersions(this);
 			}
 		},
 		class extends CommandWithConfig {

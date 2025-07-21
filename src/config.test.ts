@@ -1,5 +1,10 @@
 import { type Mock, mock } from "node:test";
-import { CommandWithConfig, resolveConfig } from "./config.ts";
+import {
+	CommandWithConfig,
+	CommandWithLocalConfig,
+	resolveConfig,
+	resolveLocalConfig,
+} from "./config.ts";
 import type { Platform, UserConfig } from "./index.ts";
 
 export const createMockPlatform = (custom: Partial<Platform> = {}) =>
@@ -31,5 +36,17 @@ export const createContext = async (
 		dir = dir;
 		latestVersion = Promise.resolve(latestVersion);
 		async executeWithConfig() {}
+	})();
+};
+
+export const createLocalContext = async (
+	config: Omit<UserConfig, "platform">,
+	{ dir = "custom" }: { dir?: string } = {},
+): Promise<CommandWithLocalConfig> => {
+	const resolved = await resolveLocalConfig({ ...config, platform: createMockPlatform() });
+	return new (class extends CommandWithLocalConfig {
+		config = resolved;
+		dir = dir;
+		async executeWithLocalConfig() {}
 	})();
 };
