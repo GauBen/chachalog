@@ -1,5 +1,9 @@
 # @chachalog/create Changelog
 
+## 0.0.9
+
+* Improved onboarding, removed npm token.
+
 ## 0.0.8
 
 * Create workflows with Chachalog @0.4.
