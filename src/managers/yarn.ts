@@ -6,9 +6,21 @@ import type { Manager, Package } from "../index.ts";
 
 export default async function yarn({
 	cwd = process.cwd(),
+	updateWorkspace = (ws, version) => {
+		ws.manifest.version = version;
+	},
 }: {
 	/** Current working directory. Will be `path.resolve`d. */
 	cwd?: string;
+	/**
+	 * Update the workspace's manifest version.
+	 *
+	 * @default
+	 *   (ws, version) => { ws.manifest.version = version } */
+	updateWorkspace?: (
+		ws: Workspace & { manifest: { name: Ident; version: string } },
+		version: string,
+	) => void;
 } = {}): Promise<Manager> {
 	const root = npath.toPortablePath(npath.resolve(cwd));
 	const configuration = await Configuration.find(root, null, { strict: false });
@@ -24,7 +36,7 @@ export default async function yarn({
 				path: npath.fromPortablePath(ws.cwd),
 			},
 			async (version) => {
-				ws.manifest.version = version;
+				updateWorkspace(ws, version);
 				await ws.persistManifest();
 			},
 		]);
