@@ -89,4 +89,20 @@ if (features.includes("prepare-next-release") || features.includes("publish-rele
 	);
 }
 
-p.outro("Have a nice day!");
+p.outro(`Installation complete!
+
+The following files were created:
+${[
+	".chachalog/config.mjs",
+	manager === "nothing" && ".chachalog/.version",
+	features.includes("comment-pr") && ".github/workflows/comment-pr.yml",
+	(features.includes("prepare-next-release") || features.includes("publish-release")) &&
+		".github/workflows/release.yml",
+]
+	.filter(Boolean)
+	.map((f) => ` - ${f}\n`)
+	.join("")}
+You can now review and edit them to fit your needs.
+
+If you are using TypeScript, install '@chachalog/types' as a dev dependency to get type support in your config file.
+`);
