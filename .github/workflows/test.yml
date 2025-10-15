@@ -7,9 +7,9 @@ jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v6
         with:
-          node-version-file: '.node-version'
+          node-version-file: ".node-version"
       - run: corepack enable && yarn && yarn build && yarn test
       - run: rm -rf node_modules && node --test --test-name-pattern='chachalog' 'src/managers/**.test.ts'
