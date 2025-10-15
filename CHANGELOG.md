@@ -1,5 +1,11 @@
 # chachalog Changelog
 
+## 0.4.2
+
+* Added new `chachalog apply-next-versions` to make nightlies easier to implement.
+
+* `yarn()` accepts a custom mutation function, used during bumps: `updateWorkspace`.
+
 ## 0.4.1
 
 This release is the first release to include user-requested features!
