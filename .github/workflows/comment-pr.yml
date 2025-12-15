@@ -2,7 +2,8 @@ name: Comment PR
 
 on:
   pull_request_target:
-    branches: [main]
+    branches:
+      - main
 
 permissions:
   contents: write
@@ -12,11 +13,11 @@ jobs:
   comment-pr:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
       - uses: actions/setup-node@v6
         with:
           node-version-file: ".node-version"
       - run: corepack enable && yarn && yarn build
       - run: npx chachalog comment-pr
         env:
-          GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
