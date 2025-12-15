@@ -41,6 +41,7 @@
 		"test": "node --experimental-test-coverage --test-coverage-exclude='**/*.test.ts' --test-coverage-exclude='dist/**' --test"
 	},
 	"resolutions": {
+		"make-fetch-happen": "exec:make-fetch-happen.js",
 		"write-file-atomic@npm:^5.0.0": "patch:write-file-atomic@npm%3A5.0.1#~/.yarn/patches/write-file-atomic-npm-5.0.1-52283db6ee.patch",
 		"write-file-atomic@npm:^5.0.1": "patch:write-file-atomic@npm%3A5.0.1#~/.yarn/patches/write-file-atomic-npm-5.0.1-52283db6ee.patch"
 	},
