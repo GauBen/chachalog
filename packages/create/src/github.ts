@@ -58,7 +58,7 @@ export const release = (prepare: boolean, publish: "yarn" | "pnpm" | "nothing" |
 									name: "Build and publish",
 									run: `corepack enable && yarn install
 yarn workspaces foreach -vv --all --topological-dev run build
-yarn workspaces foreach -vv --all --topological --no-private npm publish --access public --tolerate-republish
+yarn workspaces foreach -vv --all --topological --no-private npm publish --access public --tolerate-republish --provenance
 `,
 								},
 							]
