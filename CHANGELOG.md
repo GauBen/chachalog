@@ -1,5 +1,9 @@
 # chachalog Changelog
 
+## 0.4.4
+
+* Republish with provenance.
+
 ## 0.4.3
 
 * Bump all dependencies. (#47)

@@ -1,5 +1,9 @@
 # @chachalog/create Changelog
 
+## 0.0.11
+
+* Refine GitHub workflow permissions.
+
 ## 0.0.10
 
 * Bump all dependencies. (#47)
