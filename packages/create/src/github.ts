@@ -5,13 +5,12 @@ export const commentPr = {
 	on: {
 		pull_request_target: { branches: ["main"] },
 	},
-	permissions: {
-		contents: "write",
-		"pull-requests": "write",
-	},
 	jobs: {
 		"comment-pr": {
 			"runs-on": "ubuntu-latest",
+			permissions: {
+				"pull-requests": "write",
+			},
 			steps: [
 				{ uses: "actions/checkout@v6" },
 				{
@@ -29,14 +28,14 @@ export const release = (prepare: boolean, publish: "yarn" | "pnpm" | "nothing" |
 		push: { branches: ["main"] },
 		workflow_dispatch: null,
 	},
-	permissions: {
-		contents: "write",
-		"pull-requests": "write",
-	},
 	jobs: {
 		...(prepare && {
 			"prepare-next-release": {
 				"runs-on": "ubuntu-latest",
+				permissions: {
+					contents: "write",
+					"pull-requests": "write",
+				},
 				steps: [
 					{ uses: "actions/checkout@v6" },
 					{
@@ -49,6 +48,10 @@ export const release = (prepare: boolean, publish: "yarn" | "pnpm" | "nothing" |
 		...(publish && {
 			"publish-release": {
 				"runs-on": "ubuntu-latest",
+				permissions: {
+					contents: "write",
+					"id-token": "write",
+				},
 				steps: [
 					{ uses: "actions/checkout@v6" },
 					...(publish === "yarn"

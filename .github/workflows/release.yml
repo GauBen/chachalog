@@ -6,13 +6,12 @@ on:
       - main
   workflow_dispatch: null
 
-permissions:
-  contents: write
-  pull-requests: write
-
 jobs:
   prepare-next-release:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
     steps:
       - uses: actions/checkout@v6
       - uses: actions/setup-node@v6
@@ -26,6 +25,7 @@ jobs:
   publish-release:
     runs-on: ubuntu-latest
     permissions:
+      contents: write
       id-token: write
     steps:
       - uses: actions/checkout@v6
@@ -34,7 +34,7 @@ jobs:
         run: |
           corepack enable && yarn install
           yarn workspaces foreach -vv --all --topological-dev run build
-          yarn workspaces foreach -vv --all --topological --no-private npm publish --access public --tolerate-republish
+          yarn workspaces foreach -vv --all --topological --no-private npm publish --access public --tolerate-republish --provenance
       - run: npx chachalog publish-release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
