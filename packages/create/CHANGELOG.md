@@ -1,5 +1,11 @@
 # @chachalog/create Changelog
 
+## 0.0.10
+
+* Bump all dependencies. (#47)
+
+* Improve GitHub workflow files. (#49)
+
 ## 0.0.9
 
 * Improved onboarding, removed npm token.
