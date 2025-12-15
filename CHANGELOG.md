@@ -1,5 +1,9 @@
 # chachalog Changelog
 
+## 0.4.3
+
+* Bump all dependencies. (#47)
+
 ## 0.4.2
 
 * Added new `chachalog apply-next-versions` to make nightlies easier to implement.
