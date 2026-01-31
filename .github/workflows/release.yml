@@ -29,10 +29,10 @@ jobs:
       id-token: write
     steps:
       - uses: actions/checkout@v6
-      - uses: actions/setup-node@v6
+      - uses: jdx/mise-action@v3
       - name: Build and publish
         run: |
-          corepack enable && yarn install
+          yarn
           yarn workspaces foreach -vv --all --topological-dev run build
           yarn workspaces foreach -vv --all --topological --no-private npm publish --access public --tolerate-republish --provenance
       - run: npx chachalog publish-release
