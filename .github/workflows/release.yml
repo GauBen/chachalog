@@ -14,10 +14,8 @@ jobs:
       pull-requests: write
     steps:
       - uses: actions/checkout@v6
-      - uses: actions/setup-node@v6
-        with:
-          node-version-file: ".node-version"
-      - run: corepack enable && yarn && yarn build
+      - uses: jdx/mise-action@v3
+      - run: yarn && yarn build
       - run: npx chachalog prepare-next-release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
