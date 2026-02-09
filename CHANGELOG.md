@@ -2,32 +2,33 @@
 
 ## 0.4.4
 
-* Republish with provenance.
+- Republish with provenance.
 
 ## 0.4.3
 
-* Bump all dependencies. (#47)
+- Bump all dependencies. (#47)
 
 ## 0.4.2
 
-* Added new `chachalog apply-next-versions` to make nightlies easier to implement.
+- Added new `chachalog apply-next-versions` to make nightlies easier to implement.
 
-* `yarn()` accepts a custom mutation function, used during bumps: `updateWorkspace`.
+- `yarn()` accepts a custom mutation function, used during bumps: `updateWorkspace`.
 
 ## 0.4.1
 
 This release is the first release to include user-requested features!
 
-*(this text was set in `.chachalog/intro.md`)*
+_(this text was set in `.chachalog/intro.md`)_
 
-* New command `chachalog delete-pr-comment` to remove Chachalog comment created by `comment-pr`.
+- New command `chachalog delete-pr-comment` to remove Chachalog comment created by `comment-pr`.
 
-* Introducing a new, special changelog entry: `intro.md`. (#41)
+- Introducing a new, special changelog entry: `intro.md`. (#41)
 
   If an `intro.md` file exists, it will be used to introduce the upcoming release of all packages to be released:
 
   ```md
   <!-- intro.md -->
+
   # foo
 
   This major release...
@@ -37,6 +38,7 @@ This release is the first release to include user-requested features!
 
   ```md
   <!-- foo/CHANGELOG.md -->
+
   # foo Changelog
 
   ## 2.0.0
@@ -50,9 +52,9 @@ This release is the first release to include user-requested features!
 
 ## 0.4.0
 
-* Removed `--skip-commit` CLI flag. (#38)
+- Removed `--skip-commit` CLI flag. (#38)
 
-* `releaseBranch` and `releaseMessage` options moved from root level to `github()`. (#38)
+- `releaseBranch` and `releaseMessage` options moved from root level to `github()`. (#38)
 
   ```diff
    export default defineConfig(() => ({
@@ -67,112 +69,112 @@ This release is the first release to include user-requested features!
 
 ## 0.3.16
 
-* Reference the head repo rather than the base repo in PR comment.
+- Reference the head repo rather than the base repo in PR comment.
 
 ## 0.3.15
 
-* Move to `pull_request_target` event to circumvent permission issues. (#35)
+- Move to `pull_request_target` event to circumvent permission issues. (#35)
 
 ## 0.3.14
 
-* Support running chachalog in forks. (#33)
+- Support running chachalog in forks. (#33)
 
 ## 0.3.13
 
-* In GitHub workflows, write `changelogEntries` output variable.
+- In GitHub workflows, write `changelogEntries` output variable.
 
 ## 0.3.12
 
-* Ignore changes in the `.chachalog` directory in bump suggestions.
+- Ignore changes in the `.chachalog` directory in bump suggestions.
 
 ## 0.3.11
 
-* Ensure all pnpm dependencies are properly bundled. (#25)
+- Ensure all pnpm dependencies are properly bundled. (#25)
 
 ## 0.3.10
 
-* Suggest all packages in frontmatter comment.
+- Suggest all packages in frontmatter comment.
 
 ## 0.3.9
 
-* Promote prompt in PR comment.
+- Promote prompt in PR comment.
 
-* Properly group multi-line entries.
+- Properly group multi-line entries.
 
 ## 0.3.8
 
-* Make `bumpTitles` optional in config file type.
+- Make `bumpTitles` optional in config file type.
 
 ## 0.3.7
 
-* Prevent the prompt from creating empty entries.
+- Prevent the prompt from creating empty entries.
 
 ## 0.3.6
 
-* Suggest latest version in PR body.
+- Suggest latest version in PR body.
 
-* Support prereleases. (#20)
+- Support prereleases. (#20)
 
 ## 0.3.5
 
-* Changelog path, default and release branches, commit message are now configurable.
+- Changelog path, default and release branches, commit message are now configurable.
 
-* Make bump titles configurable, with good defaults.
+- Make bump titles configurable, with good defaults.
 
-* Release PR body contains formatted bump details.
+- Release PR body contains formatted bump details.
 
 ## 0.3.4
 
-* Suggest packages and bumps in PR comment. (#16)
+- Suggest packages and bumps in PR comment. (#16)
 
-* More detailed PR comment. (#15)
+- More detailed PR comment. (#15)
 
 ## 0.3.3
 
-* New option: `allowedBumps` to restrict semver bumps.
+- New option: `allowedBumps` to restrict semver bumps.
 
 ## 0.3.2
 
-* New command `npx chachalog prompt` to choose bumps locally.
+- New command `npx chachalog prompt` to choose bumps locally.
 
 ## 0.3.1
 
-* Report duplicate packages in `npx chachalog doctor`. (#10)
+- Report duplicate packages in `npx chachalog doctor`. (#10)
 
-* Group changelog entries per release type (major, minor, patch...) in the CHANGELOG.md file.
+- Group changelog entries per release type (major, minor, patch...) in the CHANGELOG.md file.
 
 ## 0.3.0
 
 ### Breaking changes
 
-* Platform must return files as `Map<string, string>`.
+- Platform must return files as `Map<string, string>`.
 
-* Remove `prefix` and `stringifyPackage`.
+- Remove `prefix` and `stringifyPackage`.
 
 ### Other changes
 
-* Package names and version bumps are now validated in changelog entries.
+- Package names and version bumps are now validated in changelog entries.
 
-* Prevent superfluous whitespace in changelogs.
+- Prevent superfluous whitespace in changelogs.
 
 ## 0.2.0
 
 ### Breaking changes
 
-* Configuration must now be a function: `defineConfig(() => config)`
+- Configuration must now be a function: `defineConfig(() => config)`
 
 ### Other changes
 
-* New command: `chachalog doctor`, to help check the configuration (#5)
+- New command: `chachalog doctor`, to help check the configuration (#5)
 
 ## 0.1.2
 
-* Properly extract release notes from the changelog.
+- Properly extract release notes from the changelog.
 
 ## 0.1.1
 
-* pnpm is now supported: `import pnpm from "chachalog/pnpm"` (#2)
+- pnpm is now supported: `import pnpm from "chachalog/pnpm"` (#2)
 
 ## 0.1.0
 
-* Welcome Chachalog!
+- Welcome Chachalog!

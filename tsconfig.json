@@ -1,17 +1,17 @@
 {
-	"compilerOptions": {
-		"allowImportingTsExtensions": true,
-		"declaration": true,
-		"emitDeclarationOnly": true,
-		"erasableSyntaxOnly": true,
-		"module": "preserve",
-		"moduleResolution": "bundler",
-		"outDir": "./dist",
-		"rootDir": "./src",
-		"skipLibCheck": true,
-		"strict": true,
-		"target": "esnext",
-		"verbatimModuleSyntax": true
-	},
-	"include": ["src"]
+  "compilerOptions": {
+    "allowImportingTsExtensions": true,
+    "declaration": true,
+    "emitDeclarationOnly": true,
+    "erasableSyntaxOnly": true,
+    "module": "preserve",
+    "moduleResolution": "bundler",
+    "outDir": "./dist",
+    "rootDir": "./src",
+    "skipLibCheck": true,
+    "strict": true,
+    "target": "esnext",
+    "verbatimModuleSyntax": true
+  },
+  "include": ["src"]
 }

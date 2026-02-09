@@ -1,76 +1,77 @@
 {
-	"name": "chachalog",
-	"version": "0.4.4",
-	"homepage": "https://github.com/GauBen/chachalog",
-	"repository": {
-		"url": "https://github.com/GauBen/chachalog"
-	},
-	"license": "AGPL-3.0-only",
-	"type": "module",
-	"exports": {
-		".": {
-			"types": "./dist/index.d.ts",
-			"import": "./dist/index.js"
-		},
-		"./yarn": {
-			"types": "./dist/managers/yarn.d.ts",
-			"import": "./dist/managers/yarn.js"
-		},
-		"./github": {
-			"types": "./dist/github.d.ts",
-			"import": "./dist/github.js"
-		},
-		"./pnpm": {
-			"types": "./dist/managers/pnpm.d.ts",
-			"import": "./dist/managers/pnpm.js"
-		},
-		"./package.json": "./package.json"
-	},
-	"bin": "./dist/bin.js",
-	"files": [
-		"dist"
-	],
-	"workspaces": [
-		"packages/*"
-	],
-	"scripts": {
-		"build": "tsc && rolldown -c && dts-buddy packages/types/index.d.ts && publint",
-		"check": "biome check --fix",
-		"format": "biome format --write",
-		"start": "node src/bin.ts",
-		"test": "node --experimental-test-coverage --test-coverage-exclude='**/*.test.ts' --test-coverage-exclude='dist/**' --test"
-	},
-	"resolutions": {
-		"make-fetch-happen": "exec:make-fetch-happen.js",
-		"write-file-atomic@npm:^5.0.0": "patch:write-file-atomic@npm%3A5.0.1#~/.yarn/patches/write-file-atomic-npm-5.0.1-52283db6ee.patch",
-		"write-file-atomic@npm:^5.0.1": "patch:write-file-atomic@npm%3A5.0.1#~/.yarn/patches/write-file-atomic-npm-5.0.1-52283db6ee.patch"
-	},
-	"devDependencies": {
-		"@actions/core": "^3.0.0",
-		"@actions/github": "^9.0.0",
-		"@biomejs/biome": "^2.3.14",
-		"@clack/prompts": "^1.0.0",
-		"@octokit/webhooks-types": "^7.6.1",
-		"@pnpm/logger": "^1001.0.1",
-		"@pnpm/worker": "^1000.6.4",
-		"@pnpm/workspace.find-packages": "^1000.0.58",
-		"@pnpm/workspace.read-manifest": "^1000.2.10",
-		"@types/mdast": "^4.0.4",
-		"@types/node": "^20.19.30",
-		"@types/semver": "^7.7.1",
-		"@types/unist": "^3.0.3",
-		"@yarnpkg/core": "patch:@yarnpkg/core@npm%3A4.5.0#~/.yarn/patches/@yarnpkg-core-npm-4.4.1-b47cca4d97.patch",
-		"@yarnpkg/fslib": "^3.1.4",
-		"clipanion": "^4.0.0-rc.4",
-		"dts-buddy": "^0.6.2",
-		"publint": "^0.3.17",
-		"remark": "^15.0.1",
-		"remark-frontmatter": "^5.0.0",
-		"rolldown": "1.0.0-rc.3",
-		"semver": "^7.7.4",
-		"tinyglobby": "^0.2.15",
-		"typescript": "^5.9.3",
-		"vfile-matter": "^5.0.1",
-		"yaml": "^2.8.2"
-	}
+  "name": "chachalog",
+  "version": "0.4.4",
+  "homepage": "https://github.com/GauBen/chachalog",
+  "license": "AGPL-3.0-only",
+  "repository": {
+    "url": "https://github.com/GauBen/chachalog"
+  },
+  "bin": "./dist/bin.js",
+  "workspaces": [
+    "packages/*"
+  ],
+  "files": [
+    "dist"
+  ],
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./yarn": {
+      "types": "./dist/managers/yarn.d.ts",
+      "import": "./dist/managers/yarn.js"
+    },
+    "./github": {
+      "types": "./dist/github.d.ts",
+      "import": "./dist/github.js"
+    },
+    "./pnpm": {
+      "types": "./dist/managers/pnpm.d.ts",
+      "import": "./dist/managers/pnpm.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "scripts": {
+    "build": "tsc && rolldown -c && dts-buddy packages/types/index.d.ts && publint",
+    "check": "oxlint --fix",
+    "format": "oxfmt",
+    "start": "node src/bin.ts",
+    "test": "node --experimental-test-coverage --test-coverage-exclude='**/*.test.ts' --test-coverage-exclude='dist/**' --test"
+  },
+  "devDependencies": {
+    "@actions/core": "^3.0.0",
+    "@actions/github": "^9.0.0",
+    "@clack/prompts": "^1.0.0",
+    "@octokit/webhooks-types": "^7.6.1",
+    "@pnpm/logger": "^1001.0.1",
+    "@pnpm/worker": "^1000.6.4",
+    "@pnpm/workspace.find-packages": "^1000.0.58",
+    "@pnpm/workspace.read-manifest": "^1000.2.10",
+    "@types/mdast": "^4.0.4",
+    "@types/node": "^20.19.30",
+    "@types/semver": "^7.7.1",
+    "@types/unist": "^3.0.3",
+    "@yarnpkg/core": "patch:@yarnpkg/core@npm%3A4.5.0#~/.yarn/patches/@yarnpkg-core-npm-4.4.1-b47cca4d97.patch",
+    "@yarnpkg/fslib": "^3.1.4",
+    "clipanion": "^4.0.0-rc.4",
+    "dts-buddy": "^0.6.2",
+    "oxfmt": "^0.28.0",
+    "oxlint": "^1.43.0",
+    "publint": "^0.3.17",
+    "remark": "^15.0.1",
+    "remark-frontmatter": "^5.0.0",
+    "rolldown": "1.0.0-rc.3",
+    "semver": "^7.7.4",
+    "tinyglobby": "^0.2.15",
+    "typescript": "^5.9.3",
+    "vfile-matter": "^5.0.1",
+    "yaml": "^2.8.2"
+  },
+  "resolutions": {
+    "make-fetch-happen": "exec:make-fetch-happen.js",
+    "write-file-atomic@npm:^5.0.0": "patch:write-file-atomic@npm%3A5.0.1#~/.yarn/patches/write-file-atomic-npm-5.0.1-52283db6ee.patch",
+    "write-file-atomic@npm:^5.0.1": "patch:write-file-atomic@npm%3A5.0.1#~/.yarn/patches/write-file-atomic-npm-5.0.1-52283db6ee.patch"
+  }
 }

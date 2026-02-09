@@ -1,4 +1,4 @@
 packages:
-  - 'packages/*'
-  - 'packages/foo/sub-foo'
-  - '!packages/ignore-me'
+  - "packages/*"
+  - "packages/foo/sub-foo"
+  - "!packages/ignore-me"

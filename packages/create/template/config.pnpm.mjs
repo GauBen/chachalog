@@ -5,7 +5,7 @@ import github from "chachalog/github";
 import pnpm from "chachalog/pnpm";
 
 export default defineConfig(() => ({
-	allowedBumps: ["patch", "minor", "major"],
-	platform: github(),
-	managers: pnpm(),
+  allowedBumps: ["patch", "minor", "major"],
+  platform: github(),
+  managers: pnpm(),
 }));
