@@ -7,7 +7,7 @@ export const commentPr = {
   },
   jobs: {
     "comment-pr": {
-      "runs-on": "ubuntu-latest",
+      "runs-on": "ubuntu-slim",
       permissions: {
         "pull-requests": "write",
       },
@@ -31,7 +31,7 @@ export const release = (prepare: boolean, publish: "yarn" | "pnpm" | "nothing" |
   jobs: {
     ...(prepare && {
       "prepare-next-release": {
-        "runs-on": "ubuntu-latest",
+        "runs-on": "ubuntu-slim",
         permissions: {
           contents: "write",
           "pull-requests": "write",
@@ -47,7 +47,7 @@ export const release = (prepare: boolean, publish: "yarn" | "pnpm" | "nothing" |
     }),
     ...(publish && {
       "publish-release": {
-        "runs-on": "ubuntu-latest",
+        "runs-on": "ubuntu-slim",
         permissions: {
           contents: "write",
           "id-token": "write",

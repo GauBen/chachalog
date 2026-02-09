@@ -12,12 +12,12 @@
   ],
   "type": "module",
   "scripts": {
-    "build": "pkgroll --clean-dist --minify && publint"
+    "build": "rolldown src/bin.ts -mo dist/bin.js -p node --intro '#!/usr/bin/env node' && publint"
   },
   "devDependencies": {
     "@clack/prompts": "^1.0.0",
-    "pkgroll": "^2.23.0",
     "publint": "^0.3.17",
+    "rolldown": "^1.0.0-rc.3",
     "yaml": "^2.8.2"
   }
 }

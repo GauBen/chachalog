@@ -1,9 +1,9 @@
+import { globSync } from "node:fs";
 import fs from "node:fs/promises";
 import path from "node:path";
 import type { TopLevelContent } from "mdast";
 import { remark } from "remark";
 import semver from "semver";
-import { globSync } from "tinyglobby";
 import pkg from "../../package.json" with { type: "json" };
 import { processEntries } from "../changelog/process.ts";
 import { insertChangelog, writeChangelog } from "../changelog/write.ts";

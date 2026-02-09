@@ -33,7 +33,6 @@ suite("prepareNextRelease", () => {
     );
     await prepareNextRelease(context);
 
-    // @ts-expect-error
     assert.partialDeepStrictEqual(setVersion.mock.calls, [
       { arguments: [foo, "1.1.0"] },
       { arguments: [bar, "2.0.0"] },
@@ -75,7 +74,6 @@ This major release is accompanied by a complete documentation overhaul...
 `,
     );
 
-    // @ts-expect-error
     assert.partialDeepStrictEqual(platform.upsertReleasePr.mock.calls, [
       {
         arguments: [
@@ -163,7 +161,6 @@ This PR will bump the following packages:
     );
     await prepareNextRelease(context);
 
-    // @ts-expect-error
     assert.partialDeepStrictEqual(platform.upsertReleasePr.mock.calls, [
       {
         arguments: [
