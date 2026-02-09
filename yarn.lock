@@ -4625,12 +4625,11 @@ __metadata:
   languageName: node
   linkType: hard
 
-"make-fetch-happen@exec:make-fetch-happen.js::locator=chachalog%40workspace%3A.":
-  version: 1.0.0
-  resolution: "make-fetch-happen@exec:make-fetch-happen.js#make-fetch-happen.js::hash=000a7e&locator=chachalog%40workspace%3A."
-  checksum: 10c0/1b546a2b3ba0625cad93472acd00b521760fca04c1c8a3c46076fbfa04eb4ff5f3635fec7bb420da76dba0c64fd8ac626e78866a72eea4b47570fc21ca2537d0
-  languageName: node
-  linkType: hard
+"make-fetch-happen@workkspace:*, make-fetch-happen@workspace:packages/make-fetch-happen":
+  version: 0.0.0-use.local
+  resolution: "make-fetch-happen@workspace:packages/make-fetch-happen"
+  languageName: unknown
+  linkType: soft
 
 "map-age-cleaner@npm:^0.1.3":
   version: 0.1.3
