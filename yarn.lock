@@ -3976,7 +3976,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"make-fetch-happen@workkspace:*, make-fetch-happen@workspace:packages/make-fetch-happen":
+"make-fetch-happen@workspace:*, make-fetch-happen@workspace:packages/make-fetch-happen":
   version: 0.0.0-use.local
   resolution: "make-fetch-happen@workspace:packages/make-fetch-happen"
   languageName: unknown
