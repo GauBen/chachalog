@@ -29,7 +29,6 @@ suite("prepareNextRelease", () => {
     );
     await applyNextVersions(context);
 
-    // @ts-expect-error
     assert.partialDeepStrictEqual(setVersion.mock.calls, [
       { arguments: [foo, "1.1.0"] },
       { arguments: [bar, "2.0.0"] },

@@ -1,7 +1,7 @@
+import { globSync } from "node:fs";
 import fs from "node:fs/promises";
 import path from "node:path";
 import semver from "semver";
-import { globSync } from "tinyglobby";
 import { processEntries } from "../changelog/process.ts";
 import type { CommandWithLocalConfig } from "../config.ts";
 

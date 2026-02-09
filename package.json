@@ -50,7 +50,7 @@
     "@pnpm/workspace.find-packages": "^1000.0.58",
     "@pnpm/workspace.read-manifest": "^1000.2.10",
     "@types/mdast": "^4.0.4",
-    "@types/node": "^20.19.30",
+    "@types/node": "^24.10.12",
     "@types/semver": "^7.7.1",
     "@types/unist": "^3.0.3",
     "@yarnpkg/core": "patch:@yarnpkg/core@npm%3A4.5.0#~/.yarn/patches/@yarnpkg-core-npm-4.4.1-b47cca4d97.patch",
@@ -64,7 +64,6 @@
     "remark-frontmatter": "^5.0.0",
     "rolldown": "1.0.0-rc.3",
     "semver": "^7.7.4",
-    "tinyglobby": "^0.2.15",
     "typescript": "^5.9.3",
     "vfile-matter": "^5.0.1",
     "yaml": "^2.8.2"
