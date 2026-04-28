@@ -12,7 +12,8 @@ export const createMockPlatform = (custom: Partial<Platform> = {}) =>
     email: "chachalog@example.com",
     username: "chachalog",
     createChangelogEntryLink: mock.fn(() => "https://example.com"),
-    createRelease: mock.fn(),
+    createRelease: mock.fn(() => true),
+    reportReleasesCreated: mock.fn(),
     getChangelogEntries: mock.fn(() => ({
       title: "feat: hello world",
       entries: new Map(),
@@ -23,7 +24,11 @@ export const createMockPlatform = (custom: Partial<Platform> = {}) =>
     upsertReleasePr: mock.fn(),
     ...custom,
   }) as {
-    [Key in keyof Platform]: Platform[Key] extends Function ? Mock<Platform[Key]> : Platform[Key];
+    [Key in keyof Platform]: Platform[Key] extends Function
+      ? Mock<Platform[Key]>
+      : Platform[Key] extends Function | undefined
+        ? Mock<NonNullable<Platform[Key]>> | undefined
+        : Platform[Key];
   };
 
 export const createContext = async (

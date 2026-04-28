@@ -28,6 +28,8 @@ suite("publishRelease", () => {
       "bar @ v1.2.3",
       "* Hello World!\n",
     ]);
+    assert.equal(platform.reportReleasesCreated?.mock.calls.length, 1);
+    assert.deepEqual(platform.reportReleasesCreated?.mock.calls[0].arguments, [["foo", "bar"]]);
   });
 
   test("no release", async () => {
@@ -45,6 +47,8 @@ suite("publishRelease", () => {
     });
     await publishRelease(context);
     assert.equal(platform.createRelease.mock.calls.length, 0);
+    assert.equal(platform.reportReleasesCreated?.mock.calls.length, 1);
+    assert.deepEqual(platform.reportReleasesCreated?.mock.calls[0].arguments, [[]]);
   });
 
   test("parse error", async () => {
@@ -58,5 +62,6 @@ suite("publishRelease", () => {
     });
     await assert.rejects(publishRelease(context), new Error("title parsing failed"));
     assert.equal(platform.createRelease.mock.calls.length, 0);
+    assert.equal(platform.reportReleasesCreated?.mock.calls.length, 0);
   });
 });
