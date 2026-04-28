@@ -3,6 +3,8 @@ import { remark } from "remark";
 import type { CommandWithConfig } from "../config.ts";
 
 export default async function publishRelease({ config }: CommandWithConfig) {
+  const packagesReleased = [];
+
   for (const pkg of config.packages) {
     const changelogFile = await config.getChangelogFile(pkg);
     try {
@@ -37,6 +39,9 @@ export default async function publishRelease({ config }: CommandWithConfig) {
 
     const title = `${pkg.name} @ v${version}`;
     const tag = `${pkg.name}@${version}`;
-    await config.platform.createRelease(tag, title, body);
+    const created = await config.platform.createRelease(tag, title, body);
+    if (created) packagesReleased.push(pkg.name);
   }
+
+  await config.platform.reportReleasesCreated?.(packagesReleased);
 }

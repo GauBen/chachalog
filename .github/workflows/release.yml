@@ -33,6 +33,13 @@ jobs:
           yarn
           yarn workspaces foreach -vv --all --topological-dev run build
           yarn workspaces foreach -vv --all --topological --no-private npm publish --access public --tolerate-republish --provenance
-      - run: npx chachalog publish-release
+      - id: publish-release
+        run: npx chachalog publish-release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Print release outputs
+        run: |
+          echo "releases=${{ steps.publish-release.outputs.releases }}"
+          echo "releasedPackages=${{ steps.publish-release.outputs.releasedPackages }}"
+          echo "released_chachalog=${{ steps.publish-release.outputs.released_chachalog }}"
+          echo "released_@chachalog/types=${{ steps.publish-release.outputs['released_@chachalog/types'] }}"

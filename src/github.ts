@@ -197,10 +197,16 @@ export default async function github({
           name: title,
           body,
         });
+        return true;
       } catch (error) {
         if (!(error instanceof RequestError) || error.status !== 422) throw error;
-        // Release already exists
+        return false; // Release already exists
       }
+    },
+    async reportReleasesCreated(packages: string[]) {
+      core.setOutput("releases", packages.length);
+      core.setOutput("releasedPackages", JSON.stringify(packages));
+      for (const pkg of packages) core.setOutput(`released_${pkg}`, true);
     },
   };
 }
