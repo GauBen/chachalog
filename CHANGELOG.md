@@ -1,5 +1,15 @@
 # chachalog Changelog
 
+## 0.5.1
+
+* New `Platform` API: `reportReleasesCreated`. (#61)
+
+  It is implemented for the native `github()` platform, `npx chachalog publish-release` will populate the following output vars:
+
+  * `releases (number)`: number of releases created by Chachalog
+  * `releasedPackages (string)`: list of packages released, as a JSON array (e.g., `["pkg-a","pkg-b"]`)
+  * `released_<pkg> (boolean)`: one variable per package released (true when released, unset otherwise)
+
 ## 0.5.0
 
 * **Breaking change**: dropped support for Node.js versions below 24. (#56)
