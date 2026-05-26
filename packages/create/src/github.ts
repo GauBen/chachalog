@@ -9,6 +9,7 @@ export const commentPr = {
     "comment-pr": {
       "runs-on": "ubuntu-slim",
       permissions: {
+        contents: "read",
         "pull-requests": "write",
       },
       steps: [
