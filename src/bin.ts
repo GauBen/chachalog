@@ -10,7 +10,7 @@ import doctor from "./commands/doctor.ts";
 import prepareNextRelease from "./commands/prepare-next-release.ts";
 import prompt from "./commands/prompt.ts";
 import publishRelease from "./commands/publish-release.ts";
-import { CommandWithConfig, CommandWithLocalConfig, loadConfig } from "./config.ts";
+import { CommandWithConfig, CommandWithLocalConfig, CommandWithOptionalLocalConfig, loadConfig } from "./config.ts";
 
 await Cli.from(
   [
@@ -79,13 +79,13 @@ await Cli.from(
         }
       }
     },
-    class extends CommandWithLocalConfig {
+    class extends CommandWithOptionalLocalConfig {
       static paths = [["prompt"]];
       static usage = Command.Usage({
         category: "Helpers",
         description: "Interactively create a new changelog entry",
       });
-      async executeWithLocalConfig() {
+      async executeWithOptionalLocalConfig() {
         await prompt(this);
       }
     },

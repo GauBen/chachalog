@@ -118,8 +118,8 @@ const latestVersion = fetch("https://registry.npmjs.org/chachalog/latest", {
   .then((data: { version: string }) => (semver.gt(data.version, pkg.version) ? data.version : null))
   .catch(() => null);
 
-/** Finds a config file in `dir`, returns its absolute path or throws. */
-async function findConfigFile(dir: string) {
+/** Finds a config file in `dir`, returns its absolute path or null if not found (when optional=true), or throws. */
+async function findConfigFile(dir: string, optional = false) {
   const extensions = ["js", "mjs", "ts", "mts"];
   for (const file of extensions) {
     try {
@@ -128,6 +128,7 @@ async function findConfigFile(dir: string) {
       return config;
     } catch {}
   }
+  if (optional) return null;
   throw new UsageError(`No config file found in ${dir}/config.{${extensions.join(",")}}`);
 }
 
@@ -136,9 +137,14 @@ async function findConfigFile(dir: string) {
  *
  * We copy `dist` and `package.json` into a temporary `node_modules` folder. This allows users to
  * import `chachalog` in their config without having to install it.
+ *
+ * If `optional` is true, returns null if no config file is found instead of throwing.
  */
-export async function loadConfig(dir: string) {
-  const configFile = await findConfigFile(dir);
+export function loadConfig(dir: string, optional: true): Promise<(() => UserConfig | Promise<UserConfig>) | null>;
+export function loadConfig(dir: string, optional?: false): Promise<() => UserConfig | Promise<UserConfig>>;
+export async function loadConfig(dir: string, optional = false): Promise<(() => UserConfig | Promise<UserConfig>) | null> {
+  const configFile = await findConfigFile(dir, optional);
+  if (!configFile) return null;
   try {
     await fs.cp(
       new URL(".", import.meta.resolve("chachalog")),
@@ -169,6 +175,25 @@ export abstract class CommandWithLocalConfig extends Command {
   }
 
   abstract executeWithLocalConfig(): Promise<number | void>;
+}
+
+/** Runs a command with an optional resolved local config (not platform). Returns null if no config file exists. */
+export abstract class CommandWithOptionalLocalConfig extends Command {
+  dir = Option.String("-d,--dir", ".chachalog", { description: "Chachalog directory" });
+  config!: Awaited<ReturnType<typeof resolveLocalConfig>> | null;
+
+  async execute() {
+    const configFn = await loadConfig(this.dir, true);
+    if (configFn) {
+      const raw = await configFn();
+      this.config = await resolveLocalConfig(raw);
+    } else {
+      this.config = null;
+    }
+    return this.executeWithOptionalLocalConfig();
+  }
+
+  abstract executeWithOptionalLocalConfig(): Promise<number | void>;
 }
 
 /** Runs a command with a resolved config. */

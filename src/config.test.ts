@@ -2,6 +2,7 @@ import { type Mock, mock } from "node:test";
 import {
   CommandWithConfig,
   CommandWithLocalConfig,
+  CommandWithOptionalLocalConfig,
   resolveConfig,
   resolveLocalConfig,
 } from "./config.ts";
@@ -53,5 +54,19 @@ export const createLocalContext = async (
     config = resolved;
     dir = dir;
     async executeWithLocalConfig() {}
+  })();
+};
+
+export const createOptionalLocalContext = async (
+  config: Omit<UserConfig, "platform"> | null,
+  { dir = "custom" }: { dir?: string } = {},
+): Promise<CommandWithOptionalLocalConfig> => {
+  const resolved = config
+    ? await resolveLocalConfig({ ...config, platform: createMockPlatform() })
+    : null;
+  return new (class extends CommandWithOptionalLocalConfig {
+    config = resolved;
+    dir = dir;
+    async executeWithOptionalLocalConfig() {}
   })();
 };
