@@ -54,7 +54,7 @@
     "@types/node": "^24.12.4",
     "@types/semver": "^7.7.1",
     "@types/unist": "^3.0.3",
-    "@yarnpkg/core": "patch:@yarnpkg/core@npm%3A4.7.0#~/.yarn/patches/@yarnpkg-core-npm-4.4.1-b47cca4d97.patch",
+    "@yarnpkg/core": "patch:@yarnpkg/core@npm%3A4.8.0#~/.yarn/patches/@yarnpkg-core-npm-4.4.1-b47cca4d97.patch",
     "@yarnpkg/fslib": "^3.1.5",
     "clipanion": "^4.0.0-rc.4",
     "dts-buddy": "^0.8.0",

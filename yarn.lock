@@ -2592,9 +2592,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@yarnpkg/core@npm:4.7.0":
-  version: 4.7.0
-  resolution: "@yarnpkg/core@npm:4.7.0"
+"@yarnpkg/core@npm:4.8.0":
+  version: 4.8.0
+  resolution: "@yarnpkg/core@npm:4.8.0"
   dependencies:
     "@arcanis/slice-ansi": "npm:^1.1.1"
     "@types/semver": "npm:^7.1.0"
@@ -2622,13 +2622,13 @@ __metadata:
     tinylogic: "npm:^2.0.0"
     treeify: "npm:^1.1.0"
     tslib: "npm:^2.4.0"
-  checksum: 10c0/242ca7066467b55839f31ab7445deae4ae76076449c481d2dfbc5faaba2c832bce922d633f962f575ff3d4e22480336d933a3f3dbc85246c7e73d6dff98278aa
+  checksum: 10c0/d8bb108dd5d40d7e04422bdd7df1125bde629757afa76dce3ce393d08217891a2fd3f3b73e39c07f04d32f39c7e5f6ae691164e61bea3e1c75c6853559fa5e7d
   languageName: node
   linkType: hard
 
-"@yarnpkg/core@patch:@yarnpkg/core@npm%3A4.7.0#~/.yarn/patches/@yarnpkg-core-npm-4.4.1-b47cca4d97.patch":
-  version: 4.7.0
-  resolution: "@yarnpkg/core@patch:@yarnpkg/core@npm%3A4.7.0#~/.yarn/patches/@yarnpkg-core-npm-4.4.1-b47cca4d97.patch::version=4.7.0&hash=eb880e"
+"@yarnpkg/core@patch:@yarnpkg/core@npm%3A4.8.0#~/.yarn/patches/@yarnpkg-core-npm-4.4.1-b47cca4d97.patch":
+  version: 4.8.0
+  resolution: "@yarnpkg/core@patch:@yarnpkg/core@npm%3A4.8.0#~/.yarn/patches/@yarnpkg-core-npm-4.4.1-b47cca4d97.patch::version=4.8.0&hash=eb880e"
   dependencies:
     "@arcanis/slice-ansi": "npm:^1.1.1"
     "@types/semver": "npm:^7.1.0"
@@ -2656,7 +2656,7 @@ __metadata:
     tinylogic: "npm:^2.0.0"
     treeify: "npm:^1.1.0"
     tslib: "npm:^2.4.0"
-  checksum: 10c0/42753c332aae4429bb3dd4bfee01b0ebcebcc8c9438b8edc37c49f7f3a08724c195800807e51be460b287a3c5eb90b65ff6756a737c6af17756e40053f676a59
+  checksum: 10c0/371b5d4e3d81ccd7d24bc534677b751e56581a0004cd30ffc51d3d0da33a0ceb41edf706881839e68102db7799e5e6d5b96875a283d69b939cdc9918d992f67a
   languageName: node
   linkType: hard
 
@@ -3118,7 +3118,7 @@ __metadata:
     "@types/node": "npm:^24.12.4"
     "@types/semver": "npm:^7.7.1"
     "@types/unist": "npm:^3.0.3"
-    "@yarnpkg/core": "patch:@yarnpkg/core@npm%3A4.7.0#~/.yarn/patches/@yarnpkg-core-npm-4.4.1-b47cca4d97.patch"
+    "@yarnpkg/core": "patch:@yarnpkg/core@npm%3A4.8.0#~/.yarn/patches/@yarnpkg-core-npm-4.4.1-b47cca4d97.patch"
     "@yarnpkg/fslib": "npm:^3.1.5"
     clipanion: "npm:^4.0.0-rc.4"
     dts-buddy: "npm:^0.8.0"
