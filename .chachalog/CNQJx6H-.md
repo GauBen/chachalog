@@ -1,5 +1,5 @@
 ---
-"@chachalog/create": patch
+'@chachalog/create': patch
 ---
 
-Make the "Comment PR" workflow work in private repos
+Make the "Comment PR" workflow work in private repos.

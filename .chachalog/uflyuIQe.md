@@ -1,7 +1,7 @@
 ---
 # Allowed version bumps: patch, minor, major
-chachalog: minor
-"@chachalog/create": patch
+chachalog: patch
+'@chachalog/create': patch
 # "@chachalog/types": minor
 ---
 
