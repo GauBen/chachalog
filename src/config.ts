@@ -119,7 +119,7 @@ const latestVersion = fetch("https://registry.npmjs.org/chachalog/latest", {
   .catch(() => null);
 
 /** Finds a config file in `dir`, returns its absolute path or throws. */
-async function findConfigFile(dir: string) {
+export async function findConfigFile(dir: string) {
   const extensions = ["js", "mjs", "ts", "mts"];
   for (const file of extensions) {
     try {
