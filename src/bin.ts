@@ -79,14 +79,15 @@ await Cli.from(
         }
       }
     },
-    class extends CommandWithLocalConfig {
+    class extends Command {
+      dir = Option.String("-d,--dir", ".chachalog", { description: "Chachalog directory" });
       static paths = [["prompt"]];
       static usage = Command.Usage({
         category: "Helpers",
         description: "Interactively create a new changelog entry",
       });
-      async executeWithLocalConfig() {
-        await prompt(this);
+      async execute() {
+        return prompt(this.dir);
       }
     },
   ],

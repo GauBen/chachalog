@@ -11,13 +11,14 @@
     "template"
   ],
   "type": "module",
+  "main": "src/index.ts",
   "scripts": {
-    "build": "rolldown src/bin.ts -mo dist/bin.js -p node --intro '#!/usr/bin/env node' && publint"
+    "build": "rolldown src/bin.ts -mo dist/bin.js -p node && publint"
   },
   "devDependencies": {
-    "@clack/prompts": "^1.2.0",
-    "publint": "^0.3.18",
-    "rolldown": "^1.0.0-rc.17",
-    "yaml": "^2.8.3"
+    "@clack/prompts": "^1.5.0",
+    "publint": "^0.3.21",
+    "rolldown": "^1.0.3",
+    "yaml": "^2.9.0"
   }
 }
