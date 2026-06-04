@@ -68,7 +68,10 @@ export default async function prepareNextRelease({
     await fs.writeFile(changelogFile, updated);
 
     body.push(
-      { type: "html", value: `<details><summary><code>${pkg.name}</code> ${version}</summary>` },
+      {
+        type: "html",
+        value: `<details><summary><code>${pkg.name}</code> ${pkg.version} → ${version} (${changelogEntry.bump})</summary>`,
+      },
       { type: "blockquote", children },
       { type: "html", value: "</details>" },
     );
