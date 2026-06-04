@@ -81,13 +81,13 @@ This major release is accompanied by a complete documentation overhaul...
 
 This PR will bump the following packages:
 
-<details><summary><code>foo</code> 1.1.0</summary>
+<details><summary><code>foo</code> 1.0.0 → 1.1.0 (minor)</summary>
 
 > * This is a minor change to the \`foo\` package.
 
 </details>
 
-<details><summary><code>bar</code> 2.0.0</summary>
+<details><summary><code>bar</code> 1.0.0 → 2.0.0 (major)</summary>
 
 > This major release is accompanied by a complete documentation overhaul...
 >
@@ -168,13 +168,13 @@ This PR will bump the following packages:
 
 This PR will bump the following packages:
 
-<details><summary><code>foo</code> 1.1.0</summary>
+<details><summary><code>foo</code> 1.0.0 → 1.1.0 (minor)</summary>
 
 > * This is a minor change to the \`foo\` package.
 
 </details>
 
-<details><summary><code>bar</code> 2.0.0</summary>
+<details><summary><code>bar</code> 1.0.0 → 2.0.0 (major)</summary>
 
 > This major release is accompanied by a complete documentation overhaul...
 >
