@@ -1,5 +1,11 @@
 # @chachalog/create Changelog
 
+## 0.0.13
+
+* Make the "Comment PR" workflow work in private repos.
+
+* Allow creating changelog entries with `chachalog prompt` without config file. (#64)
+
 ## 0.0.12
 
 * **Breaking change**: dropped support for Node.js versions below 24. (#56)

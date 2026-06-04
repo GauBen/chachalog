@@ -1,5 +1,9 @@
 # chachalog Changelog
 
+## 0.5.2
+
+* Allow creating changelog entries with `chachalog prompt` without config file. (#64)
+
 ## 0.5.1
 
 * New `Platform` API: `reportReleasesCreated`. (#61)
