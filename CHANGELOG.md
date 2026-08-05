@@ -1,5 +1,9 @@
 # chachalog Changelog
 
+## 0.5.3
+
+* Create release commits through the GitHub API so that they are signed and marked as verified.
+
 ## 0.5.2
 
 * Allow creating changelog entries with `chachalog prompt` without config file. (#64)
