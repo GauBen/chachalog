@@ -22,7 +22,8 @@ export interface Platform {
   /**
    * Creates a release. Will be called on every commit, ensure it is idempotent.
    *
-   * @returns A truthy value indicates that a release was created, a falsy value indicates that it was not (e.g. because it already exists).
+   * @returns A truthy value indicates that a release was created, a falsy value indicates that it
+   *   was not (e.g. because it already exists).
    */
   createRelease: (tag: string, title: string, body: string) => MaybePromise<undefined | boolean>;
   /** Reports the packages for which releases were created as CI output. */

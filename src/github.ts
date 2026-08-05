@@ -1,4 +1,5 @@
 import { execFileSync } from "node:child_process";
+import fs from "node:fs/promises";
 import * as core from "@actions/core";
 import { context, getOctokit } from "@actions/github";
 import type { RestEndpointMethodTypes } from "@octokit/plugin-rest-endpoint-methods";
@@ -7,7 +8,7 @@ import type { PullRequestEvent } from "@octokit/webhooks-types";
 import type { Platform } from "./index.ts";
 
 const git = (...args: string[]) =>
-  execFileSync("git", args, { stdio: "inherit", encoding: "utf-8" });
+  execFileSync("git", args, { stdio: ["ignore", "pipe", "inherit"], encoding: "utf-8" });
 
 const marker = "<!--🦜-->";
 
@@ -18,13 +19,19 @@ export default async function github({
   releaseBranch = "release",
   releaseMessage = "chore: release",
 }: {
+  /** Account used to author comments. @default "github-actions[bot]" */
   username?: string;
+  /**
+   * Email of the account used to author comments.
+   *
+   * @default "41898282+github-actions[bot]@users.noreply.github.com"
+   */
   email?: string;
-  /** Base branch. Defaults to `main`. */
+  /** Base branch. @default "main" */
   base?: string;
-  /** Branch to use to create release PRs. Defaults to `release`. */
+  /** Branch to use to create release PRs. @default "release" */
   releaseBranch?: string;
-  /** Commit message to use when creating a release. Defaults to `chore: release`. */
+  /** Commit message to use when creating a release. @default "chore: release" */
   releaseMessage?: string;
 } = {}): Promise<Platform> {
   const token = process.env.GITHUB_TOKEN;
@@ -158,13 +165,84 @@ export default async function github({
       return { title, entries, changedPackages };
     },
     async upsertReleasePr(body: string) {
-      git("config", "user.name", username);
-      git("config", "user.email", email);
-      git("switch", "-c", releaseBranch);
       git("add", ".");
-      git("commit", "-m", releaseMessage);
-      git("push", "--force", "origin", releaseBranch);
+      const changes = git(
+        "diff-index",
+        "--cached",
+        "--name-status",
+        "--no-renames", // Guarantees two fields per change instead of three
+        "-z", // NUL-separated output
+        "HEAD",
+      ).split("\0");
 
+      const additions: Array<{ path: string; contents: string }> = [];
+      const deletions: Array<{ path: string }> = [];
+      for (let i = 0; i + 1 < changes.length; i += 2) {
+        const [status, path] = [changes[i], changes[i + 1]];
+        if (status === "D") {
+          deletions.push({ path });
+        } else {
+          additions.push({
+            path,
+            contents: await fs.readFile(path, "base64"),
+          });
+        }
+      }
+
+      if (additions.length === 0 && deletions.length === 0) {
+        core.warning("No changes to release, skipping release pull request.");
+        return;
+      }
+
+      const ref = await octokit.rest.git
+        .getRef({ ...context.repo, ref: `heads/${releaseBranch}` })
+        .catch((error: unknown) => {
+          if (error instanceof RequestError && error.status === 404) return undefined;
+          throw error;
+        });
+
+      // Reset the release branch onto the current commit, like `git push --force`
+      if (!ref) {
+        await octokit.rest.git.createRef({
+          ...context.repo,
+          ref: `refs/heads/${releaseBranch}`,
+          sha: context.sha,
+        });
+      } else if (ref.data.object.sha !== context.sha) {
+        await octokit.rest.git.updateRef({
+          ...context.repo,
+          ref: `heads/${releaseBranch}`,
+          sha: context.sha,
+          force: true,
+        });
+      }
+
+      // Create a signed commit on the release branch
+      const [headline, ...rest] = releaseMessage.split("\n");
+      await octokit.graphql(
+        `
+          mutation ($input: CreateCommitOnBranchInput!) {
+            createCommitOnBranch(input: $input) {
+              commit {
+                oid
+              }
+            }
+          }
+        `,
+        {
+          input: {
+            branch: {
+              repositoryNameWithOwner: `${context.repo.owner}/${context.repo.repo}`,
+              branchName: releaseBranch,
+            },
+            expectedHeadOid: context.sha,
+            message: { headline, body: rest.join("\n") || undefined },
+            fileChanges: { additions, deletions },
+          },
+        },
+      );
+
+      // Update the release PR body
       const { data: pulls } = await octokit.rest.pulls.list({
         ...context.repo,
         base,

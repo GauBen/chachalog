@@ -15,8 +15,8 @@ export default async function yarn({
   /**
    * Update the workspace's manifest version.
    *
-   * @default
-   *   (ws, version) => { ws.manifest.version = version } */
+   * @default (ws, version) => { ws.manifest.version = version }
+   */
   updateWorkspace?: (
     ws: Workspace & { manifest: { name: Ident; version: string } },
     version: string,
