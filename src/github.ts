@@ -201,21 +201,22 @@ export default async function github({
           throw error;
         });
 
-      // Reset the release branch onto the current commit, like `git push --force`
+      // If the release branch doesn't exist, create it at the current commit.
+      // Do NOT force-reset an existing branch: doing so could move the branch
+      // head to a commit that is an ancestor of the base branch, which causes
+      // GitHub to auto-close the release PR.
       if (!ref) {
         await octokit.rest.git.createRef({
           ...context.repo,
           ref: `refs/heads/${releaseBranch}`,
           sha: context.sha,
         });
-      } else if (ref.data.object.sha !== context.sha) {
-        await octokit.rest.git.updateRef({
-          ...context.repo,
-          ref: `heads/${releaseBranch}`,
-          sha: context.sha,
-          force: true,
-        });
       }
+
+      // Use the current release branch HEAD as the expected OID so that
+      // concurrent runs stack their commits rather than fighting over the same
+      // base SHA.
+      const expectedHeadOid = ref ? ref.data.object.sha : context.sha;
 
       // Create a signed commit on the release branch
       const [headline, ...rest] = releaseMessage.split("\n");
@@ -235,7 +236,7 @@ export default async function github({
               repositoryNameWithOwner: `${context.repo.owner}/${context.repo.repo}`,
               branchName: releaseBranch,
             },
-            expectedHeadOid: context.sha,
+            expectedHeadOid,
             message: { headline, body: rest.join("\n") || undefined },
             fileChanges: { additions, deletions },
           },
