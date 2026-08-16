@@ -2,7 +2,7 @@ import fs from "node:fs/promises";
 import path from "node:path";
 import pkg from "chachalog/package.json" with { type: "json" };
 import { Command, Option, UsageError } from "clipanion";
-import semver from "semver";
+import { isGreater } from "verkit";
 import { type Package, ReleaseTypes, type UserConfig } from "./index.ts";
 
 /** Transforms a raw config into a usable one. */
@@ -80,7 +80,7 @@ export async function resolveLocalConfig(config: UserConfig) {
     allowedBumps,
     bumpTitles,
     prereleaseIdentifier: config.prereleaseIdentifier ?? "next",
-    prereleaseIdentifierBase: config.prereleaseIdentifierBase ?? "1",
+    prereleaseIdentifierBase: Number(config.prereleaseIdentifierBase ?? "1") as 0 | 1,
     getChangelogFile: config.getChangelogFile ?? ((pkg) => path.join(pkg.path, "CHANGELOG.md")),
     getNewChangelog: config.getNewChangelog ?? ((pkg) => `# ${pkg.name} Changelog\n`),
     validator: (bumps: unknown) => {
@@ -115,7 +115,7 @@ const latestVersion = fetch("https://registry.npmjs.org/chachalog/latest", {
     if (!response.ok) throw new Error("Network response was not ok");
     return response.json();
   })
-  .then((data: { version: string }) => (semver.gt(data.version, pkg.version) ? data.version : null))
+  .then((data: { version: string }) => (isGreater(data.version, pkg.version) ? data.version : null))
   .catch(() => null);
 
 /** Finds a config file in `dir`, returns its absolute path or throws. */
