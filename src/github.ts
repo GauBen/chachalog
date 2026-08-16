@@ -194,53 +194,49 @@ export default async function github({
         return;
       }
 
-      const ref = await octokit.rest.git
-        .getRef({ ...context.repo, ref: `heads/${releaseBranch}` })
-        .catch((error: unknown) => {
-          if (error instanceof RequestError && error.status === 404) return undefined;
-          throw error;
-        });
+      // Create a signed commit on a temporary branch to prevent the release PR
+      // from being closed by GitHub after resetting the release branch
+      const tmpBranch = `refs/heads/chachalog-tmp-${releaseBranch}`;
+      git("push", "--force", "origin", `${context.sha}:${tmpBranch}`);
 
-      // Reset the release branch onto the current commit, like `git push --force`
-      if (!ref) {
-        await octokit.rest.git.createRef({
-          ...context.repo,
-          ref: `refs/heads/${releaseBranch}`,
-          sha: context.sha,
-        });
-      } else if (ref.data.object.sha !== context.sha) {
-        await octokit.rest.git.updateRef({
-          ...context.repo,
-          ref: `heads/${releaseBranch}`,
-          sha: context.sha,
-          force: true,
-        });
-      }
-
-      // Create a signed commit on the release branch
-      const [headline, ...rest] = releaseMessage.split("\n");
-      await octokit.graphql(
-        `
-          mutation ($input: CreateCommitOnBranchInput!) {
-            createCommitOnBranch(input: $input) {
-              commit {
-                oid
+      try {
+        const [headline, ...rest] = releaseMessage.split("\n");
+        const { createCommitOnBranch } = await octokit.graphql<{
+          createCommitOnBranch: { commit: { oid: string } };
+        }>(
+          `
+            mutation ($input: CreateCommitOnBranchInput!) {
+              createCommitOnBranch(input: $input) {
+                commit {
+                  oid
+                }
               }
             }
-          }
-        `,
-        {
-          input: {
-            branch: {
-              repositoryNameWithOwner: `${context.repo.owner}/${context.repo.repo}`,
-              branchName: releaseBranch,
+          `,
+          {
+            input: {
+              branch: {
+                repositoryNameWithOwner: `${context.repo.owner}/${context.repo.repo}`,
+                branchName: tmpBranch,
+              },
+              expectedHeadOid: context.sha,
+              message: { headline, body: rest.join("\n") || undefined },
+              fileChanges: { additions, deletions },
             },
-            expectedHeadOid: context.sha,
-            message: { headline, body: rest.join("\n") || undefined },
-            fileChanges: { additions, deletions },
           },
-        },
-      );
+        );
+        const signedCommit = createCommitOnBranch.commit.oid;
+
+        // Fetch the commit and push it to the real release branch
+        git("fetch", "origin", tmpBranch);
+        git("push", "--force", "origin", `${signedCommit}:refs/heads/${releaseBranch}`);
+      } finally {
+        try {
+          git("push", "--delete", "origin", tmpBranch);
+        } catch (error) {
+          core.warning(`Could not delete ${tmpBranch}: ${error}`);
+        }
+      }
 
       // Update the release PR body
       const { data: pulls } = await octokit.rest.pulls.list({
