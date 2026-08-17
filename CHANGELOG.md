@@ -1,5 +1,9 @@
 # chachalog Changelog
 
+## 0.5.4
+
+* Prevent a bug that, on rare occasions, would close then open a new release PR instead of updating the existing one.
+
 ## 0.5.3
 
 * Create release commits through the GitHub API so that they are signed and marked as verified.
