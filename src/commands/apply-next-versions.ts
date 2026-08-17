@@ -1,7 +1,7 @@
 import { globSync } from "node:fs";
 import fs from "node:fs/promises";
 import path from "node:path";
-import semver from "semver";
+import { increment } from "verkit";
 import { processEntries } from "../changelog/process.ts";
 import type { CommandWithLocalConfig } from "../config.ts";
 
@@ -24,12 +24,10 @@ export default async function prepareNextRelease({ config, dir }: CommandWithLoc
     const changelogEntry = changelogEntries.get(pkg.name);
     if (!changelogEntry) continue;
 
-    const version = semver.inc(
-      pkg.version,
-      changelogEntry.bump,
-      config.prereleaseIdentifier,
-      config.prereleaseIdentifierBase,
-    );
+    const version = increment(pkg.version, changelogEntry.bump, {
+      identifier: config.prereleaseIdentifier,
+      identifierBase: config.prereleaseIdentifierBase,
+    });
     if (!version) throw new Error("bump failed");
     await config.setVersion(pkg, version);
   }

@@ -3,7 +3,7 @@ import fs from "node:fs/promises";
 import path from "node:path";
 import type { TopLevelContent } from "mdast";
 import { remark } from "remark";
-import semver from "semver";
+import { increment } from "verkit";
 import pkg from "../../package.json" with { type: "json" };
 import { processEntries } from "../changelog/process.ts";
 import { insertChangelog, writeChangelog } from "../changelog/write.ts";
@@ -47,12 +47,10 @@ export default async function prepareNextRelease({
     const changelogEntry = changelogEntries.get(pkg.name);
     if (!changelogEntry) continue;
 
-    const version = semver.inc(
-      pkg.version,
-      changelogEntry.bump,
-      config.prereleaseIdentifier,
-      config.prereleaseIdentifierBase,
-    );
+    const version = increment(pkg.version, changelogEntry.bump, {
+      identifier: config.prereleaseIdentifier,
+      identifierBase: config.prereleaseIdentifierBase,
+    });
     if (!version) throw new Error("bump failed");
     await config.setVersion(pkg, version);
 
