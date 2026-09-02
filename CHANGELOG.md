@@ -1,5 +1,9 @@
 # chachalog Changelog
 
+## 0.5.5
+
+* Allow `base` and `releaseBranch` to be functions, defaulting to the `pull_request_target` branch instead of hardcoding `main`. (#71)
+
 ## 0.5.4
 
 * Prevent a bug that, on rare occasions, would close then open a new release PR instead of updating the existing one.
