@@ -1,5 +1,9 @@
 # chachalog Changelog
 
+## 0.5.6
+
+* The default PR title is now `chore: release pkg @ v1.2.3 (patch)` or `chore: release X packages`. (#73)
+
 ## 0.5.5
 
 * Allow `base` and `releaseBranch` to be functions, defaulting to the `pull_request_target` branch instead of hardcoding `main`. (#71)
