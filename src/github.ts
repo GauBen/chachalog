@@ -5,12 +5,27 @@ import { context, getOctokit } from "@actions/github";
 import type { RestEndpointMethodTypes } from "@octokit/plugin-rest-endpoint-methods";
 import { RequestError } from "@octokit/request-error";
 import type { PullRequestEvent } from "@octokit/webhooks-types";
-import type { Platform } from "./index.ts";
+import type { Platform, Releases } from "./index.ts";
 
 const git = (...args: string[]) =>
   execFileSync("git", args, { stdio: ["ignore", "pipe", "inherit"], encoding: "utf-8" });
 
 const marker = "<!--🦜-->";
+
+export const ReleaseMessage = {
+  /** `chore: release pkg @ v1.2.3` or `chore: release X packages` */
+  SMART: (releases) => {
+    if (releases.length === 0) return "chore: release";
+
+    if (releases.length === 1)
+      return `chore: release ${releases[0].name} @ v${releases[0].to} (${releases[0].bump})`;
+
+    return (
+      `chore: release ${releases.length} packages\n` +
+      releases.map(({ name, from, to, bump }) => `- ${name} ${from} → ${to} (${bump})`).join("\n")
+    );
+  },
+} satisfies Record<string, (releases: Releases) => string>;
 
 export default async function github({
   username = "github-actions[bot]",
@@ -18,7 +33,7 @@ export default async function github({
   base: baseFn = (branch) => branch,
   releaseBranch: releaseBranchFn = (branch) =>
     branch === "main" || branch === "master" ? "release" : `release/${branch}`,
-  releaseMessage = "chore: release",
+  releaseMessage: releaseMessageFn = ReleaseMessage.SMART,
 }: {
   /** Account used to author comments. @default "github-actions[bot]" */
   username?: string;
@@ -37,7 +52,7 @@ export default async function github({
    */
   releaseBranch?: string | ((branch: string) => string);
   /** Commit message to use when creating a release. @default "chore: release" */
-  releaseMessage?: string;
+  releaseMessage?: string | ((releases: Releases) => string);
 } = {}): Promise<Platform> {
   const token = process.env.GITHUB_TOKEN;
 
@@ -169,7 +184,7 @@ export default async function github({
 
       return { title, entries, changedPackages };
     },
-    async upsertReleasePr(body: string) {
+    async upsertReleasePr(body, releases = []) {
       git("add", ".");
       const changes = git(
         "diff-index",
@@ -210,8 +225,11 @@ export default async function github({
       const tmpBranch = `refs/heads/chachalog-tmp-${releaseBranch}`;
       git("push", "--force", "origin", `${context.sha}:${tmpBranch}`);
 
+      const releaseMessage =
+        typeof releaseMessageFn === "string" ? releaseMessageFn : releaseMessageFn(releases);
+
+      const [headline, ...rest] = releaseMessage.split("\n");
       try {
-        const [headline, ...rest] = releaseMessage.split("\n");
         const { createCommitOnBranch } = await octokit.graphql<{
           createCommitOnBranch: { commit: { oid: string } };
         }>(
@@ -261,7 +279,7 @@ export default async function github({
         await octokit.rest.pulls.update({
           ...context.repo,
           pull_number: pulls[0].number,
-          title: releaseMessage,
+          title: headline,
           body,
         });
       } else {
@@ -269,7 +287,7 @@ export default async function github({
           ...context.repo,
           base,
           head: releaseBranch,
-          title: releaseMessage,
+          title: headline,
           body,
         });
       }
