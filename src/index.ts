@@ -1,6 +1,8 @@
 type MaybePromise<T> = T | Promise<T>;
 type MaybeArray<T> = T | T[];
 
+export type Releases = Array<{ name: string; from: string; to: string; bump: string }>;
+
 export interface Platform {
   /** Account name to use when creating git commits. */
   username: string;
@@ -18,7 +20,7 @@ export interface Platform {
     packagePaths: Array<[string, string]>,
   ) => MaybePromise<{ title: string; entries: Map<string, string>; changedPackages: Set<string> }>;
   /** Creates a PR for the next release. */
-  upsertReleasePr: (body: string) => MaybePromise<void>;
+  upsertReleasePr: (body: string, releases?: Releases) => MaybePromise<void>;
   /**
    * Creates a release. Will be called on every commit, ensure it is idempotent.
    *

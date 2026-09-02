@@ -8,6 +8,7 @@ import pkg from "../../package.json" with { type: "json" };
 import { processEntries } from "../changelog/process.ts";
 import { insertChangelog, writeChangelog } from "../changelog/write.ts";
 import type { CommandWithConfig } from "../config.ts";
+import type { Releases } from "../index.ts";
 
 export default async function prepareNextRelease({
   config,
@@ -43,6 +44,7 @@ export default async function prepareNextRelease({
       children: [{ type: "text", value: "This PR will bump the following packages:" }],
     },
   ];
+  const releases: Releases = [];
   for (const pkg of config.packages) {
     const changelogEntry = changelogEntries.get(pkg.name);
     if (!changelogEntry) continue;
@@ -73,6 +75,7 @@ export default async function prepareNextRelease({
       { type: "blockquote", children },
       { type: "html", value: "</details>" },
     );
+    releases.push({ name: pkg.name, from: pkg.version, to: version, bump: changelogEntry.bump });
   }
 
   const nextVersion = await latestVersion;
@@ -88,5 +91,8 @@ export default async function prepareNextRelease({
     });
   }
 
-  await config.platform.upsertReleasePr(remark().stringify({ type: "root", children: body }));
+  await config.platform.upsertReleasePr(
+    remark().stringify({ type: "root", children: body }),
+    releases,
+  );
 }
