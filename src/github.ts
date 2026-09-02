@@ -15,8 +15,9 @@ const marker = "<!--🦜-->";
 export default async function github({
   username = "github-actions[bot]",
   email = "41898282+github-actions[bot]@users.noreply.github.com",
-  base = "main",
-  releaseBranch = "release",
+  base: baseFn = (branch) => branch,
+  releaseBranch: releaseBranchFn = (branch) =>
+    branch === "main" || branch === "master" ? "release" : `release/${branch}`,
   releaseMessage = "chore: release",
 }: {
   /** Account used to author comments. @default "github-actions[bot]" */
@@ -27,10 +28,14 @@ export default async function github({
    * @default "41898282+github-actions[bot]@users.noreply.github.com"
    */
   email?: string;
-  /** Base branch. @default "main" */
-  base?: string;
-  /** Branch to use to create release PRs. @default "release" */
-  releaseBranch?: string;
+  /** Base branch. @default (branch) => branch */
+  base?: string | ((branch: string) => string);
+  /**
+   * Branch to use to create release PRs.
+   *
+   * @default (branch) => branch === "main" || branch === "master" ? "release" : `release/${branch}`
+   */
+  releaseBranch?: string | ((branch: string) => string);
   /** Commit message to use when creating a release. @default "chore: release" */
   releaseMessage?: string;
 } = {}): Promise<Platform> {
@@ -174,6 +179,12 @@ export default async function github({
         "-z", // NUL-separated output
         "HEAD",
       ).split("\0");
+
+      // `GITHUB_REF_NAME` is not yet available in `context`
+      const refName = context.ref.replace(/^refs\/heads\//, "");
+      const base = typeof baseFn === "string" ? baseFn : baseFn(refName);
+      const releaseBranch =
+        typeof releaseBranchFn === "string" ? releaseBranchFn : releaseBranchFn(refName);
 
       const additions: Array<{ path: string; contents: string }> = [];
       const deletions: Array<{ path: string }> = [];
