@@ -32,7 +32,7 @@ export default async function github({
   email = "41898282+github-actions[bot]@users.noreply.github.com",
   base: baseFn = (branch) => branch,
   releaseBranch: releaseBranchFn = (branch) =>
-    branch === "main" || branch === "master" ? "release" : `release/${branch}`,
+    branch === "main" || branch === "master" ? "release" : `release-${branch}`,
   releaseMessage: releaseMessageFn = ReleaseMessage.SMART,
 }: {
   /** Account used to author comments. @default "github-actions[bot]" */
@@ -48,7 +48,10 @@ export default async function github({
   /**
    * Branch to use to create release PRs.
    *
-   * @default (branch) => branch === "main" || branch === "master" ? "release" : `release/${branch}`
+   * Defaults to `release` for `main` and `master`, `release-<branch>` otherwise. A `/` is avoided
+   * since `release/<branch>` cannot coexist with a `release` branch.
+   *
+   * @default (branch) => branch === "main" || branch === "master" ? "release" : `release-${branch}`
    */
   releaseBranch?: string | ((branch: string) => string);
   /** Commit message to use when creating a release. @default "chore: release" */
