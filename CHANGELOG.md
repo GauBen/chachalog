@@ -1,5 +1,9 @@
 # chachalog Changelog
 
+## 0.5.7
+
+* Default `releaseBranch` to `release-<branch>` instead of `release/<branch>` for non-main branches, as the latter cannot be pushed while a `release` branch exists.
+
 ## 0.5.6
 
 * The default PR title is now `chore: release pkg @ v1.2.3 (patch)` or `chore: release X packages`. (#73)
